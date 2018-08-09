@@ -1,0 +1,4506 @@
+第2章：安装MySQL
+本章描述怎样获得并安装MySQL：
+
+1.    要了解支持哪些平台。请注意并非所有支持的平台同等适合运行MySQL。在部分平台上会比其它平台更有效、稳定。详情请参见2.1.1节，“MySQL支持的操作系统” 。
+
+2.    确定你应该使用的分发的版本。可获得MySQL的多个版本，大部分有多种分发版。你可以选择包含二进制（预编译）代码或源码形式的预打包分发。如果不能确定，则使用二进制分发版。对于想看我们的最新开发并帮助我们测试新代码的用户，我们提供了公共访问接口，可以访问我们最新的源码树。为了确定你应该使用的分发的版本和类型，请参见2.1.2节，“选择要安装的MySQL分发版”。
+
+3.    下载想安装的分发版。对于能从其获得MySQL的站点列表，请参见2.1.3节，“怎样获得MySQL”。用来验证分发版完整性的指令参见2.1.4节，“通过MD5校验和或GnuPG验证软件包的完整性”。
+
+4.    安装分发版。针对二进制代码和源码分发版的安装说明在2.2节，“使用二进制分发版的标准MySQL安装”中讲述。针对二进制代码和源码分发版的安装说明在2.8节，“使用源码分发版安装MySQL”中讲述。
+
+注释：如果你想要将当前版本的MySQL升级到最新版本，而不是首次安装MySQL，关于升级过程和升级前应考虑的问题请参见2.10节，“升级MySQL”。
+
+如果遇到安装问题，2.12节，“具体操作系统相关的注意事项”中提供了解决平台相关问题的信息。
+
+5.    进行安装后的设置。安装MySQL后，请阅读2.9节，“安装后的设置和测试”。本节介绍了重要的信息，可以确保MySQL服务器正确工作。本节还描述了如何使尚未有密码的初始MySQL用户账户的安全。不管你是用二进制代码还是源码分发版来安装MySQL，这些过程均适用。
+
+如果要运行MySQL基准脚本，必须使用支持MySQL的Perl。请参见2.13节，“Perl安装注意事项”。
+2.1. 一般安装问题
+2.1.1. MySQL支持的操作系统
+2.1.2. 选择要安装的MySQL分发版
+2.1.3. 怎样获得MySQL
+2.1.4. 通过MD5校验和或GnuPG验证软件包的完整性
+2.1.5. 安装布局
+在安装MySQL前，你应该：
+
+1.    确定是否MySQL将运行在你的平台上。
+
+2.    选择安装的分发版。
+
+3.    下载分发版并验证其完整性。
+
+本节包含执行上述步骤必需的信息。之后，你可以按照本章中后面几节的说明来安装选择的分发版。
+
+2.1.1. MySQL支持的操作系统
+本节列出了可以运行MySQL的操作系统。
+
+我们使用GNU Autoconf，因此将MySQL移植到所有使用Posix线程和C++编译器的现代系统是可能的。(要求服务器支持线程。如果只是编译客户端代码，则只需要C++编译器)。我们主要在Linux(SuSE和Red Hat)、FreeBSD和Sun Solaris(版本8和9)上使用并开发本软件。
+
+已经报告MySQL可以在下列操作系统/线程包的组合上成功地进行编译。注意，对于很多操作系统，原生的线程仅支持最新的版本。
+
+·         有原生线程的AIX 4.x和5.x。请参见2.12.5.3节，“IBM-AIX注意事项”。
+
+·         Amiga。
+
+·         包括MIT-pthreads包的BSDI 2.x。请参见2.12.4.4节，“BSD/OS 2.x版注意事项”。
+
+·         有原生线程的BSDI3.0,3.1和4.x。请参见2.12.4.4节，“BSD/OS 2.x版注意事项”。
+
+·         有原生线程的Digital Unix 4.x。请参见2.12.5.5节，“Alpha-DEC-UNIX(Tru64)版注意事项”.。
+
+·         包括MIT-pthreads包的FreeBSD 2.x。请参见2.12.4.1节，“FreeBSD注意事项”。
+
+·         有原生线程的FreeBSD 3.x和4.x。请参见2.12.4.1节，“FreeBSD注意事项”。
+
+·         有LinuxThreads的FreeBSD 4.x。请参见2.12.4.1节，“FreeBSD注意事项”。
+
+·         有DCE线程或MIT-pthreads包的HP-UX 10.20。请参见2.12.5.1节，“HP-UX 10.20版注意事项”。
+
+·         有原生线程的HP-UX 11.x。请参见2.12.5.2节，“HP-UX 11.x版注意事项”。
+
+·         有LinuxThreads 0.7.1+或glibc 2.0.7+，适合各种CPU的Linux 2.0+。请参见2.12.1节，“Linux注意事项”。
+
+·         Mac OS X。请参见2.12.2节，“Mac OS X注意事项”。
+
+·         NetBSD 1.3/1.4 Intel和NetBSD 1.3 Alpha(需要GNU make)。请参见2.12.4.2节，“NetBSD注意事项”。
+
+·         Novell NetWare 6.0。请参见2.6节，“在NetWare中安装MySQL”。
+
+·         有原生线程的OpenBSD > 2.5。包括MIT-pthreads包的OpenBSD < 2.5。请参见2.12.4.3节，“OpenBSD 2.5版注意事项”。
+
+·         OS/2 Warp 3, FixPack 29和OS/2 Warp 4, FixPack 4. 参见2.12.6节，“OS/2注意事项”。
+
+·         有最新FSU Pthreads移植包的SCO OpenServer 5.0.X。请参见2.12.5.8节，“SCO UNIX和OpenServer 5.0.x版注意事项”。
+
+·         SCO UnixWare 7.1.x。请参见2.12.5.9节，“SCO UnixWare 7.1.x和OpenUNIX 8.0.0版注意事项”。
+
+·         SCO Openserver 6.0.x。请参见2.12.5.10节，“SCO OpenServer 6.0.x版注意事项”。
+
+·         有原生线程的SGI Irix 6.x。请参见2.12.5.7节，“SGI Irix注意事项”。
+
+·         SPARC和x86上有原生线程的Solaris 2.5和以上版本。请参见2.12.3节，“Solaris注意事项”。
+
+·         包括MIT-pthreads包的SunOS 4.x。请参见2.12.3节，“Solaris注意事项”。
+
+·         Tru64 Unix。请参见2.12.5.5节，“Alpha-DEC-UNIX(Tru64)版注意事项”。
+
+·         Windows 9x、Me、NT、2000、XP和2003。请参见2.3节，“在Windows上安装MySQL”。
+
+并非所有支持的平台同等适合运行MySQL。根据以下因素确定某个平台适合高负荷关键任务MySQL服务器的程度：
+
+·         线程库的稳定性。可能某个平台的反应不错，但MySQL的稳定性取决于它所调用的线程库，不管其它部分是否完善。
+
+·         内核和线程库利用均衡多处理器(SMP)系统的能力。换句话说，当进程创建一个线程时，应允许线程运行原进程所运行CPU之外的其它处理器。
+
+·         内核和线程库运行在短范围频繁获取和释放互斥体而不需要过多地交换内容的多个线程的能力。如果执行pthread_mutex_lock()时产生的CPU时间太短，则会严重影响MySQL。如果不关注该问题，增加过多的CPU实际会降低MySQL的速度。
+
+·         常规文件系统的稳定性和性能。
+
+·         如果数据库表很大，文件系统处理大文件的能力和处理效率。
+
+·         我们在该平台上使用MySQL AB的经验水平。如果我们熟悉一个平台，我们可以对具体平台进行优化并固定编译时间。我们还可以提供建议如何更好地为MySQL配置系统。
+
+·         我们在类似配置下所完成的内部测试的数量。
+
+·         在同一平台类似配置下成功运行MySQL的用户数。如果该数字很高，则说明遇到具体平台问题的几率要小得多。
+
+根据前面的标准，允许MySQL的最好的平台是x86,安装SuSE Linux，使用2.4或2.6内核，和ReiserFS(或类似Linux分发版)和安装了 Solaris(2.7-9)的SPARC。FreeBSD排第三位，但我们真正希望一旦线程库得到改进，它也可以提高排名。从某一观点我们还希望提高其它MySQL目前正在上面编译、允许的平台的排名，但稳定性和性能上可以要求不同等级。这需要我们与MySQL所依赖的操作系统和库组件开发人员共同努力。如果你对改进某个组件感兴趣，可能影响其开发，需要更多的关于MySQL如何能运行得更好的说明，请向我们的MySQL internals发送邮件。请参见1.7.1.1节，“The MySQL邮件列表”。
+
+请注意前面的对比并不是说一个操作系统总体上比另一个操作系统要好。我们只是讨论选择一个OS来专门运行MySQL。记住了这一点，如果考虑更多的因素，对比结果可能会不同。在某些情况下，一个OS比另一个OS好的原因只是我们已经为具体平台做出了更多的努力来进行测试和优化。我们只是陈述我们的观点帮助你选择运行MySQL的平台。
+
+2.1.2. 选择要安装的MySQL分发版
+2.1.2.1. 选择要安装的MySQL版本
+2.1.2.2. 选择分发格式
+2.1.2.3. 如何发布更新以及何时发布更新
+2.1.2.4. 发布原则：发行版本中没有已知的缺陷
+2.1.2.5. MySQL AB编译的MySQL二进制版本
+准备安装MySQL时，你应确定使用哪个版本。MySQL的开发有几个发布系列，可以选择最适合你要求的一个版本。确定了安装的版本后，便可以选择分发版。有二进制或源码发布格式。
+2.1.2.1. 选择要安装的MySQL版本
+首先要作出决策，你是否想要使用最新的开发版本或最终的稳定版本。在MySQL开发过程中，同时存在多个发布系列，每个发布处在成熟度的不同阶段：
+
+·         MySQL 5.2是最新开发的发布系列，是将执行新功能的系列。不久的将来可以使用Alpha发行，以便感兴趣的用户进行广泛的测试。
+
+·         MySQL 5.1是当前稳定(产品质量)发布系列。只针对漏洞修复重新发布；没有增加会影响稳定性的新功能。
+
+·         MySQL 5.0是前一稳定(产品质量)发布系列。只针对严重漏洞修复和安全修复重新发布；没有增加会影响该系列的重要功能。
+
+·         MySQL 4.0和3.23是旧的稳定(产品质量)发布系列。该版本不再使用，新的发布只用来修复特别严重的漏洞（以前的安全问题）。
+
+我们不认为有完全的冻结版，因为任何版本均需要对漏洞进行修复和其它修复。对于“某种程度的冻结”，我们是指我们可以在产品发布中增加一些不会影响当前工作的小东西。自然，前一系列的相关漏洞修复会移植到后面的系列。
+
+通常, 如果你是第一次开始使用MySQL或想要将它移植到一些还没有二进制分发版的系统上，我们推荐使用最终的稳定版本。目前是MySQL 5.1。我们已经使用MySQL基准对所有MySQL发布进行了检查，包括来自开发系列的发布，在发布前还使用基准套件来测试它。
+
+如果你正在运行一个老的系统并且想要升级，但是又不想冒险进行非无缝升级，应该升级到最新版本中你正使用的相同的发布系列（只有版本号的最后部分比你使用的新）。我们已经试着仅修复致命缺陷，对那个版本进行了很小的相对安全的改动。
+
+如果你想要使用产品发布系列中所没有的新功能，你可以使用开发系列的版本。请注意开发发布不如产品发布稳定。
+
+如果你想要使用包含所有最新补丁和漏洞修复的最新源码，可以使用我们的BitKeeper库。这些库还没有发布，但可以预览代码，将来的发布基于这些代码。
+
+MySQL的命名机制使用由3个数字和一个后缀组成的版本号。例如，像mysql-5.0.9-beta的版本号这样解释：
+
+·         第1个数字(5)是主版本号，描述了文件格式。所有版本5的发行都有相同的文件格式。
+
+·         第2个数字(0)是发行级别。主版本号和发行级别组合到一起便构成了发行序列号。
+
+·         第3个数字(9)是在此发行系列的版本号，随每个新分发版递增。通常你需要已经选择的发行(release)的最新版本(版本)。
+
+每次更新后，版本字符串的最后一个数字递增。如果相对于前一个版本增加了新功能或有微小的不兼容性，字符串的第二个数字递增。如果文件格式改变，第一个数字递增。
+
+后缀显示发行的稳定性级别。通过一系列后缀显示如何改进稳定性。可能的后缀有：
+
+·         alpha表明发行包含大量未被彻底测试的新代码。已知的缺陷应该在新闻小节被记录。请参见附录D：MySQL变更史。在大多数alpha版本中也有新的命令和扩展。alpha版本也可能有主要代码更改等开发。但我们在发布前一定对其进行测试。
+
+·         beta意味着该版本功能是完整的，并且所有的新代码被测试了，没有增加重要的新特征，应该没有已知的缺陷。当alpha版本至少一个月没有出现报导的致命漏洞，并且没有计划增加导致已经实施的功能不稳定的新功能时，版本则从alpha版变为beta版。
+
+在以后的beta版、发布版或产品发布中，所有API、外部可视结构和SQL命令列均不再更改。
+
+·         rc是发布代表；是一个发行了一段时间的beta版本，看起来应该运行正常。只增加了很小的修复。(发布代表即以前所称的gamma 版) 
+
+·         如果没有后缀，这意味着该版本已经在很多地方运行一段时间了，而且没有非平台特定的缺陷报告。只增加了关键漏洞修复修复。这就是我们称为一个产品（稳定）或“通用”版本的东西。
+
+MySQL的命名机制于其它产品稍有不同。一般情况，我们可以很放心地使用已经投放市场两周而没有被相同发布系列的新版本所代替的版本。
+
+MySQL所有版本都经过我们的标准测试和基准测试运行，以保证它们可相当安全地使用。因为标准测试不断扩充以检测以前发现的缺陷，测试套件一直在改进之中。
+
+所有版本都至少已经用下列套件进行了测试：
+
+·         一个内部测试套件
+
+mysql-test目录包含一整套测试案例。我们针对每个二进制服务器进行这些测试。关于该测试套件的详细信息参见27.1.2节，“MySQL测试套件”。
+
+·         MySQL基准套件
+
+它运行一定范围的普通查询。它也是一个测试，检测最新的优化处理是否真的使代码更快。请参见7.1.4节，“MySQL基准套件”。
+
+·         crash-me测试
+
+这尝试决定数据库支持什么功能和它的能力与限制是什么。请参见7.1.4节，“MySQL基准套件”。
+
+另一个测试是在内部生产环境中使用最新MySQL版本，至少在一台机器上。我们有超过100GB的数据可供使用。
+
+2.1.2.2. 选择分发格式
+选择了MySQL的安装版本后，要做的第二项决策是你是使用源码分发版还是二进制分发版。大多数情况，如果你的平台上已经有了一个二进制分发版，你可能使用二进制分发版。大多数平台可以使用原格式二进制分发版，例如Linux使用RPM文件，Mac OS X使用DMG安装软件包。也可以使用Zip文件或压缩tar文件。
+
+选择二进制分发版的理由：
+
+·         二进制分发版比源码分发版更容易安装。
+
+·         为了满足不同用户的需求，我们提供了两种不同的二进制版本：一个是编译过的带非事务储存引擎(小的快速库)，另一个配置了最重要的扩展选项，例如事务安全表。两个版本均从相同的源码分发版编译而来。所有本地MySQL客户端均可以连接任一版本的MySQL服务器。
+
+扩展MySQL库分发版标有-max后缀，配置了与mysqld-max相同的选项。请参见5.1.2节，“mysqld-max扩展MySQL服务器”。
+
+如果想要使用MySQL-Max RPM，必须首先安装标准MySQL-server RPM。
+
+在某些环境下，最好安装源码分发版MySQL：
+
+·         你想要在某个明显的位置安装MySQL。标准二进制分发版可以安装到任何地方，但你想更加灵活地将MySQL组件放到某个地方。
+
+·         你想要将mysqld配置一些标准二进制分发版中未包括的一些特殊特征。下面是一些你想要使用的最常用的选项：
+
+o        --with-innodb(在所有MySQL 5.1库版本中默认使用)
+
+o        --with-berkeley-db(只适合部分平台)
+
+o        --with-libwrap
+
+o        --with-名d-z-libs(适合部分二进制)
+
+o        --with-debug[=full]
+
+·         你想要将mysqld配置一些标准二进制分发版中已经包括的一些特殊特征。例如，一般编译过的分发版支持所有字符集。如果你想要一个更小的MySQL服务器，可以重新编译只支持你需要的字符集。
+
+·         你有一个专用编译器(例如pgcc)或想要使用更好地优化适用你的处理器的编译器选项。二进制分发版编译的选项适合同一处理器族的各种处理器。
+
+·         你想要使用BitKeeper库中的最新源码，以访问所有最新漏洞修复。例如，如果你发现了漏洞并将它报告给MySQL开发小组，漏洞修复传递给源码库，你便可以访问它。发布实际发行后才会出现漏洞修复。
+
+·         如果你想要阅读(或修改)构成MySQL的C和C++代码，你应该拿到源码分发版。源码总是最终的手册。
+
+·         源码分发版也比二进制的分发版包含更多的测试和实例。
+
+2.1.2.3. 如何发布更新以及何时发布更新
+MySQL进展的相当快，我们想要与其它MySQL用户分享它。当我们有一个看来其它人似乎需要的非常有用的功能时，我们就试着制作一个发行版本。
+
+我们也尝试帮助那些需要很容易实现的功能的用户，我们也关注我们授权的用户想要什么，我们更特别关注我们支持的客户想要什么，并且尽力帮助他们。
+
+没有人一定要下载一个新版本，新闻小节中将告诉你新版本是否有一些你确实想要的东西。请参见附录D：MySQL变更史。
+
+当更新MySQL时，我们使用下列策略：
+
+·         将发布每个系列。每次发布时，版本的最后一个数字为同一系列前一版本的基础上加1。
+
+·         稳定的测试过的产品版本每年准备出现1-2次，但是如果发现小缺陷，只有缺陷修复的一个版本将被发行。
+
+·         工作版本/对旧版本的漏洞修复文件每4-8周出现一次。
+
+·         对一些平台的二进制分发版，主要版本由我们制作。其它人可以为其它系统制作二进制分发版，但是可能不多见。
+
+·         我们一旦识别并修正了非紧急但烦人的缺陷，则立即将其发布，可以从公共BitKeeper库中立即得到修复代码，并将包含到下一发布版中。
+
+在任何情况下，如果在一个发行中有一个致命缺陷，我们将尽快制作一个新版本来修复。（我们希望其它公司也这样做！) 
+2.1.2.4. 发布原则：发行版本中没有已知的缺陷
+我们投入了大量的时间和工作来使我们的发布没有缺陷。我们从来没有发布过含有已知致命重复性缺陷的单一MySQL版本。(“致命”缺陷指能在正常应用中导致MySQL瘫痪的缺陷，对于正常查询产生错误答案，或有安全问题）。 
+
+我们已经将所有公开问题、缺陷和由设计决策决定的事宜记入文件。请参见A.8节，“MySQL中的已知事宜”。
+
+我们的目标是修复一切可以修复的东西，而不会使稳定的MySQL版本变得不稳定。在某些情况，这意味着我们可以在开发版本中修复问题，而不是在稳定的 (产品) 版本。自然，我们会将这些问题记入文档，以便用户能知道。
+
+下面描述了我们如何操作：
+
+·         我们通过我们的客户支持列表、在http://bugs.mysql.com/ 缺陷数据库和MySQL外部邮件列表来监控缺陷。
+
+·         当前版本中所有被报导的缺陷被输入缺陷数据库。
+
+·         当我们修复缺陷，我们总是为其设计一次测试案例，并将其包括进测试系统中，以确保不会漏检使缺陷再现。(所有修复的缺陷中大约90%的具有测试案例）。 
+
+·         为添加到MySQL中的所有新功能创建测试案例。
+
+·         我们开始构建新的MySQL发布前，我们确保修复了MySQL版本(3.23.x、4.0.x、4.1.x、5.0.x等等)中所有被报导的重复性缺陷。如果某些内容不能修复(由于MySQL内部的一些设计决策)，我们在本手册中记录下来。请参见A.8节，“MySQL中的已知事宜”。
+
+·         我们在所有支持二进制的平台(15+平台)上构建并运行我们的测试套件和基准套件。
+
+·         如果在某个平台上测试或基准套件失败，我们不会公布二进制。如果问题是由于源码中的普通缺陷，我们将进行修复并在所有系统上构建并测试。
+
+·         构建和测试过程需要2-3天。如果在该过程中我们收到致命缺陷相关报告(例如，会造成内核转储)，我们将修复该问题并重新启动构建过程。
+
+·         在http：//dev.mysql.com/上公布二进制后，我们则向mysql发出公告消并announce邮件列表。请参见1.7.1.1节，“The MySQL邮件列表”。公告消息包含所有发布的更改列表和已知问题。只有部分发版不需要已知的问题部分。
+
+·         为了让我们的用户快速访问最新MySQL功能，我们每4-8周产生一个新的MySQL发布。每天构建源码快照，可以从http://downloads.mysql.com/snapshots.php获得。
+
+·         如果，尽管经过我们最大的努力，我们在发布后仍收到缺陷报告，即在某个具体平台上出现严重问题，我们将立即进行修复，并为该平台构建一个新的 'a'版本。由于我们的大用户群，可以很快地查出并解决此类问题。
+
+·         我们为保证稳定版本所做的跟踪记录不错。在最近150个发布中，我们只需要对其中不到10个重新构建。其中有3个案例，缺陷为我们的构建机器上的glibc 库，花了很长时间来跟踪。
+
+2.1.2.5. MySQL AB编译的MySQL二进制版本
+作为MySQL AB的服务，我们提供了一套二进制MySQL分发版，已经在我们的站点上所列的系统或支持MySQL、友好地为我们提供访问的机器上的系统上编译过。
+
+除了具体平台安装软件包格式提供的二进制分发版，我们还以压缩tar文件(.tar.gz文件)为多种平台提供了二进制分发版。请参见2.2节，“使用二进制分发版的标准MySQL安装”。
+
+对于Windows分发版，参见2.3节，“在Windows上安装MySQL”。
+
+使用脚本 Build-tools/Do-compile生成这些分发版，可以编译源码并使用scripts/make_binary_distribution创建二进制tar.gz文件。
+
+通过下面的编译器和选项来配置并构建二进制分发版。可以查看各个库二进制tar文件分发版的脚本bin/mysqlbug内的变量COMP_ENV_INFO和 CONFIGURE_LINE来查看这些信息。
+
+在MySQL AB开发系统上构建下面的二进制：
+·         Linux 2.4.xx x86中的gcc 2.95.3：
+
+CFLAGS="-O2 -mcpu=pentiumpro" CXX=gcc CXXFLAGS="-O2 -mcpu=pentiumpro -felide-constructors" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --enable-assembler --disable-shared --with-client-ldflags=-all-static --with-mysqld-ldflags=-all-static
+
+·         Linux 2.4.x x86中的icc(Intel C++ Compiler 8.1或更高版本)：
+
+CC=icc CXX=icpc CFLAGS="-O3 -unroll2 -ip -mp -no-gcc -restrict" CXXFLAGS="-O3 -unroll2 -ip -mp -no-gcc -restrict" ./configure --prefix=/usr/local/mysql --localstatedir=/usr/local/mysql/data --libexecdir=/usr/local/mysql/bin --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --enable-assembler --disable-shared --with-client-ldflags=-all-static --with-mysqld-ldflags=-all-static --with-embedded-server --with-innodb
+
+请注意Intel 编译器8.1版和更高版有不同的“纯”C(icc)驱动程序和C++(icpc)驱动程序；如果你使用icc 8.0版本或较早的版本来构建MySQL，需要设置CXX=icc。
+
+·         Linux 2.4.xx Intel Itanium 2中的ecc (Intel C++ Itanium Compiler 7.0)：
+
+CC=ecc CFLAGS="-O2 -tpp2 -ip -nolib_inline" CXX=ecc CXXFLAGS="-O2 -tpp2 -ip -nolib_inline" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile
+
+·         Linux 2.4.xx Intel Itanium中的ecc(Intel C++ Itanium Compiler 7.0)：
+
+CC=ecc CFLAGS=-tpp1 CXX=ecc CXXFLAGS=-tpp1 ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile
+
+·         Linux 2.4.xx alpha中的ccc(Compaq C V6.2-505 / Compaq C++ V6.3-006)：
+
+CC=ccc CFLAGS="-fast -arch generic" CXX=cxx CXXFLAGS="-fast -arch generic -noexceptions -nortti" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --with-mysqld-ldflags=-non_shared --with-client-ldflags=-non_shared --disable-shared
+
+·         Linux 2.x.xx ppc中的gcc 2.95.4：
+
+CC=gcc CFLAGS="-O3 -fno-omit-frame-pointer" CXX=gcc CXXFLAGS="-O3 -fno-omit-frame-pointer -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --localstatedir=/usr/local/mysql/data --libexecdir=/usr/local/mysql/bin --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --disable-shared --with-embedded-server --with-innodb
+
+·         Linux 2.4.xx s390中的gcc 2.95.3：
+
+CFLAGS="-O2" CXX=gcc CXXFLAGS="-O2 -felide-constructors" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --disable-shared --with-client-ldflags=-all-static --with-mysqld-ldflags=-all-static
+
+·         Linux 2.4.xx x86_64(AMD64)中的gcc 3.2.1：
+
+CXX=gcc ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --disable-shared
+
+·         Sun Solaris 8 x86中的gcc 3.2.3：
+
+CC=gcc CFLAGS="-O3 -fno-omit-frame-pointer" CXX=gcc CXXFLAGS="-O3 -fno-omit-frame-pointer -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --localstatedir=/usr/local/mysql/data --libexecdir=/usr/local/mysql/bin --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --disable-shared --with-inno
+
+·         Sun Solaris 8 SPARC中的gcc 3.2：
+
+CC=gcc CFLAGS="-O3 -fno-omit-frame-pointer" CXX=gcc CXXFLAGS="-O3 -fno-omit-frame-pointer -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --enable-assembler --with-named-z-libs=no --with-named-curses-libs=-lcurses --disable-shared
+
+·         Sun Solaris 8 SPARC 64-bit中的gcc 3.2：
+
+CC=gcc CFLAGS="-O3 -m64 -fno-omit-frame-pointer" CXX=gcc CXXFLAGS="-O3 -m64 -fno-omit-frame-pointer -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --with-named-z-libs=no --with-named-curses-libs=-lcurses --disable-shared
+
+·         Sun Solaris 9 SPARC中的gcc 2.95.3：
+
+CC=gcc CFLAGS="-O3 -fno-omit-frame-pointer" CXX=gcc CXXFLAGS="-O3 -fno-omit-frame-pointer -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --enable-assembler --with-named-curses-libs=-lcurses --disable-shared 
+
+·         Sun Solaris 9 SPARC中的cc-5.0(Sun Forte 5.0)：
+
+CC=cc-5.0 CXX=CC ASFLAGS="-xarch=v9" CFLAGS="-Xa -xstrconst -mt -D_FORTEC_ -xarch=v9" CXXFLAGS="-noex -mt -D_FORTEC_ -xarch=v9" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --enable-assembler --with-named-z-libs=no --enable-thread-safe-client --disable-shared
+
+·         IBM AIX 4.3.2 ppc中的gcc 3.2.3：
+
+CFLAGS="-O2 -mcpu=powerpc -Wa,-many " CXX=gcc CXXFLAGS="-O2 -mcpu=powerpc -Wa,-many -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --with-named-z-libs=no --disable-shared
+
+·         IBM AIX 4.3.3 ppc中的xlC_r(IBM Visual Age C/C++ 6.0)：
+
+CC=xlc_r CFLAGS="-ma -O2 -qstrict -qoptimize=2 -qmaxmem=8192" CXX=xlC_r CXXFLAGS ="-ma -O2 -qstrict -qoptimize=2 -qmaxmem=8192" ./configure --prefix=/usr/local/mysql --localstatedir=/usr/local/mysql/data --libexecdir=/usr/local/mysql/bin --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --with-named-z-libs=no --disable-shared --with-innodb
+
+·         IBM AIX 5.1.0 ppc中的gcc 3.3：
+
+CFLAGS="-O2 -mcpu=powerpc -Wa,-many" CXX=gcc CXXFLAGS="-O2 -mcpu=powerpc -Wa,-many -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --with-named-z-libs=no --disable-shared
+
+·         IBM AIX 5.2.0 ppc中的xlC_r(IBM Visual Age C/C++ 6.0)： 
+
+CC=xlc_r CFLAGS="-ma -O2 -qstrict -qoptimize=2 -qmaxmem=8192" CXX=xlC_r CXXFLAGS="-ma -O2 -qstrict -qoptimize=2 -qmaxmem=8192" ./configure --prefix=/usr/local/mysql --localstatedir=/usr/local/mysql/data --libexecdir=/usr/local/mysql/bin --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --with-named-z-libs=no --disable-shared --with-embedded-server --with-innodb 
+
+·         HP-UX 10.20 pa-risc1.1中的gcc 3.1：
+
+CFLAGS="-DHPUX -I/opt/dce/include -O3 -fPIC" CXX=gcc CXXFLAGS="-DHPUX -I/opt/dce /include -felide-constructors -fno-exceptions -fno-rtti -O3 -fPIC" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --with-pthread --with-named-thread-libs=-ldce --with-lib-ccflags=-fPIC --disable-shared 
+
+·         HP-UX 11.00 pa-risc中的aCC(HP ANSI C++ B3910B A.03.50)：
+
+CC=cc CXX=aCC CFLAGS=+DAportable CXXFLAGS=+DAportable ./configure --prefix=/usr/local/mysql --localstatedir=/usr/local/mysql/data --libexecdir=/usr/local/mysql/bin --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --disable-shared --with-embedded-server --with-innodb
+
+·         HP-UX 11.11 pa-risc2.0 64bit中的aCC(HP ANSI C++ B3910B A.03.33)： 
+
+CC=cc CXX=aCC CFLAGS=+DD64 CXXFLAGS=+DD64 ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --disable-shared
+
+·         HP-UX 11.11 pa-risc2.0 32bit中的aCC(HP ANSI C++ B3910B A.03.33)： 
+
+CC=cc CXX=aCC CFLAGS="+DAportable" CXXFLAGS="+DAportable" ./configure --prefix=/usr/local/mysql --localstatedir=/usr/local/mysql/data --libexecdir=/usr/local/mysql/bin --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --disable-shared --with-innodb
+
+·         HP-UX 11.22 ia64 64bit中的aCC(HP aC++/ANSI C B3910B A.05.50)：
+
+CC=cc CXX=aCC CFLAGS="+DD64 +DSitanium2" CXXFLAGS="+DD64 +DSitanium2" ./configure --prefix=/usr/local/mysql --localstatedir=/usr/local/mysql/data --libexecdir=/usr/local/mysql/bin --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --disable-shared --with-embedded-server --with-innodb 
+
+·         Apple Mac OS X 10.2 powerpc中的gcc 3.1：
+
+CC=gcc CFLAGS="-O3 -fno-omit-frame-pointer" CXX=gcc CXXFLAGS="-O3 -fno-omit-frame-pointer -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --disable-shared 
+
+·         FreeBSD 4.7 i386中的gcc 2.95.4：
+
+CFLAGS=-DHAVE_BROKEN_REALPATH ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --enable-assembler --with-named-z-libs=not-used --disable-shared 
+
+·         使用LinuxThreads的FreeBSD 4.7 i386中的gcc 2.95.4：
+
+CFLAGS="-DHAVE_BROKEN_REALPATH -D__USE_UNIX98 -D_REENTRANT -D_THREAD_SAFE -I/usr/local/include/pthread/linuxthreads" CXXFLAGS="-DHAVE_BROKEN_REALPATH -D__USE_UNIX98 -D_REENTRANT -D_THREAD_SAFE -I/usr/local/include/pthread/linuxthreads" ./configure --prefix=/usr/local/mysql --localstatedir=/usr/local/mysql/data --libexecdir=/usr/local/mysql/bin --enable-thread-safe-client --enable-local-infile --enable-assembler --with-named-thread-libs="-DHAVE_GLIBC2_STYLE_GETHOSTBYNAME_R -D_THREAD_SAFE -I /usr/local/include/pthread/linuxthreads -L/usr/local/lib -llthread -llgcc_r" --disable-shared --with-embedded-server --with-innodb
+
+·         QNX Neutrino 6.2.1 i386中的gcc 2.95.3qnx-nto 20010315：
+
+CC=gcc CFLAGS="-O3 -fno-omit-frame-pointer" CXX=gcc CXXFLAGS="-O3 -fno-omit-frame-pointer -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --disable-shared
+
+下面的二进制是在由其它用户提供给MySQL AB的第三方系统上构建而成。这是免费赠送；MySQL AB没有完全控制这些系统，因此我们只能对在这些系统上构建的二进制提供有限的支持。
+
+·           SCO Unix 3.2v5.0.7 i386中的gcc 2.95.3: 
+
+CFLAGS="-O3 -mpentium" LDFLAGS=-static CXX=gcc CXXFLAGS="-O3 -mpentium -felide-constructors" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --with-named-z-libs=no --enable-thread-safe-client --disable-shared 
+
+·         SCO UnixWare 7.1.4 i386中的CC 3.2: 
+
+CC=cc CFLAGS="-O" CXX=CC ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --with-named-z-libs=no --enable-thread-safe-client --disable-shared --with-readline 
+
+·         CO OpenServer 6.0.0 i386中的CC 3.2: 
+
+CC=cc CFLAGS="-O" CXX=CC ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --with-named-z-libs=no --enable-thread-safe-client --disable-shared --with-readline 
+
+·         Compaq Tru64 OSF/1 V5.1 732 alpha中的cc/cxx(Compaq C V6.3-029i / DIGITAL C++ V6.1-027): 
+
+CC="cc -pthread" CFLAGS="-O4 -ansi_alias -ansi_args -fast -inline speed -speculate all" CXX="cxx -pthread" CXXFLAGS="-O4 -ansi_alias -fast -inline speed -speculate all -noexceptions -nortti" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --with-named-thread-libs="-lpthread -lmach -lexc -lc" --disable-shared --with-mysqld-ldflags=-all-static 
+
+·            SGI Irix 6.5 IP32中的gcc 3.0.1: 
+
+CC=gcc CFLAGS="-O3 -fno-omit-frame-pointer" CXXFLAGS="-O3 -fno-omit-frame-pointer -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --disable-shared 
+
+·         FreeBSD/sparc64 5.0中的gcc 3.2.1: 
+
+CFLAGS=-DHAVE_BROKEN_REALPATH ./configure --prefix=/usr/local/mysql --localstatedir=/usr/local/mysql/data --libexecdir=/usr/local/mysql/bin --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --disable-shared --with-innodb 
+
+在MySQL AB过去提供的二进制软件包中应用了下面的编译选项。这些二进制不再进行更新，但是在这里列出了这些编译选项供参考。
+
+·          Linux 2.2.xx SPARC中的egcs 1.1.2: 
+
+CC=gcc CFLAGS="-O3 -fno-omit-frame-pointer" CXX=gcc CXXFLAGS="-O3 -fno-omit-frame-pointer -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex --enable-thread-safe-client --enable-local-infile --enable-assembler --disable-shared 
+
+·         Linux 2.2.x x686中的gcc 2.95.2: 
+
+CFLAGS="-O3 -mpentiumpro" CXX=gcc CXXFLAGS="-O3 -mpentiumpro -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --enable-assembler --with-mysqld-ldflags=-all-static --disable-shared --with-extra-charsets=complex 
+
+·         SunOS 4.1.4 2 sun4c中的gcc 2.7.2.1: 
+
+CC=gcc CXX=gcc CXXFLAGS="-O3 -felide-constructors" ./configure --prefix=/usr/local/mysql --disable-shared --with-extra-charsets=complex --enable-assembler 
+
+·         SunOS 5.5.1(及以上版本)sun4u中的egcs 1.0.3a或2.90.27或gcc 2.95.2和更新版: 
+
+·         CC=gcc CFLAGS="-O3" CXX=gcc CXXFLAGS="-O3 -felide-constructors -fno-exceptions -fno-rtti" ./configure --prefix=/usr/local/mysql --with-low-memory --with-extra-charsets=complex --enable-assembler 
+
+·         SunOS 5.6 i86pc中的gcc 2.8.1: 
+
+CC=gcc CXX=gcc CXXFLAGS=-O3 ./configure --prefix=/usr/local/mysql --with-low-memory --with-extra-charsets=complex 
+
+·         BSDI BSD/OS 3.1 i386中的gcc 2.7.2.1: 
+
+CC=gcc CXX=gcc CXXFLAGS=-O ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex
+
+·         BSDI BSD/OS 2.1 i386中的gcc 2.7.2: 
+
+CC=gcc CXX=gcc CXXFLAGS=-O3 ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex
+
+·         AIX 4.2中的gcc 2.7.2.2：
+
+CC=gcc CXX=gcc CXXFLAGS=-O3 ./configure --prefix=/usr/local/mysql --with-extra-charsets=complex
+
+如果你有更好的上述配置选项，可以向MySQL internals邮件列表发送邮件。请参见1.7.1.1节，“The MySQL邮件列表”。
+
+在我们的站点中列出的MySQL 5.1发布的RPM分发版是由MySQL AB产生的。
+
+如果你想要编译MySQL调试版本，应当在前面的configure命令中加上--with-debug或--with-debug=full，并去掉-fomit-frame-pointer选项。
+
+2.1.3. 怎样获得MySQL
+检查MySQL下载页(http://dev.mysql.com/downloads/ )获取当前版本和下载指令信息。关于MySQL下载镜像站点的完整的最新列表，参见 http://dev.mysql.com/downloads/mirrors.html。你可以在此发现MySQL镜像站点和如何报告有问题的或过时的镜像站点的信息。
+我们的主镜像站点位于http://mirrors.sunsite.dk/mysql/。
+
+2.1.4. 通过MD5校验和或GnuPG验证软件包的完整性
+2.1.4.1. 验证MD5校验和
+2.1.4.2. 通过GnuPG进行签名检查
+2.1.4.3. 使用RPM进行签名检查
+下载了适合你的需求的MySQL安装软件包并在安装前，你应当确保它的完整性，没有被篡改。MySQL AB提供了3种完整性检查方法：
+·         MD5校验和
+
+·         使用GnuPG、GNU Privacy Guard对签名进行加密
+
+·         对于RPM软件包，使用内嵌式RPM完整性验证机制
+
+下面的章节描述了如何使用这些方法。
+
+如果你注意到MD5校验和与GPG签名不匹配，首先应尝试多次下载相关安装软件包，可以从其它镜像站点。如果你反复尝试仍不能成功验证安装软件包的完整性，请将此类问题通知给我们，包括完整的安装软件包名和你使用的下载站点，在<webmaster@mysql.com>或<build@mysql.com>。不要使用缺陷-报告机制来报告下载问题。
+
+2.1.4.1. 验证MD5校验和
+下载MySQL安装软件包后，你应当确保它的MD5校验和与提供的MySQL下载页上的相匹配。每个安装软件包有唯一的校验和，可以用下面的命令来验证，其中package_name是你下载的安装软件包的名称：
+
+shell> md5sum package_name
+示例：
+
+  shell> md5sum mysql-st和ard-5.1.2-alpha-linux-i686.tar.gz
+  aaab65abbec64d5e907dcd41b8699945  mysql-st和ard-5.1.2-alpha-linux-i686.tar.gz
+你应当验证结果校验和(十六进制数字字符串)与下载页上相关安装软件包下面显示的校验和相匹配。
+
+注释：一定要验证归档文件(例如，.zip或.tar.gz文件)的校验和，而不是其中包括的文件。
+
+请注意并非所有操作系统支持md5sum命令。在一些操作系统上，只是称为md5，另一些根本不装载它。在Linux中，它是GNU Text Utilities安装软件包的一部分，适合各种平台。可以从http：//www.gnu.org/software/textutils/下载源码。如果你已经安装了OpenSSL，还可以使用命令openssl md5 package_name。http：//www.fourmilab.ch/md5/提供了DOS/Windows使用的md5命令行实用工具。winMd5Sum是一个图形MD5检查工具，可以从http：//www.nullriver.com/index/products/winmd5sum获得。
+
+2.1.4.2. 通过GnuPG进行签名检查
+验证安装软件包完整性和真实性的另一个方法是使用加密签名。这比使用MD5校验和更可靠，但是需要更多的工作。
+
+MySQL AB用GnuPG(GNU Privacy Guard)对下载MySQ软件包进行签名。GnuPG是开放源码，不同于Phil Zimmermann的闻名的Pretty Good Privacy (PGP)。关于GnuPG和如何获得并安装到你的系统的详细信息，请参见http：//www.gnupg.org/。大多数Linux分发版装有默认安装的GnuPG。关于GnuPG的详细信息，参见 http：//www.openpgp.org/。
+
+要想验证具体安装软件包的签名，你首先需要获得MySQL AB公共GPG构建密钥的拷贝。可以从http：//www.keyserver.net/下载密钥。你想要获得的密钥名为build@mysql.com。另外，可以从下面的文本直接剪切并粘贴密钥：
+
+Key ID:
+pub  1024D/5072E1F5 2003-02-03
+     MySQL Package signing key (www.mysql.com) <build@mysql.com>
+Fingerprint: A4A9 4068 76FC BD3C 4567  70C8 8C71 8D3B 5072 E1F5
+ 
+Public Key (ASCII-armored):
+ 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.0.6 (GNU/Linux)
+Comment: For info see http://www.gnupg.org
+ 
+mQGiBD4+owwRBAC14GIfUfCyEDSIePvEW3SAFUdJBtoQHH/nJKZyQT7h9bPlUWC3
+RODjQReyCITRrdwyrKUGku2FmeVGwn2u2WmDMNABLnpprWPkBdCk96+OmSLN9brZ
+fw2vOUgCmYv2hW0hyDHuvYlQA/BThQoADgj8AW6/0Lo7V1W9/8VuHP0gQwCgvzV3
+BqOxRznNCRCRxAuAuVztHRcEAJooQK1+iSiunZMYD1WufeXfshc57S/+yeJkegNW
+hxwR9pRWVArNYJdDRT+rf2RUe3vpquKNQU/hnEIUHJRQqYHo8gTxvxXNQc7fJYLV
+K2HtkrPbP72vwsEKMYhhr0eKCbtLGfls9krjJ6sBgACyP/Vb7hiPwxh6rDZ7ITnE
+kYpXBACmWpP8NJTkamEnPCia2ZoOHODANwpUkP43I7jsDmgtobZX9qnrAXw+uNDI
+QJEXM6FSbi0LLtZciNlYsafwAPEOMDKpMqAK6IyisNtPvaLd8lH0bPAnWqcyefep
+rv0sxxqUEMcM3o7wwgfN83POkDasDbs3pjwPhxvhz6//62zQJ7Q7TXlTUUwgUGFj
+a2FnZSBzaWduaW5nIGtleSAod3d3Lm15c3FsLmNvbSkgPGJ1aWxkQG15c3FsLmNv
+bT6IXQQTEQIAHQUCPj6jDAUJCWYBgAULBwoDBAMVAwIDFgIBAheAAAoJEIxxjTtQ
+cuH1cY4AnilUwTXn8MatQOiG0a/bPxrvK/gCAJ4oinSNZRYTnblChwFaazt7PF3q
+zIhMBBMRAgAMBQI+PqPRBYMJZgC7AAoJEElQ4SqycpHyJOEAn1mxHijft00bKXvu
+cSo/pECUmppiAJ41M9MRVj5VcdH/KN/KjRtW6tHFPYhMBBMRAgAMBQI+QoIDBYMJ
+YiKJAAoJELb1zU3GuiQ/lpEAoIhpp6BozKI8p6eaabzF5MlJH58pAKCu/ROofK8J
+Eg2aLos+5zEYrB/LsrkCDQQ+PqMdEAgA7+GJfxbMdY4wslPnjH9rF4N2qfWsEN/l
+xaZoJYc3a6M02WCnHl6ahT2/tBK2w1QI4YFteR47gCvtgb6O1JHffOo2HfLmRDRi
+Rjd1DTCHqeyX7CHhcghj/dNRlW2Z0l5QFEcmV9U0Vhp3aFfWC4Ujfs3LU+hkAWzE
+7zaD5cH9J7yv/6xuZVw411x0h4UqsTcWMu0iM1BzELqX1DY7LwoPEb/O9Rkbf4fm
+Le11EzIaCa4PqARXQZc4dhSinMt6K3X4BrRsKTfozBu74F47D8Ilbf5vSYHbuE5p
+/1oIDznkg/p8kW+3FxuWrycciqFTcNz215yyX39LXFnlLzKUb/F5GwADBQf+Lwqq
+a8CGrRfsOAJxim63CHfty5mUc5rUSnTslGYEIOCR1BeQauyPZbPDsDD9MZ1ZaSaf
+anFvwFG6Llx9xkU7tzq+vKLoWkm4u5xf3vn55VjnSd1aQ9eQnUcXiL4cnBGoTbOW
+I39EcyzgslzBdC++MPjcQTcA7p6JUVsP6oAB3FQWg54tuUo0Ec8bsM8b3Ev42Lmu
+QT5NdKHGwHsXTPtl0klk4bQk4OajHsiy1BMahpT27jWjJlMiJc+IWJ0mghkKHt92
+6s/ymfdf5HkdQ1cyvsz5tryVI3Fx78XeSYfQvuuwqp2H139pXGEkg0n6KdUOetdZ
+Whe70YGNPw1yjWJT1IhMBBgRAgAMBQI+PqMdBQkJZgGAAAoJEIxxjTtQcuH17p4A
+n3r1QpVC9yhnW2cSAjq+kr72GX0eAJ4295kl6NxYEuFApmr1+0uUq/SlsQ==
+=YJkx
+-----END PGP PUBLIC KEY BLOCK-----
+你可以使用gpg --import将构建密钥导入你的个人公共GPG钥匙圈（keyring）。例如，如果你把密钥保存到mysql_pubkey.asc文件中，导入命令应为：
+
+shell> gpg --import mysql_pubkey.asc
+关于公共密钥如何工作的详细信息，请参阅GPG文档。
+
+下载并导入公共构建密钥后，下载期望的MySQL安装软件包和相应的签名，也可以从下载页上获得。签名文件名与分发版文件相同，有 an .asc扩展名。例如：
+
+分发文件
+ mysql-st和ard-5.1.2-alpha-linux-i686.tar.gz
+ 
+签名文件
+ mysql-st和ard-5.1.2-alpha-linux-i686.tar.gz.asc
+ 
+
+确保两个文件保存在同一目录下，运行下面的命令来验证分发文件的签名：
+
+shell> gpg --verify package_name.asc
+示例：
+
+  shell> gpg --verify mysql-standard-5.1.2-alpha-linux-i686.tar.gz.asc
+  gpg: Signature made Tue 12 Jul 2005 23:35:41 EST using DSA key ID 5072E1F5
+  gpg: Good signature from "MySQL Package signing key (www.mysql.com) <build@mysql.com>"
+Good signature消息表示所有内容都很正确。你可以忽略任何insecure memory警告。
+
+2.1.4.3. 使用RPM进行签名检查
+RPM软件包没有单独的签名。RPM软件包内置GPG签名和MD5校验和。可以运行下面的命令来验证安装软件包：
+
+shell> rpm --checksig package_name.rpm
+示例：
+
+shell> rpm --checksig MySQL-server-5.1.2-alpha-0.i386.rpm
+MySQL-server-5.1.2-alpha-0.i386.rpm： md5 gpg OK
+注释：如果你正使用RPM 4.1，并且出现关于(GPG) NOT OK (MISSING KEYS: GPG#5072e1f5)的抱怨，尽管你已经将MySQL公共构建密钥导入到你自己的GPG钥匙圈，你必须首先将密钥导入到RPM钥匙圈中。RPM 4.1不再使用你的个人GPG钥匙圈(或GPG本身)。RPM 4.1维护自己的钥匙圈，因为它是系统范围的应用程序，而用户GPG公共钥匙圈是具体的用户文件。要想将MySQL公共密钥导入RPM钥匙圈，要首先获得前面章节描述的密钥。然后使用rpm --import导入密钥。例如，如果你的公共密钥保存在mysql_pubkey.asc文件中，应使用下述命令导入公共密钥：
+
+shell> rpm --import mysql_pubkey.asc
+如果你需要获得MySQL公共密钥，参见2.1.4.2节，“通过GnuPG进行签名检查”。
+
+2.1.5. 安装布局
+这节描述安装MySQL AB提供的二进制代码和源码分发时创建的默认目录布局。如果你安装其它供应商提供的分发，应使用其它布局。
+在Windows中，MySQL 5.1的默认安装目录是C:\Program Files\MySQL\MySQL Server 5.1。(一些Windows用户宁愿安装到原来的默认安装目录 C：\mysql。然而，子目录布局仍然相同）。安装目录包括以下子目录：
+
+目录
+ 目录内容
+ 
+bin
+ 客户端程序和mysqld服务器
+ 
+data
+ 日志文件，数据库
+ 
+Docs
+ 文档
+ 
+examples
+ 示例程序和脚本
+ 
+include
+ 包含(头)文件
+ 
+lib
+ 库
+ 
+scripts
+ 实用工具脚本
+ 
+share
+ 错误消息文件
+ 
+
+使用MySQL AB's Linux RPM分发进行安装后，将在以下系统目录产生文件：
+
+目录
+ 目录内容
+ 
+/usr/bin
+ 客户端程序和脚本
+ 
+/usr/sbin
+ mysqld服务器
+ 
+/var/lib/mysql
+ 日志文件，数据库
+ 
+/usr/share/doc/packages
+ 文档
+ 
+/usr/include/mysql
+ 包含(头)文件
+ 
+/usr/lib/mysql
+ 库
+ 
+/usr/share/mysql
+ 错误消息和字符集文件
+ 
+/usr/share/sql-bench
+ 基准程序
+ 
+
+在Unix中，可以在你选择的安装位置解压并安装tar文件二进制分发(typically /usr/local/mysql)并在该位置创建以下目录：
+
+目录
+ 目录内容
+ 
+bin
+ 客户端程序和mysqld服务器
+ 
+data
+ 日志文件，数据库
+ 
+docs
+ 文档，ChangeLog
+ 
+include
+ 包含(头)文件
+ 
+lib
+ 库
+ 
+scripts
+ mysql_install_db
+ 
+share/mysql
+ 错误消息文件
+ 
+sql-bench
+ 基准程序
+ 
+
+配置并编译完源码分发后，便开始安装。默认情况下，可以将文件安装到/usr/local，即在下面的子目录中：
+
+目录
+ 目录内容
+ 
+bin
+ 客户端程序和脚本
+ 
+include/mysql
+ 包含(头)文件
+ 
+info
+ Info格式的文档
+ 
+lib/mysql
+ 库
+ 
+libexec
+ mysqld服务器
+ 
+share/mysql
+ 错误消息文件
+ 
+sql-bench
+ 基准程序和crash-me测试
+ 
+var
+ 数据库和日志文件
+ 
+
+在一个安装目录内，源码安装的布局在下列方面不同于二进制安装：
+
+·         mysqld服务器被安装在“libexec”目录而不是“bin”目录内。
+
+·         数据目录是“var”而非“data”。
+
+·         mysql_install_db被安装在“bin”目录而非“scripts”内。
+
+·         头文件和库目录是“include/mysql”和“lib/mysql”而非“include”和“lib”。
+
+执行源码分发根目录下的scripts/make_binary_distribution脚本，你可以用编译过的源码分发版创建你自己的二进制安装。
+
+2.2. 使用二进制分发版的标准MySQL安装
+后面几章包括如何在安装软件包格式适合的平台上平台安装MySQL。(即执行“二进制安装”）。也可以在多种平台上安装MySQL二进制分发版。关于适合所有平台的软件包的通用安装指令参见2.7节，“在其它类Unix系统中安装MySQL”。
+
+关于二进制分发版的使用和如何获得的详细信息请参见2.1节，“一般安装问题”。
+
+2.3. 在Windows上安装MySQL
+2.3.1. Windows系统要求
+2.3.2. 选择安装软件包
+2.3.3. 用自动安装器安装MySQL
+2.3.4. 使用MySQL安装向导
+2.3.5. 使用配置向导
+2.3.6. 通过非安装Zip文件安装MySQL
+2.3.7. 提取安装档案文件
+2.3.8. 创建选项文件
+2.3.9. 选择MySQL服务器类型
+2.3.10. 首次启动服务器
+2.3.11. 从Windows命令行启动MySQL
+2.3.12. 以Windows服务方式启动MySQL
+2.3.13. 测试MySQL安装
+2.3.14. 在Windows环境下对MySQL安装的故障诊断与排除
+2.3.15. 在Windows下升级MySQL
+2.3.16. Windows版MySQL同Unix版MySQL对比
+MySQL AB已经提供了Windows中安装的MySQL 3.21以上版本，并提供了每天下载MySQL的比率。本节描述在Windows中安装MySQL的过程。
+
+使用Windows版本MySQL安装器，结合GUI配置向导，可以自动安装MySQL，创建选项文件，启动服务器并使默认用户账户安全。
+
+如果你要升级已有的4.1.5版以前的MySQL,你必须执行以下步骤：
+
+1.    获得并安装分发版。
+
+2.    根据需要设置选项文件。
+
+3.    选择想要使用的服务器。
+
+4.    启动服务器。
+
+5.    为初始MySQL账户指定密码。
+
+该过程还适合安装软件包内不包括安装器的MySQL安装。
+
+Windows版MySQL 5.1有3种分发格式：
+
+·          二进制分发版包含一个设置程序，可以安装你需要的任何内容，因此可以立即启动服务器。
+
+·          源码分发版包含所有使用Visual Studio 2003编译器来构建可执行程序的代码和支持文件。
+
+一般来讲，你应当使用二进制分发版。它比其它的分发版使用起来要简单，不再需要其它工具来启动并运行MySQL。
+
+本节描述了如何使用二进制分发版在Windows中安装MySQL。要想使用源码分发版安装，参见2.8.6节，“在Windows下从源码安装MySQL”。
+
+2.3.1. Windows系统要求
+要想在Windows中运行MySQL，你需要：
+
+·         32位Windows操作系统，例如9x、Me、NT、2000、XP或Windows Server 2003。
+
+基于Windows NT的操作系统(NT，2000,XP，2003)，将MySQL服务器做为服务来运行。强烈建议使用基于Windows NT的操作系统。请参见2.3.12节，“以Windows服务方式启动MySQL”。
+
+·         TCP/IP协议支持。
+
+·         Windows版本MySQL二进制分发版，可以从http：//dev.mysql.com/下载/下载。请参见2.1.3节，“怎样获得MySQL”。
+
+注释：如果你从FTP下载分发版，我们建议使用充分的FTP客户端以保证续传，避免下载过程中文件被破坏。
+
+·         可以读取 .zip文件的工具，以解压分发文件。
+
+·         硬盘上有足够的空间保证根据你的需求来解包、安装和创建数据库(一般建议至少有200兆字节)。
+
+你还可以有以下可选需求：
+
+·         如果你计划通过ODBC连接MySQL服务器，你还需要一个连接器/ODBC驱动程序。请参见26.1节，“MySQL Connector/ODBC”。
+
+·         如果表需要占用的空间大于4GB，则在NTFS或更新的文件系统上安装MySQL。当创建表时不要忘记使用MAX_ROWS和 AVG_ROW_LENGTH。请参见13.1.5节，“CREATE TABLE语法”。
+
+2.3.2. 选择安装软件包
+在Windows中安装MySQL时，有3种MySQL 5.1安装软件包可供选择：
+
+·         基本安装：该安装软件包的文件名类似于mysql-essential-5.1.2-alpha-win32.msi，包含在Windows中安装MySQL所需要的最少的文件，包括配置向导。该安装软件包不包括可选组件，例如嵌入式服务器和基准套件。
+
+·         完全安装：该安装软件包的文件名类似于mysql-5.1.2-alpha-win32.zip，包含在Windows中安装MySQL所需要的全部文件，包括配置向导。该安装软件包包括可选组件，例如嵌入式服务器和基准套件。
+
+·         非自动安装文件：该安装软件包的文件名类似于mysql-noinstall-5.1.2-alpha-win32.zip，包含完整安装包中的全部文件，只是不包括配置向导。该安装软件包不包括自动安装器，必须手动安装和配置。
+
+对于大多数用户，建议选择基本安装。
+
+你的选择会影响你后面必须遵从的安装过程。如果你选择基本安装或完全安装，参见2.3.3节，“用自动安装器安装MySQL”。如果你选择非自动安装MySQL，参见2.3.6节，“通过非安装Zip文件安装MySQL”。
+
+2.3.3. 用自动安装器安装MySQL
+在Windows中安装MySQL时，新用户可以使用MySQL安装帮助和MySQL Configuration Wizard（配置向导）。MySQL安装和配置的方式是使新用户可以立即开始使用MySQL。
+基本安装和完全安装中均包括MySQL安装帮助和配置向导，建议在大多数标准MySQL安装中选择。例外情况包括想在单个服务器上安装多个实例的用户和想完全控制服务器配置的高级用户。
+
+2.3.4. 使用MySQL安装向导
+2.3.4.1. 前言
+2.3.4.2. 下载并启动MySQL安装向导
+2.3.4.3. 选择安装类型
+2.3.4.4. 定制安装对话框
+2.3.4.5. 配置对话框
+2.3.4.6. MySQL安装向导所作的更改
+2.3.4.7. 升级MySQL
+2.3.4.1. 前言
+MySQL安装帮助是MySQL服务器的安装器，使用最新的Microsoft Window安装器技术。结合使用MySQL安装帮助和配置向导，用户安装并 配置完MySQL服务器后便可以直接使用。
+
+MySQL安装帮助是MySQL 5.1服务器分发的标准安装器。使用MySQL安装帮助安装MySQL之前，用户需要手动关闭并卸载已经安装的以前版本的MySQL。关于对以前版本进行升级的详细信息请参见 2.3.4.7节，“升级MySQL”。
+
+最近版本的Windows包含了改进版本的Microsoft Windows安装器(MSI)。MSI已经成为Windows 2000、Windows XP和Windows Server 2003应用程序安装的事实标准。MySQL安装帮助中使用了该技术，使安装过程更加灵活、顺利。
+
+Microsoft Windows安装器引擎随着Windows XP的更新而更新；使用以前Windows版本的用户可以参考Microsoft 知识库文章查阅关于升级到最新版Windows安装器引擎的资料。
+
+此外，Microsoft最近已经引入了WiX(Windows 安装器 XML)工具包。这是Microsoft公认的开放源码项目。我们转换到WiX是因为它是一个开放源码项目，可以使用脚本更加灵活地处理整个Windows安装过程。
+
+对MySQL装帮助的改进依赖于各用户的支持和反馈。如果你发现MySQL安装帮助缺少对你很重要的某些功能，或如果你发现某个缺陷，请使用我们的MySQL缺陷系统来索取功能或报告问题。
+
+2.3.4.2. 下载并启动MySQL安装向导
+可以从http://dev.mysql.com/downloads/下载MySQL服务器安装软件包。如果你下载的安装软件包在Zip文件中，你需要先提取文件。
+
+启动帮助的过程取决于下载的安装软件包的内容。如果有setup.exe文件，双击启动安装过程。如果有.msi文件，双击启动安装过程。
+
+2.3.4.3. 选择安装类型
+有3种安装类型：Typical(典型安装)、Complete(完全安装)和Custom(定制安装)。
+
+Typical(典型安装)安装只安装MySQL服务器、mysql命令行客户端和命令行实用程序。命令行客户端和实用程序包括mysqldump、myisamchk和其它几个工具来帮助你管理MySQL服务器。
+
+Complete(完全安装)安装将安装软件包内包含的所有组件。完全安装软件包包括的组件包括嵌入式服务器库、基准套件、支持脚本和文档。
+
+Custom(定制安装)安装允许你完全控制你想要安装的软件包和安装路径。关于定制安装的详细信息请参见2.3.4.4节，“定制安装对话框”。
+
+如果你选择Typical(典型安装)或Complete(完全安装)安装并点击Next按钮，你将进入确认窗口确认选择并开始安装。如果你选择定制安装并点击Next按钮，你将进入定制安装对话框，参见2.3.4.4节，“定制安装对话框”。
+
+2.3.4.4. 定制安装对话框
+如果你想要更改MySQL安装帮助安装的安装路径或具体组件，应当选择Custom(定制安装)安装。
+所有可用组件列入定制安装对话框左侧的树状视图内。未安装的组件用红色 X 图标表示；已经安装的组件有灰色图标。要想更改组件，点击该组件的图标并从下拉列表中选择新的选项。
+
+可以点击安装路径右侧的Change...按钮来更改默认安装路径。
+
+选择了安装组件和安装路径后，点击Next按钮进入确认对话框。
+
+2.3.4.5. 配置对话框
+选择了安装类型和可选安装组件后，则进入确认对话框。该对话框中将显示安装类型和安装路径供检查。
+
+如果你满意设定值要想安装MySQL，点击Install（安装）按钮。要想更改设定值，点击Back按钮。要想退出MySQL安装帮助不再安装 MySQL，点击Cancel按钮。
+
+完成安装后，将出现注册选项和MySQL网址。注册后便可以访问forums.mysql.com处的MySQL论坛，可以在bugs.mysql.com报告缺陷，并可以注册为时事新闻订户。在安装器的最后一个窗口内，提供了安装摘要，并提供选项以启动MySQL Configuration Wizard（配置向导），可以用来创建配置文件，安装MySQL服务并进行安全配置。
+
+2.3.4.6. MySQL安装向导所作的更改
+点击Install（安装）按钮后，MySQL安装帮助开始安装过程，并对系统进行下面章节描述的更改。
+更改注册表
+
+在典型安装中，MySQL安装帮助在HKEY_LOCAL_MACHINE\SOFTWARE\MySQL AB创建Windows注册键值。
+
+MySQL安装帮助根据正安装的服务器的主要版本创建一个键值，例如 MySQL服务器5.1。它包含两个字符串值，Location和Version。Location字符串包含安装目录。在默认安装中，它包含C:\Program Files\MySQL\MySQL Server 5.1\。Version字符串包含发布号。例如，安装MySQL Server 5.1.2-alpha，键值包含一个5.1.2-alpha值。
+
+这些注册键值用来帮助外部工具识别MySQL服务器的安装位置，不需要扫描整个硬盘来确定MySQL服务器的安装路径。运行服务器时不需要注册键值，使用noinstall Zip文件时不创建注册键值。
+
+更改启动菜单
+
+MySQL安装帮助在Windows 启动菜单中创建一条新的条目，使用MySQL菜单，根据安装的MySQL的主版本来命名。例如，如果安装了MySQL 5.1, MySQL安装帮助在启动菜单中创建MySQL Server 5.1部分。
+
+将在新启动菜单部分创建下面的条目：
+
+·         MySQL命令行客户端：这是mysql命令行客户端的快捷方式，对其进行配置以连接为root用户。当连接时快捷方式提示输入root用户密码。
+
+·         MySQL服务器实例配置向导：这是MySQL Configuration Wizard（配置向导）的快捷方式。使用该快捷方式来配置新安装的服务器，或重新配置已有的服务器。
+
+·         MySQL文档：可以连接到保存在MySQL服务器安装目录下的文档。采用基本安装方式安装MySQL服务器时，该选项不可用。
+
+更改文件系统
+
+默认情况下，MySQL安装帮助将MySQL 5.1服务器安装到C:\Program Files\MySQL\MySQL Server 5.1，其中Program Files是系统应用程序的默认位置，5.1是MySQL服务器的主要版本。这是建议的MySQL服务器的新安装位置，替换了前面的默认位置c：\mysql。
+
+默认情况下，所有MySQL应用程序保存到目录C:\Program Files\MySQL下，其中Program Files是应用程序在Windows中的默认安装位置。开发机器上的典型MySQL安装应为：
+
+C:\Program Files\MySQL\MySQL Server 5.1
+C:\Program Files\MySQL\MySQL Administrator 1.0
+C:\Program Files\MySQL\MySQL Query Browser 1.0
+该方法使管理和维护具体系统上安装的MySQL应用程序更加容易。
+
+2.3.4.7. 升级MySQL
+使用MSI的升级功能，MySQL安装帮助可以自动执行服务器升级。这意味着安装新版本前，不需要手动卸载前面安装的程序。安装新版本前，安装器自动关闭并卸载前面安装的MySQL服务。
+
+只有在主版本号和次要版本号相同的安装之间进行升级时，才能自动进行升级。例如，可以自动从MySQL 4.1.5升级到MySQL 4.1.6,但是不能从MySQL 5.0升级到MySQL 5.1。
+
+参见2.3.15节，“在Windows下升级MySQL”。
+
+2.3.5. 使用配置向导
+2.3.5.1. 前言
+2.3.5.2. 启动MySQL配置向导
+2.3.5.3. 选择维护选项
+2.3.5.4. 选择配置类型
+2.3.5.5. 服务器类型对话框
+2.3.5.6. 数据库使用情况对话框
+2.3.5.7. InnoDB表空间对话框
+2.3.5.8. 并发连接对话框
+2.3.5.9. 联网选项对话框
+2.3.5.10. 字符集对话框
+2.3.5.11. 服务选项对话框
+2.3.5.12. 安全选项对话框
+2.3.5.13. 配置对话框
+2.3.5.14. my.ini文件的位置
+2.3.5.15. 编辑my.ini文件
+2.3.5.1. 前言
+MySQL Configuration Wizard（配置向导）可以帮助自动配置Windows中的服务器。MySQL Configuration Wizard（配置向导）问你一系列问题，然后将回答放到模板中生成一个my.ini文件，该文件与你的安装一致。
+MySQL Configuration Wizard（配置向导）包含在MySQL 5.1服务器中，目前只适用于Windows用户。
+
+MySQL Configuration Wizard（配置向导）在很大程度上是MySQL AB经过多年从许多用户收到的反馈的结果。然而，如果你发现它缺少某些对你很重要的功能，或如果你发现一个缺陷，请使用我们的MySQL 缺陷系统来索取功能或报告问题。
+
+2.3.5.2. 启动MySQL配置向导
+一般情况当MySQL安装帮助退出时，从MySQL安装帮助启动MySQL Configuration Wizard（配置向导）。还可以点击Windows启动菜单中MySQL服务器实例配置向导条目中的MySQL部分来启动MySQL Configuration Wizard（配置向导）。
+并且，还可以进入MySQL安装bin目录直接启动MySQLInstanceConfig.exe文件。
+
+2.3.5.3. 选择维护选项
+如果MySQL Configuration Wizard（配置向导）检查到my.ini文件，你可以选择重新配置已有的服务器，或通过删除my.ini文件并停止、卸载MySQL服务来卸载服务器实例。
+要想重新配置已有的服务器，选择Re-configure Instance选项并点击Next按钮。已有的my.ini文件重新命名为mytimestamp.ini.bak，其中timestamp是my.ini文件创建是的日期和时间。要想卸载已有的服务器实例，选择Remove Instance选项并点击Next按钮。
+
+如果选择了Remove Instance选项，则进入确认窗口。点击Execute按钮：MySQL Configuration Wizard（配置向导）停止并卸载MySQL服务，然后删除my.ini文件。服务器安装和自己的data文件夹不删除。
+
+如果选择了Re-configure Instance选项，则进入配置类型对话框，可以选择你想要配置的安装类型。
+
+2.3.5.4. 选择配置类型
+当启动MySQL Configuration Wizard（配置向导）重新安装MySQL，或为已有安装选择Re-configure Instance选项，则进入配置类型对话框。
+
+可以选择两种配置类型：Detailed Configuration（详细配置）和Standard Configuration（标准配置）。Standard Configuration（标准配置）选项适合想要快速启动MySQL而不必考虑服务器配置的新用户。详细配置选项适合想要更加细粒度控制服务器配置的高级用户。
+
+如果你是MySQL的新手，需要配置为单用户开发机的服务器，Standard Configuration（标准配置）应当适合你的需求。选择Standard Configuration（标准配置）选项，则 MySQL Configuration Wizard（配置向导）自动设置所有配置选项，但不包括服务选项和安全选项。
+
+Standard Configuration（标准配置）设置选项可能与安装MySQL的系统不兼容。如果系统上已经安装了MySQL和你想要配置的安装，建议选择详细配置。
+
+要想Standard Configuration（标准配置），请分别参阅2.3.5.11节，“服务选项对话框”和2.3.5.12节，“安全选项对话框”的服务选项和安全选项。
+
+2.3.5.5. 服务器类型对话框
+可以选择3种服务器类型，选择哪种服务器将影响到MySQL Configuration Wizard（配置向导）对内存、硬盘和过程或使用的决策。
+·         Developer Machine(开发机器)：该选项代表典型个人用桌面工作站。假定机器上运行着多个桌面应用程序。将MySQL服务器配置成使用最少的系统资源。
+
+·         Server Machine（服务器）：该选项代表服务器，MySQL服务器可以同其它应用程序一起运行，例如FTP、email和web服务器。MySQL服务器配置成使用适当比例的系统资源。
+
+·         Dedicated MySQL Server Machine（专用MySQL服务器）：该选项代表只运行MySQL服务的服务器。假定运行没有运行其它应用程序。MySQL服务器配置成使用所有可用系统资源。
+
+2.3.5.6. 数据库使用情况对话框
+通过Database Usage（数据库使用）对话框，你可以指出创建MySQL表时使用的表处理器。通过该选项，你可以选择是否使用InnoDB储存引擎，以及InnoDB占用多大比例的服务器资源。
+·         Multifunctional Database（多功能数据库）：选择该选项，则同时使用InnoDB和MyISAM储存引擎，并在两个引擎之间平均分配资源。建议经常使用两个储存引擎的用户选择该选项。
+
+·         Transactional Database Only（只是事务处理数据库）：该选项同时使用InnoDB和MyISAM 储存引擎，但是将大多数服务器资源指派给InnoDB储存引擎。建议主要使用InnoDB只偶尔使用MyISAM的用户选择该选项。
+
+·         Non-Transactional Database Only（只是非事务处理数据库）：该选项完全禁用InnoDB储存引擎，将所有服务器资源指派给MyISAM储存引擎。建议不使用InnoDB的用户选择该选项。
+
+2.3.5.7. InnoDB表空间对话框
+有些用户可能想要将InnoDB表空间文件放到不同的位置，而不放到MySQL服务器数据目录。如果你的系统有较大的空间或较高性能的储存设备（例如RAID储存系统），则最好将表空间文件单独放到一个位置。
+要想更改InnoDB表空间文件的默认位置，从驱动器下拉列表选择一个新的驱动器，并从路径下拉列表选择新的路径。要想创建路径，点击 ...按钮。
+
+如果你要更改已有服务器的配置，更改路径前你必须点击Modify按钮。此时启动服务器之前，你必须将已有表空间文件移到新位置。
+
+2.3.5.8. 并发连接对话框
+限制所创建的与MySQL服务器之间的并行连接数量很重要，以便防止服务器耗尽资源。在Concurrent Connections（并行连接）对话框中，可以选择服务器的使用方法，并根据情况限制并行连接的数量。还可以手动设置并行连接的限制。
+·         Decision Support（决策支持）(DSS)/OLAP：如果服务器不需要大量的并行连接可以选择该选项。假定最大连接数目设置为100,平均并行连接数为20。
+
+·         Online Transaction Processing（联机事务处理）(OLTP)：如果你的服务器需要大量的并行连接则选择该选项。最大连接数设置为500。
+
+·         Manual Setting（人工设置）：选择该选项可以手动设置服务器并行连接的最大数目。从前面的下拉框中选择并行连接的数目，如果你期望的数目不在列表中，则在下拉框中输入最大连接数。
+
+2.3.5.9. 联网选项对话框
+在Networking Options（网络选项）对话框中可以启用或禁用TCP/IP网络，并配置用来连接MySQL服务器的端口号。
+默认情况启用TCP/IP网络。要想禁用TCP/IP网络，取消选择Enable TCP/IP Networking选项旁边的检查框。
+
+默认使用3306端口。要想更访问MySQL使用的端口，从下拉框选择一个新端口号或直接向下拉框输入新的端口号。如果你选择的端口号已经被占用，将提示确认选择的端口号。
+
+2.3.5.10. 字符集对话框
+MySQL服务器支持多种字符集，可以设置适用于所有表、列和数据库的默认服务器字符集。使用Character Set（字符集对话框）来更改 MySQL服务器的默认字符集。
+·         Standard Character Set（标准字符集）：如果想要使用Latin1做为默认服务器字符集，则选择该选项。Latin1用于英语和许多西欧语言。
+
+·         Best Support For Multilingualism（支持多种语言）：如果想要使用UTF8做为默认服务器字符集，则选择该选项。UTF8可以 将不同语言的字符储存为单一的字符集。
+
+·         Manual Selected Default Character Set/Collation（人工选择的默认字符集/校对规则）：如果想要手动选择服务器的默认字符集，请选择该项。从下拉列表中选择期望的字符集。
+
+2.3.5.11. 服务选项对话框
+在基于Windows NT的平台上，可以将MySQL服务器安装成服务。安装成服务，系统启动时可以自动启动MySQL服务器，甚至出现服务故障时可以随Windows自动启动。
+
+默认情况，MySQL Configuration Wizard（配置向导）将MySQL服务器安装为服务，服务名为MySQL。如果你不想安装服务，取消Install As Windows Service选项旁边的选择框。可以从下拉框选择新的服务名或在下拉框输入新的服务名来更改服务名。
+
+要想将MySQL服务器安装为服务，但是不自动启动，不选中Launch the MySQL Server Automatically选项旁边的检查框。
+
+2.3.5.12. 安全选项对话框
+强烈建议为你的MySQL服务器设置一个root密码，默认情况MySQL Configuration Wizard（配置向导）要求你设置一个root密码。如果你不想设置root密码，不选中Modify Security Settings（修改安全设定值）选项旁边的选择框。
+
+要想设置root密码，在New root password(输入新密码)和Confirm（确认）两个框内输入期望的密码。如果重新配置已有的服务器，你还需要Current root password（当前root密码）框内输入已有的root密码。
+
+要想防止通过网络以root登录，选中Root may only connect from localhost（只允许从本机登陆连接root）选项旁边的框。这样可以提高root账户的安全。
+
+要想创建一个匿名用户账户，选中Create An Anonymous Account（创建匿名账户）选项旁边的框。创建匿名账户会降低服务器的安全，并造成登录和许可困难。因此不建议。
+
+2.3.5.13. 配置对话框
+MySQL Configuration Wizard（配置向导）的最后一个对话框是Confirmation（确认）对话框。要想启动配置过程，点击Execute。要想返回要想到前面的对话框，点击Back按钮。要想不配置服务器即退出MySQL Configuration Wizard（配置向导），点击Cancel按钮。
+点击Execute按钮后，MySQL Configuration Wizard（配置向导）执行一系列的任务，执行过程将显示在屏幕上。
+
+MySQL Configuration Wizard（配置向导）首先使用MySQL AB开发人员和工程师准备的模板根据你的选择确定配置文件选项。该模板的名称为my-template.ini，位于服务器安装目录中。
+
+MySQL Configuration Wizard（配置向导）将这些选项写入到一个my.ini文件中。my.ini文件的最终位置显示在写配置文件任务的旁边。
+
+如果选择为MySQL服务器创建一个服务，MySQL Configuration Wizard（配置向导）则创建并启动服务。如果你重新配置已有的服务，MySQL Configuration Wizard（配置向导）则根据你的配置更改重新启动服务。
+
+如果选择设置root密码，MySQL Configuration Wizard（配置向导）则连接服务器，设置新root密码并应用你选择的其它安全设定值。
+
+MySQL Configuration Wizard（配置向导）完成任务后，则显示一个概要。点击Finish按钮退出MySQL Configuration Wizard（配置向导）。
+
+2.3.5.14. my.ini文件的位置
+MySQL Configuration Wizard（配置向导）将my.ini文件放到MySQL服务器的安装目录中。这样可以帮助将配置文件与具体服务器实例关联起来。
+要想确保MySQL服务器知道从哪里查找my.ini文件，即做为服务安装的一部分传递给MySQL服务器的部分：--defaults-file="C:\Program Files\MySQL\MySQL Server 5.1\my.ini"，其中C:\Program Files\MySQL\MySQL Server 5.1 被MySQL服务器的安装路径替代。
+
+--defaults-file指导MySQL服务器读取具体的配置文件。
+
+2.3.5.15. 编辑my.ini文件
+要想修改my.ini文件，用文本编辑器打开并进行必要的修改。你还可以用MySQL Administrator实用工具修改服务器配置。
+MySQL客户端和实用程序，例如mysql命令行客户端和mysqldump不能将my.ini文件放到服务器安装目录中。要想配置客户端和实用工具，根据Windows 版本，在C：\Windows或C：\WINNT目录下创建一个新的my.ini文件。
+
+2.3.6. 通过非安装Zip文件安装MySQL
+想使用非自动安装包的用户可以使用本节的指令手动安装MySQL。从Zip文档安装MySQL的过程为：
+
+1.    将文档提取到期望的安装目录中。
+
+2.    创建一个选项文件。
+
+3.    选择MySQL服务器类型。
+
+4.    启动MySQL服务器。
+
+5.    使默认用户账户安全。
+
+下面一节描述了该过程。
+
+2.3.7. 提取安装档案文件
+要想手动安装MySQL，其步骤为：
+
+1.    如果你从以前的版本升级，开始升级过程前请参阅2.3.15节，“在Windows下升级MySQL”。
+
+2.    如果你使用基于Windows NT的操作系统，例如Windows NT、Windows 2000、Windows XP或Windows Server 2003,确保登录的用户名具有管理员权限。
+
+3.    选择安装位置。传统安装中MySQL服务器安装到C：\mysql，MySQL Installation Wizard（安装帮助）将MySQL安装到C:\Program Files\MySQL。如果你不想将MySQL安装到C：\mysql，你必须在启动过程或在选项文件中指定安装目录的路径。请参见2.3.8节，“创建选项文件”。
+
+4.    使用zip文件工具，将安装文件提取到选定的安装位置。使用某些工具，可以将文档提取到选择的安装位置的文件夹中。在这种情况下，你可以将子文件夹中的内容移动到选择的安装位置。
+
+2.3.8. 创建选项文件
+如果想要指定运行服务器的启动选项，可以在命令行中指出或放到一个选项文件中。对于服务器每次启动都用到的选项，你会发现使用选项文件来指定MySQL配置非常方便。特别是在以下环境中：
+·         安装或数据目录位置不是默认位置(C:\Program Files\MySQL\MySQL Server 5.1和C:\Program Files\MySQL\MySQL Server 5.1\data)。
+
+·         需要调节服务器设定值。
+
+档MySQL服务器在Windows中启动时，它从两个文件中寻找选项：Windows目录中的my.ini文件和C：\my.cnf 文件。Windows目录典型名称为C：\WINDOWS或C：\WINNT。可以使用下面的命令从WINDIR环境变量值确定自己的确切位置：
+
+C：\> echo %WINDIR%
+MySQL首先从my.ini文件中寻找选项，然后从my.cnf文件中寻找。为了避免混淆，最好只使用一个文件。如果你的PC使用了一个引导加载器，其中C：不是引导盘，唯一的选则是使用my.ini文件。不管你使用哪个选项文件，必须为纯文本文件。
+
+还可以使用MySQL分发中的示例选项文件。在安装目录中查找以下文件：my-small.cnf、my-medium.cnf、my-large.cnf和my-huge.cnf，你可以重新命名并复制到相应位置用作基本配置文件。
+
+可以用任何文本编辑器来创建并修改选项文件，例如记事本。例如，如果MySQL安装在E：\mysql，数据目录安装在E:\mydata\data，你可以 创建含有[mysqld]部分的选项文件，指定basedir和datadir参数的值：
+
+[mysqld]
+# set basedir to your installation path
+basedir=E:/mysql
+# set datadir to the location of your data directory
+datadir=E:/mydata/data
+请注意在选项文件中使用正斜线儿不是反斜线指定Windows路径名。如果使用反斜线，必须用双反斜线：
+
+[mysqld]
+# set basedir to your installation path
+basedir=E:\\mysql
+# set datadir to the location of your data directory
+datadir=E:\\mydata\\data
+在Windows下，MySQL安装器将数据目录直接放到安装MySQL的目录下。如果你想要使用其它位置的数据目录，应当将data目录中的全部内容复制到新的目录下。例如，如果MySQL安装到C:\Program Files\MySQL\MySQL Server 5.1中，数据目录默认在C:\Program Files\MySQL\MySQL Server 5.1\data。如果想要使用E:\mydata做为数据目录，你必须做两件事情：
+
+1.    将整个data目录和全部内容从C:\Program Files\MySQL\MySQL Server 5.1\data移动到E:\mydata。
+
+2.    每次启动服务器时，使用--datadir选项来指定新的数据目录。
+
+2.3.9. 选择MySQL服务器类型
+下面的表显示了Windows下可用的MySQL 5.1服务器：
+
+二进制
+ 描述
+ 
+mysqld- debug
+ 已经编译过，可以进行完全调试和自动内存分配检查，用于表InnoDB和BDB。
+ 
+mysqld
+ 优化的二进制，支持InnoDB。
+ 
+mysqld-nt
+ 优化的二进制，支持Windows NT，2000 XP，有命名管道。
+ 
+mysqld-max
+ 优化的二进制，支持InnoDB和BDB表。
+ 
+mysqld-max-nt
+ 同mysqld-max，但是已经编译过，支持命名管道。
+ 
+
+已经对所有前面的二进制进行了优化以适用现代Intel处理器，但是应当工作在Intel i386-类或更高的处理器上。
+
+所有Windows MySQL 5.1服务器支持数据库目录符号链接。
+
+MySQL支持所有Windows平台的TCP/IP。mysqld-nt和mysql-max-nt服务器支持Windows NT、2000、XP和2003的命名管道。然而，在所有平台下默认使用TCP/IP。(在许多Windows配置中，命名管道比TCP/IP慢）。 
+
+命名管道在以下条件下使用：
+
+·         如果使用--enable-named-pipe选项启动服务器，则启用了命名管道。需要明确使用该选项，因为当使用命名管道关闭MySQL服务器时，某些用户会遇到问题。
+
+·         只有mysqld-nt或mysqld-max-nt服务器，并且服务器运行在支持命名管道的Windows版本(NT、2000、XP、2003)，才能够使用命名管道连接。
+
+·         这些服务器可以运行在Windows 98 或Me中，但是必须安装TCP/IP协议；此时不可以使用命名管道连接。
+
+·         这些服务器不能在Windows 95中运行。
+
+注释：参考手册中的大多数例子使用mysqld做为服务器名。如果你选择使用不同的服务器，例如mysqld-nt，则在相应例子中的命令中进行相应的替换。
+
+2.3.10. 首次启动服务器
+本节中的信息主要适用选择NoinstallMySQL安装版本，或想要手动配置和测试MySQL而不用GUI工具的情况。
+
+在Windows 95,98,或Me中，MySQL客户端总使用TCP/IP连接服务器。(这样允许网络中的所有机器连接MySQL服务器）。因此，在启动MySQL之前，你必须确保机器支持TCP/IP。可以从Windows CD-ROM中找到TCP/IP。
+
+请注意如果使用旧版本的Windows 95(例如，OSR2)，很可能你使用了旧的Winsock包；MySQL需要Winsock 2。可以从http://www.microsoft.com/获得最新的Winsock。Windows 98包含新的Winsock 2库，因此不需要更新库。
+
+在基于NT的系统中，例如 Windows NT、2000、XP或2003,客户端可以有两个选择。可以使用TCP/IP，如果服务器支持命名管道连接，也可以使用命名管道。要想使MySQL使用Windows NT 4中的TCP/IP,你必须安装服务pack 3(或更新的补丁)。
+
+如果用--shared-memory选项启动，Windows版MySQL还支持共享内存连接。客户端可以通过--protocol=memory选项通过共享内存进行连接。
+
+关于运行哪个服务器二进制的信息，参见2.3.9节，“选择MySQL服务器类型”。
+
+本节对MySQL服务器启动进行了概述。下面章节详细说明了从命令行或Windows 服务启动MySQL服务器的具体信息。
+
+这些章节的例子假定MySQL安装到默认位置C:\Program Files\MySQL\MySQL Server 5.1。如果你将MySQL安装到了其它位置，则要更改例子中的路径名。
+
+在控制台窗口(或“DOS window”)中，最好根据命令提示进行测试。这样可以让服务器在window中容易看见的地方显示状态消息。如果配置出现错误，通过这些消息，可以更容易地识别并修复问题。
+
+要想启动服务器，输入命令：
+
+C：\> C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqld --console
+支持InnoDB的服务器启动时，你应当能看见下面的消息：
+
+InnoDB: The first specified datafile c:\ibdata\ibdata1 did not exist:
+InnoDB: a new database to be created！
+InnoDB: Setting file c:\ibdata\ibdata1 size to 209715200
+InnoDB: Database physically writes the file full: wait...
+InnoDB: Log file c:\iblogs\ib_logfile0 did not exist: new to be created
+InnoDB: Setting log file c:\iblogs\ib_logfile0 size to 31457280
+InnoDB: Log file c:\iblogs\ib_logfile1 did not exist: new to be created
+InnoDB: Setting log file c:\iblogs\ib_logfile1 size to 31457280
+InnoDB: Log file c:\iblogs\ib_logfile2 did not exist: new to be created
+InnoDB: Setting log file c:\iblogs\ib_logfile2 size to 31457280
+InnoDB: Doublewrite buffer not found: creating new
+InnoDB: Doublewrite buffer created
+InnoDB: creating foreign key constraint system tables
+InnoDB: foreign key constraint system tables created
+011024 10:58:25  InnoDB: Started
+服务器完成启动序列后，你应当能看见下述内容，表示服务器准备好，可以进行客户端连接：
+
+mysqld: ready for connections
+Version: '5.1.2-alpha'  socket: ''  port: 3306
+服务器继续向控制台写入诊断输出。你可以打开新的控制台窗口运行客户端程序。
+
+如果省略--console选项，服务器向数据目录(默认为C:\Program Files\MySQL\MySQL Server 5.1\data)中的错误日志写入诊断输出。错误日志文件的扩展名为.err。
+
+注释：MySQL授权表中的账户一开始没有密码。服务器启动后，你应当根据2.9节，“安装后的设置和测试”中的说明设置密码。
+
+2.3.11. 从Windows命令行启动MySQL
+可以从命令行手动启动MySQL服务器。可以在任何版本的Windows中实现。
+
+要想从命令行启动mysqld服务器，你应当启动控制台窗口(或“DOS window”)并输入命令：
+
+C：\> C:\Program Files\MySQL\MySQL Server 5.0\bin\mysqld
+根据系统中MySQL安装位置的不同，前面的例子中使用的路径也不同。
+
+在非NT版本的Windows中，在后台启动mysqld。也就是，服务器启动后，你应当可以看见后面的命令提示。如果你用该方法在Windows NT、2000、XP或2003中启动服务器，服务器则在前台运行，在服务器退出前，不会出现命令提示。因此，当服务器运行时，应当打开另一个控制台窗口来运行客户端程序。
+
+下述命令可以停止MySQL服务器：
+
+C：\> C:\Program Files\MySQL\MySQL Server 5.0\bin\mysqladmin -u root shutdown
+该命令调用MySQL管理工具mysqladmin连接服务器并告知它关闭服务。该命令使用MySQL root用户连接，这是MySQL权限系统中的默认管理账户。请注意MySQL权限系统中的用户完全独立于Windows下的登录用户。
+
+如果mysqld不能启动，检查错误日志看看服务器是否写入了显示问题原因的任何消息。错误日志位于C:\Program Files\MySQL\MySQL Server 5.1\data目录中。是带后缀.err的文件。还可以尝试将服务器启动为mysqld --console；此时，可以从窗口中获得一些有用的信息，可以帮助解决问题。
+
+最后选项是用--standalone --debug启动mysqld。此时，mysqld 写入日志文件C：\mysqld.trace，应当包含mysqld不启动的原因。请参见E.1.2节，“创建跟踪文件”。
+
+使用mysqld --verbose --help显示mysqld的所有选项。
+
+2.3.12. 以Windows服务方式启动MySQL
+在NT家族 (Windows NT，2000,XP，2003)中，建议将MySQL安装为Windows服务，当Windows启动、停止时，MySQL也自动启动、停止。还可以从命令行使用NET命令，或使用图形Services工具来控制AMySQL服务器。
+
+在Windows控制面板(Windows 2000,XP和Server 2003的管理工具下面)中可以看见Services工具(Windows Service Control Manager)。建议从命令行安装活卸载服务器时关闭Services工具。这样可以防止许多错误。
+
+安装MySQL Windows服务之前，应当使用下面的命令先停止当前正运行的服务器：
+
+C：\> C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqladmin -u root shutdown
+注释：如果MySQL root用户账户有密码，你需要调用命令 C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqladmin -u root -p shutdown并根据提示输入密码。
+
+该命令调用MySQL管理工具mysqladmin，连接服务器并告知它关闭服务。该命令使用MySQL root用户连接，这是MySQL权限系统中的默认管理账户。请注意MySQL权限系统中的用户完全独立于Windows下的登录用户。
+
+使用该命令安装服务器
+
+C：\> mysqld --install
+如果只使用服务器名安装mysqld时有问题，尝试使用全路径名来安装。例如：
+
+C：\> C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqld --install
+你还可以将MySQL bin目录的路径加到Windows系统PATH环境变量中：
+
+·         右击Windows桌面上的My Computer（我的计算机）图标，选择Properties（属性）。
+
+·         然后从出现的System Properties菜单中选择Advanced（高级）标签，然后点击Environment Variables（环境变量）按钮。
+
+·         选择System Variables（系统变量）下面的Path（路径），然后点击Edit（编辑）按钮。将弹出Edit System Variable（编辑系统变量）对话框。
+
+·         将光标放到标记Variable Value（变量值）处的文本的后面。(使用End键确保光标位于文本的最后)。然后输入MySQL bin目录   的完整路径(例如，C:\Program Files\MySQL\MySQL Server 5.1\bin)，请注意应使用分号将该路径与该域内的其它值隔离开。一次关闭该对话框和各个对话框，点击OK直到打开的所有对话框被关闭。你现在可以在DOS提示符下从系统的任何目录输入MySQL可执行程序名来调用MySQL可执行程序，而不必提供路径名。包括服务器、MySQL客户端和所有MySQL命令行实用程序，例如mysqladmin和mysqldump。
+
+·         请注意在同一个机器上运行多个MySQL服务器时，不需要在Windows PATH中加入MySQL bin目录。
+
+警告：编辑系统PATH时必须特别注意；意外删除或修改已有路径值会造成系统故障甚至瘫痪。
+
+服务安装命令不会启动服务器。在本节后面将给出相关指令。
+
+安装服务时，可以使用MySQL 5.1中的下面的参数：
+
+·         可以直接在--install选项后面指定服务名。默认服务名是MySQL。
+
+·         如果给出了服务名，后面可以跟一个选项。一般情况，应当为defaults-file=file_name，指定选项文件的名称，服务器启动时应当从中读取选项。
+
+可以使用单个选项代替--defaults-file，但是不提倡这样做。--defaults-file更加灵活一些，因为你可以将多个服务器启动选项放入命名的选项文件中。
+
+·         可以在服务名后面指定一个--local-service选项。这样服务器运行时使用LocalService Windows账户，只具有有限的系统权限。该账户只适用于Windows XP或更新版本。如果服务名后面同时跟有--defaults-file和--local-service，二者可以按任何顺序排放。
+
+对于Windows MySQL服务器，根据下面规则确定服务器使用的服务名和选项文件：
+
+·         如果在服务安装命令中，没有在--install选项后面指定了服务名或使用默认服务名(MySQL)，服务器则使用MySQL服务名并从标准选项文件的[mysqld]组读取选项。
+
+·         如果在服务安装命令中，在--install选项后面指定的服务名不是默认服务名(MySQL)。则从具有相同服务名的组中读取选项，并从标准选项文件读取选项。
+
+服务器还从标准选项文件的[mysqld]组读取选项。你可以使用[mysqld]组中的选项用于所有MySQL 服务，还可以使用具有相同服务名的组，用于该服务名所对应的服务器。
+
+·         如果在服务安装命令中，在服务名后面指定了--defaults-file选项，服务器只从命名文件的[mysqld]组中读取选项，忽略标准选项文件。
+
+对于更复杂的例子可以考虑使用命令：
+
+C：\> C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqld --install MySQL --defaults-file=C:\my-opts.cnf
+该命令中，--install选项后面给出了默认服务名(MySQL)。如果未给出--defaults-file选项，该命令可以让服务器从标准选项文件的[mysqld]组中读数。由于提供了--defaults-file选项，服务器只从命名文件的[mysqld]组读取选项。
+
+还可以在启动MySQL服务之前，在Windows Services工具中指定启动参数选项。
+
+MySQL服务器安装为服务后，Windows启动时自动启动服务。还可以从Services工具直接启动服务，或使用命令NET START MySQL。NET命令忽略大小写。
+
+做为服务运行时，mysqld不能访问控制台窗口，因此看不见任何消息。如果mysqld未启动，检查错误日志看看服务器是否写入了显示问题原因的任何消息。错误日志位于MySQL数据目录中(例如，C:\Program Files\MySQL\MySQL Server 5.1\data)，是带后缀.err的文件。
+
+如果MySQL服务器安装为服务，并且服务正运行，Windows关闭时自动停止服务。还可以通过Services工具、NET STOP MySQL命令或 mysqladmin shutdown命令手动停止服务器。
+
+如果不想在引导过程中自动启动服务，还可以将服务设置为手动启动模式。实现的方法是使用--install-manual选项而非--install选项：
+
+C：\> C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqld --install-manual
+要想卸载服务器，如果服务正运行则应首先使用命令NET STOP MYSQL停止服务。然后使用--remove选项卸载服务：
+
+C：\> C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqld --remove
+如果mysqld不是服务，可以从命令行启动它。详细说明参见2.3.11节，“从Windows命令行启动MySQL”。
+
+如果在安装过程中遇到问题，请参阅2.3.14节，“在Windows环境下对MySQL安装的故障诊断与排除”。
+
+2.3.13. 测试MySQL安装
+可以通过以下命令测试MySQL服务器是否工作：
+C:\> C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqlshow
+C:\> C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqlshow -u root mysql
+C:\> C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqladmin version status proc
+C:\> C:\Program Files\MySQL\MySQL Server 5.1\bin\mysql test
+如果mysqld对客户端程序TCP/IP连接的响应较慢，可能是DNS问题。此时，使用--skip-name-resolve选项启动mysqld，在MySQL授权表的Host列只使用localhost和IP号。
+
+可以通过--pipe或--protocol=PIPE选项强制MySQL客户端使用命名管道连接代替TCP/IP连接，或指定.(阶段)做为主机名。使用--socket选项指定管道名。
+
+2.3.14. 在Windows环境下对MySQL安装的故障诊断与排除
+首次安装、运行MySQL时，你可能会遇到一些错误，使MySQL服务器不能启动。本节的目的是帮助你诊断并纠正这些错误。
+
+解决服务器问题时你的第一资料是错误日志。MySQL服务器使用错误日志来记录服务器不能启动的信息。错误日志位于my.ini文件指定的数据目录中。默认数据目录位于C:\Program Files\MySQL\MySQL Server 5.1\dat。请参见5.11.1节，“错误日志”。
+
+另一个错误相关信息源是MySQL服务启动时控制台上显示的消息。将mysqld安装为服务后，从命令行通过NET START mysql命令来查看MySQL服务启动相关的错误消息。请参见2.3.12节，“以Windows服务方式启动MySQL”。
+
+下面距离说明了首次安装并启动MySQL服务时会遇到的最常见的错误消息：
+
+·                System error 1067 has occurred.
+·                Fatal error: Can't open privilege tables: Table 'mysql.host' doesn't exist
+·         当MySQL服务器找不到MySQL权限数据库或关键文件时会出现这些消息。当MySQL基或数据目录没有安装在默认位置(C：\mysql和 C:\Program Files\MySQL\MySQL Server 5.1\data)，而是安装到其它位置时通常会遇到该问题。
+
+发生该问题的一种情况是对MySQL进行升级或安装到了新位置，但是没有对配置文件进行更新以对应新的安装位置。此外还可能是新旧配置文件冲突，当升级MySQL时，一定要删除或重新命名旧的配置文件。
+
+如果你没有将MySQL安装到C:\Program Files\MySQL\MySQL Server 5.1目录下，而是安装到了其它目录下，你需要通过使用配置(my.ini)文件让MySQL服务器知道安装目录。my.ini文件应位于Windows目录下，典型为C：\WINNT或C：\WINDOWS。可以在命令提示符下输入下面的命令从WINDIR环境变量值中确定确切位置：
+
+C：\> echo %WINDIR%
+可以通过文本编辑器（例如记事本）来创建并修改选项文件。例如，如果MySQL安装在E：\mysql下，数据目录在D:\MySQLdata，你可以创建选项文件并设置[mysqld]来指定basedir和datadir参数的值：
+
+[mysqld]
+# set basedir to your installation path
+basedir=E:/mysql
+# set datadir to the location of your data directory
+datadir=D:/MySQLdata
+请注意应使用(正)斜线而不是反斜线在选项文件中指定Windows路径名。如果使用反斜线，则必须使用双斜线：
+
+[mysqld]
+# set basedir to your installation path
+basedir=C:\\Program Files\\MySQL\\MySQL Server 5.1
+# set datadir to the location of your data directory
+datadir=D:\\MySQLdata
+如果在MySQL配置文件中更改datadir值，在重新启动MySQL服务器之前，必须移动已有MySQL数据目录中的内容。
+
+参见2.3.8节，“创建选项文件”。
+
+·                Error: Cannot create Windows service for MySql. Error: 0
+·         当你没有事先停止并卸载已有MySQL服务，并且使用MySQL Configuration Wizard（配置向导）重新安装或升级MySQL时，会遇到该问题。发生的原因是，当配置向导试图安装服务时，它发现已经有一个同名的服务。
+
+解决该问题的一个方案是使用配置向导时选择mysql之外的其它服务名。这样可以正确安装新服务，但保留了原来的服务。但是这样不好，最好是卸掉不再使用的旧服务。
+
+要想永远卸掉旧的MySQL服务，通过管理权限用户在命令行执行下面的命令：
+
+C:\>sc delete mysql
+[SC] DeleteService SUCCESS
+如果Windows版本中没有sc工具，可以从 http://www.microsoft.com/windows2000/techinfo/reskit/tools/existing/delsrv-o.asp 下载delsrv工具并使用delsrvMySQL语法。
+
+2.3.15. 在Windows下升级MySQL
+本节列出了在Windows中升级MySQL应采取的步骤。
+
+1.    进行升级前你应先备份当前的MySQL安装。请参见5.9.1节，“数据库备份”。
+
+2.    从http://dev.mysql.com/downloads/下载最新Windows版MySQL。
+
+3.    升级MySQL前，必须停止服务器。
+
+如果服务器安装为服务，必须在命令提示符下在命令行中用下面的命令停止服务：
+
+C：\> NET STOP MYSQL
+如果MySQL服务器不是服务，使用下面的命令停止服务器：
+
+C：\> C:\Program Files\MySQL\MySQL Server 5.1\bin\mysqladmin -u root shutdown
+4.    当从以前至的4.1.5版本升级到MySQL 5.1时,或从Zip文件安装的MySQL升级到MySQL Installation Wizard（安装帮助）安装的MySQL时，你必须手动卸载前面安装的MySQL服务。
+
+要想卸载MySQL服务，使用下面的命令：
+
+C：\> C:\mysql\bin\mysqld --remove
+如果你不想卸载已有的服务，MySQL Installation Wizard（安装帮助）则不会正确安装新的MySQL服务。
+
+5.    如果你使用MySQL Installation Wizard（安装帮助），按照2.3.4节，“使用MySQL安装向导”的描述来启动帮助。
+
+6.    如果用Zip文件安装MySQL，应提取文件。你可以覆盖已有的MySQL安装(通常位于C：\mysql)，或将它安装到其它目录，例如 C：\mysql4。建议覆盖原有的安装。
+
+7.    重新启动服务器。如果你运行MySQL服务，则使用NET START MySQL，还可以直接调用mysqld。
+
+8.    关于在Windows之外的操作系统升级MySQL的详细信息，请参阅2.10节，“升级MySQL”。
+
+9.    如果遇到错误，参见 2.3.14节，“在Windows环境下对MySQL安装的故障诊断与排除”。
+
+2.3.16. Windows版MySQL同Unix版MySQL对比
+已经证明，Windows版MySQL很稳定。Windows版MySQL的功能与相应的Unix版相同，只有以下例外：
+
+·         Windows 95和线程
+
+Windows 95创建一个线程时大约需要200字节的主内存。MySQL的每个连接都会创建一个新线程，因此如果你的服务器正处理许多连接，你不应当在Windows 95中运行mysqld。
+
+·         有限的端口数目
+
+Windows系统有大约4,000个端口供客户端连接，某个端口的连接关闭后，在能够重新利用该端口前，需要2至4分钟。在客户端频繁连接并从服务器上断开时，在可以重新使用关闭的端口前，有可能用完了所有可用的端口。如果发生这种情况，MySQL服务器不会响应，即使它仍在运行。请注意机器上运行的其它应用程序也可以使用端口，此时可供MySQL使用的端口数要少。
+
+详细信息参见http://support.microsoft.com/default.aspx?scid=kb;en-us;196271 。
+
+·         并行读
+
+MySQL依靠pread()和pwrite()系统调用来同时使用INSERT和SELECT。目前我们使用互斥来竞争pread()和pwrite()。我们将来想用虚拟接口替换文件级接口，因此要想更快，我们可以在NT、2000和XP上使用readfile()/writefile()接口。目前MySQL 5.1可以打开的文件的限制数目为2,048,意味着在Windows NT，2000,XP和2003上可以运行的并行线程不如Unix上多。
+
+·         阻塞读
+
+MySQL为每个连接使用阻塞读取，如果启用了命名管道连接，其含义如下：
+
+o        连接不会在8小时后自动断开，而在Unix版MySQL中会发生。
+
+o        如果连接被挂起，不杀掉MySQL则不会将其中断。
+
+o        mysqladmin kill不会杀掉睡眠中的连接。
+
+o        只要有睡眠连接，mysqladmin shutdown不会中断。
+
+我们计划在将来修复该问题。
+
+·         ALTER TABLE
+
+执行ALTER TABLE语句时，将该表锁定不让其它线程使用。在Windows中，你不能删除正被另一个线程使用的文件。在将来，我们会找出办法解决该问题。
+
+·         DROP TABLE
+
+在Windows中对一个被MERGE表应用的表执行DROP TABLE不会实现，因为MERGE处理器将表从MySQL上层映射隐藏起来。由于Windows不允许删除打开的文件，必须在删除表之前首先清空所有MERGE表(使用FLUSH TABLES)或删掉MERGE表。
+
+·         DATA DIRECTORY and INDEX DIRECTORY
+
+在Windows中将忽略DATA DIRECTORY和INDEX DIRECTORY选项，因为Windows不支持符号连接。在具有非功能realpath()调用的系统中，这些选项也被忽略。
+
+·         DROP DATABASE
+
+你不能删掉正被线程使用的数据库。
+
+·         从Task Manager（任务管理器）杀掉MySQL
+
+你不能从Task Manager（任务管理求）或使用Windows 95的shutdown工具来杀掉MySQL。你必须通过mysqladmin shutdown停止它。
+
+·         大小写名
+
+由于Windows对文件名大小写不敏感。因此在Windows中MySQL数据库名和表名对大小写也不敏感。唯一的限制是在同一个语句中，必须同时使用大写或小写指定数据库名和表名。请参见9.2.2节，“识别符大小写敏感性”。
+
+·         ‘\’路径名间隔符
+
+Windows中的路径名用‘\’符间隔开，在MySQL中还是转义字符。如果你使用LOAD DATA INFILE或SELECT ... INTO OUTFILE，用‘/’符使用Unix-类文件名：
+
+mysql> LOAD DATA INFILE 'C:/tmp/skr.txt' INTO TABLE skr;
+mysql> SELECT * INTO OUTFILE 'C:/tmp/skr.txt' FROM skr;
+你还可以使用双‘\’符：
+
+mysql> LOAD DATA INFILE 'C:\\tmp\\skr.txt' INTO TABLE skr;
+mysql> SELECT * INTO OUTFILE 'C:\\tmp\\skr.txt' FROM skr;
+·         管道问题。
+
+管道不能在Windows命令行提示符下可靠地工作。如果管道包括字符^Z/CHAR(24)，Windows认为遇到了文件末尾并中断程序。
+
+这主要是按照如下所示使用二进制日志的主要问题：
+
+C：\>mysqlbinlog binary-log-name | mysql --user=root
+如果使用日志时出现问题，怀疑是由于^Z / CHAR(24)字符，你可以使用下面的程序：
+
+C:\> mysqlbinlog binary-log-file --result-file=/tmp/bin.sql
+C:\> mysql --user=root --execute "source /tmp/bin.sql"
+后面的命令还可以用来可靠读取任何包含二进制数据的SQL文件。
+
+·         Access denied for user错误
+
+如果你试图运行MySQL客户端程序来连接同一机器上运行的服务器，但是遇到错误Access denied for user 'some-user'@'unknown' to database 'mysql'，这意味着MySQL不能正确识别你的主机名。
+
+要解决该问题，你应当创建一个名为\windows\hosts包含下面信息的文件：
+
+127.0.0.1       localhost
+这儿有一些公开问题，提供给想要帮助我们改进Windows中的MySQL的人们：
+
+·         增加宏来使用Windows提供的更快的线程安全增/减方法。
+
+2.4. 在Linux下安装MySQL
+建议在Linux中使用RPM包来安装MySQL。MySQL RPM目前已经嵌入到SuSE Linux 7.3系统中，但是应当能在大多数支持rpm和使用glibc的Linux版本中工作。要想获得RPM软件包，参见2.1.3节，“怎样获得MySQL”。
+
+MySQL AB不提供与具体平台相关的RPM；具体平台相关的RPM和通用RPM之间的区别是具体平台相关RPM为目标平台而构建，为动态连接。而通用RPM与Linux线程之间是静态连接。
+
+注释：通常由其它供应商提供MySQL的RPM分发版。其特征和功能与MySQL AB所构建的不同，该手册中的指令不一定适合安装其它供应商提供的MySQL的RPM分发版。此时应咨询供应商的说明。
+
+如果RPM文件有问题(例如，如果你收到错误“Sorry, the host 'xxxx' could not be looked up”)，参见2.12.1.2节，“Linux二进制分发版说明”。
+
+在大多数情况，你只需要安装MySQL-server和MySQL-client软件包来安装MySQL。在标准安装中不需要其它的包。如果你想要运行含更多功能的MySQL-Max服务器，还应当安装MySQL-Max RPM。必须先安装M MySQL-server RPM再安装该模块。请参见5.1.2节，“mysqld-max扩展MySQL服务器”。
+
+如果安装MySQL软件包时出现从属错误(例如，“error: removing these packages would break dependencies: libmysqlclient.so.10 is needed by ..”)，你还应当安装包MySQL-shared-compat，其中包括两个向后兼容的共享库(MySQL 4.0为libmysqlclient.so.12，MySQL 3.23为libmysqlclient.so.10)。
+
+许多Linux分发版包含了MySQL 3.23，通常动态连接应用程序以节省硬盘空间。如果这些共享库在单独的包内(例如，MySQL-shared)，只需要安装这些包并升级MySQL服务器和客户端软件包(为静态连接，不依赖共享库)。对于包含与MySQL服务器相同软件包中的共享库的分发版(例如，Red Hat Linux)，你可以安装3.23 MySQL-shared RPM，或使用MySQL-shared-compat包。
+
+可以使用以下RPM包：
+
+·         MySQL-server-VERSION.i386.rpm
+
+MySQL服务器。你需要该选项，除非你只想连接运行在另一台机器上的MySQL服务器。 注释：在MySQL 4.0.10之前，服务器RPM文件被称为MySQL-VERSION.i386.rpm。也就是说，名称中不含有-server。
+
+·         MySQL-Max-VERSION.i386.rpm
+
+MySQL-Max服务器。该服务器具有其它功能，这是MySQL-server RPM不具备的。你必须首先安装MySQL-server RPM，因为MySQL-Max RPM依赖于它。
+
+·         MySQL-client-VERSION.i386.rpm
+
+标准MySQL客户端程序。你可能总是要安装该软件包。
+
+·         MySQL-bench-VERSION.i386.rpm
+
+测试和基准。需要Perl和DBD：：mysql模块。
+
+·         MySQL-devel-VERSION.i386.rpm
+
+库和包含文件，如果你想要编译其它MySQL客户端，例如Perl模块，则需要。
+
+·         MySQL-shared-VERSION.i386.rpm
+
+该软件包包含某些语言和应用程序需要动态装载的共享库(libmysqlclient.so*)，使用MySQL。
+
+·         MySQL-shared-compat-VERSION.i386.rpm
+
+该软件包包括MySQL 3.23和MySQL 4.0的共享库。如果你安装了应用程序动态连接MySQL 3.23，但是你想要升级到MySQL 4.0而不想打破库的从属关系，则安装该软件包而不要安装MySQL-shared。从MySQL 4.0.13起包含该安装软件包。
+
+·         MySQL-embedded-VERSION.i386.rpm
+
+嵌入式MySQL服务器库(从MySQL 4.0起)。
+
+·         MySQL-VERSION.src.rpm
+
+包含以前所有软件包的源码。可用来在其它架构上重建RPM(例如，Alpha或SPARC)。
+
+要想看到RPM软件包内的所有文件(例如，MySQL-server RPM)，运行：
+
+shell> rpm -qpl MySQL-server-VERSION.i386.rpm
+要想执行标准最小安装，运行：
+
+shell> rpm -i MySQL-server-VERSION.i386.rpm
+shell> rpm -i MySQL-client-VERSION.i386.rpm
+要想只安装客户端软件包，运行：
+
+shell> rpm -i MySQL-client-VERSION.i386.rpm
+RPM提供在安装软件包前验证其完整性和真实性的功能。如果你要想了解关于该功能的更多信息，参见2.1.4节，“通过MD5校验和或GnuPG验证软件包的完整性”。
+
+服务器RPM将数据放入/var/lib/mysql目录。RPM还为mysql用户创建登录账户(如果还没有)，用来运行MySQL服务器，并在/etc/init.d/创建相应条目，以便在引导时自动启动服务器。(这意味着如果你已经安装并且已经更改启动脚本，你可能要复制脚本，以便你安装新RPM时 不会丢掉脚本)。关于系统启动时如何自动启动MySQL的详细信息，参见 2.9.2.2节，“自动启动和停止MySQL”。
+
+如果想要在旧的不支持/etc/init.d(直接或通过符号连接)初始化脚本的Linux分发版中安装MySQL RPM，你应当创建一个指向初始化脚本实际安装的位置的符号连接。例如，如果安装位置为/etc/rc.d/init.d，安装RPM前使用这些命令创建/etc/init.d，作为指向该位置的符号连接：
+
+shell> cd /etc
+shell> ln -s rc.d/init.d。
+目前主要Linux分发版应当支持使用/etc/init.d的新目录布局，因为需要LSB(Linux标准基)兼容性。
+
+如果你安装的RPM文件包括MySQL-server，安装后MySQLd服务器应当能启动并运行。你应当能使用MySQL启动。
+
+如果出现问题，可以从二进制安装部分找到详细信息。2.7节，“在其它类Unix系统中安装MySQL”。
+
+注释：MySQL授权表中的账户开始没有密码。启动服务器后，应当按照2.9节，“安装后的设置和测试”中的说明为它们设置密码。
+
+2.5.在Mac OS X中安装MySQL
+可以在Mac OS X 10.2.x(“Jaguar”)和以上版本上Mac OS X使用二进制安装软件包的PKG格式代替二进制分发版来安装MySQL。请注意该软件包不支持旧版本的Mac OS X(例如，10.1.x)。
+
+安装软件包位于硬盘映象(.dmg)文件中，必须首先双击搜索起中的图标来安装该文件。应当安装图像并显示其内容。
+
+要想获得MySQL，参见2.1.3节，“怎样获得MySQL”。
+
+注释：在继续安装前，一定要使用MySQL管理器应用程序(在Mac OS X服务器上)或通过命令行的mysqladmin shutdown关闭所有运行MySQL服务器实例。
+
+要想安装MySQL PKG文件，双击软件包图标。将启动Mac OS X安装软件包安装器，将指导你完成MySQL安装。
+
+Mac OS X安装软件包的安装器中有一个缺陷，你会在目标盘选择对话框中发现该错误消息：
+
+You cannot install this software on this disk. (null)
+如果出现该错误，只需要点击Go Back按钮返回前面的窗口。然后点击Continue再次选择目标盘，此时应当可以正确地选择目标盘。我们已经向Apple报告了该缺陷，它正在调查该问题。
+
+MySQL的Mac OS X PKG安装到/usr/local/mysql-VERSION，并且还会安装一个符号连接，/usr/local/mysql，指向新的位置。如果有/usr/local/mysql目录，首先将它改名为/usr/local/mysql.bak。安装完后，安装器执行mysql_install_db在MySQL数据库中创建授权表。
+
+安装布局与tar文件二进制分发版类似；所有MySQL二进制代码位于目录/usr/local/mysql/bin中。默认情况，MySQL套接字文件创建为/tmp/mysql.sock。请参见2.1.5节，“安装布局”。
+
+MySQL安装需要Mac OS X的mysql用户账户。在Mac OS X 10.2及以上版本中，默认情况应存在mysql用户账户。
+
+如果正运行Mac OS X服务器，需要安装MySQL。随Mac OS X服务器版本安装的MySQL版本如下表所示：
+
+Mac OS X服务器版本
+ MySQL版本
+ 
+10.2-10.2.2
+ 3.23.51
+ 
+10.2.3-10.2.6
+ 3.23.53
+ 
+10.3
+ 4.0.14
+ 
+10.3.2
+ 4.0.16
+ 
+10.4.0
+ 4.1.10a
+ 
+
+本节只覆盖官方MySQL Mac OS X PKG版本。一定要阅读Apple关于MySQL安装的帮助信息：运行“帮助视图”应用程序，选择“Mac OS X服务器”帮助，搜索“MySQL”，阅读标题为“安装MySQL”的内容。
+
+对于Mac OS X服务器上已经安装的MySQL版本，如果早于4.0，应特别注意应当使用mysqld_safe而不是safe_mysqld来启动mysqld。
+
+如果你前面在Mac OS X上安装了从http://www.entropy.ch下载的Marc Liyanage的MySQL软件包，你可以只使用该页给出的二进制安装布局按照更新说明来安装。
+
+如果你从Marc的3.23.xx 版本或从Mac OS X的MySQL服务器版本升级到官方MySQL PKG，你还需要将已有MySQL授权表转换为当前格式，因为已经加了许多新的安全权限。请参见2.10.2节，“升级授权表”。
+
+如果你想在系统启动过程中自动启动MySQL，你还需要安装MySQL Startup Item。在MySQL 5.1中,它是Mac OS X安装盘映像的一部分，是一个独立的安装软件包。只需要双击MySQLStartupItem.图标并按照说明来安装。
+
+请注意Startup Item只需要安装一次！不需要在以后每次升级MySQL软件包时都安装它。
+
+MySQL 5.1的Startup Item安装在/Library/StartupItems/MySQLCOM。(在MySQL 4.1.2以前的版本,安装位置为/Library/StartupItems/MySQL，但与Mac OS X服务器安装的MySQL Startup Item冲突)。Startup Item安装时在系统配置文件/etc/hostconfig中加入变量MySQLCOM=-YES-。如果你想要disable自动启动MySQL，只需要将该变量更改为MySQLCOM=-NO-。
+
+在Mac OS X服务器上，默认MySQL安装使用/etc/hostconfig文件中的变量MySQL。MySQL AB Startup Item安装器将其设置为MySQL=-NO-禁用该变量。这样可以避免启动时间与MySQL AB Startup Item使用的MySQLCOM变量冲突。但是，不会关闭运行的MySQL服务器。你应当自己关闭。
+
+安装完后，可以在终端窗口运行下面的命令来启动MySQL。你必须具有管理员权限来执行该任务。
+
+如果你已经安装的Startup Item：
+
+shell> sudo /Library/StartupItems/MySQLCOM/MySQLCOM start
+
+(Enter your password, if necessary)
+
+(Press Control-D or enter "exit" to exit the shell)
+
+如果不使用Startup Item，输入下面的命令序列：
+
+shell> cd /usr/local/mysql
+
+shell> sudo ./bin/mysqld_safe
+
+(Enter your password, if necessary)
+
+(Press Control-Z)
+
+shell> bg
+
+(Press Control-D or enter "exit" to exit the shell)
+
+你应当能够连接MySQL服务器，例如，通过运行/usr/local/mysql/bin/mysql来连接。
+
+注释：MySQL授权表中的账户开始没有密码。启动服务器后，应当按照2.9节，“安装后的设置和测试”中的说明来设置密码。
+
+你可以为外壳源文件起一个别名，使它更容易访问常用的程序，例如从命令行运行mysql和mysqladmin。tcsh语法为：
+
+aliasMySQL /usr/local/mysql/bin/mysql
+aliasMySQLadmin /usr/local/mysql/bin/mysqladmin
+对于bash，使用：
+
+aliasMySQL=/usr/local/mysql/bin/mysql
+aliasMySQLadmin=/usr/local/mysql/bin/mysqladmin
+最好是在PATH环境变量中加入/usr/local/mysql/bin。例如，如果外壳命令是tcsh，在$HOME/.tcshrc文件中加入下面一行：
+
+setenv PATH ${PATH}:/usr/local/mysql/bin
+如果根目录中没有.tcshrc文件，则用文本编辑器创建该文件。
+
+如果你对已有的安装进行升级，请注意安装新MySQL PKG时不会卸载旧的安装目录。遗憾的是，Mac OS X安装器尚未提供功能来正确升级前面安装的软件包。
+
+要想在新安装中使用已有的数据库，你需要将旧数据目录中的内容复制到新的数据目录。执行该操作时，确保关闭新、旧服务器。将以前安装的MySQL数据库文件拷贝过来并成功启动新的服务器后，应当卸载旧的文件以节省硬盘空间。并且，还应当卸掉位于/Library/Receipts/mysql-VERSION.pkg的旧版本Package Receipt目录。
+
+2.6. 在NetWare中安装MySQL
+将MySQL装入到NetWare首先由Novell实现。Novell客户应当满意，NetWare 6.5中捆绑了SQL二进制，并具有自动商业使用许可，用于运行该版本NetWare的所有服务器。
+
+NetWare的MySQL使用NetWare的Metrowerks CodeWarrior和专用跨编译版GNU自动工具编译而成。
+
+可以从http://dev.mysql.com/downloads/获得最新的二进制软件包NetWare。请参见2.1.3节，“怎样获得MySQL”。
+
+为了使MySQL驻留在主机上，NetWare服务器必须满足以下要求：
+
+·         安装的NetWare 6.5 或NetWare 6.0的Latest Support Pack（最新支持补丁）。
+
+·         系统必须满足Novell的最低要求以运行相关版本的NetWare。
+
+·         MySQL数据及其二进制，必须安装到NSS卷内；不支持传统卷。
+
+要想在NetWare下安装MySQL，遵从下面的步骤：
+
+1.    如果你对前面的安装进行升级，停止MySQL服务器。应使用下面的命令从服务器控制台完成：
+
+2.            SERVER:  mysqladmin -u root shutdown
+3.    从客户端登录到目标服务器上，访问安装MySQL的位置。
+
+4.    将二进制软件包Zip文件提取到服务器上。一定要使用Zip文件中的路径。简单地将文件提取到SYS：\是很安全的。
+
+如果你从前面的安装升级，你可能需要复制数据目录(例如，SYS:MYSQL\DATA)和my.cnf（如果你已经定制）。然后你可以删除旧版本的MySQL。
+
+5.    你可以将目录重新命名为更加一致和易于使用的名称。在本手册的例子中使用SYS：MYSQL来指向安装目录。
+
+请注意在NetWare上安装MySQL不会检测到是否已经安装了NetWare发布之外的MySQL版本。因此，如果你已经在SYS：\MYSQL安装了从网站上下载的最新MySQL版本(例如，MySQL 4.1或更新版本)，在升级NetWare服务器之前，必须重新命名文件夹；否则，SYS：\MySQL中的文件会被NetWare Support Pack中的版本所覆盖。
+
+6.    在服务器控制台中，加入含有 MySQL NLM的目录的搜索路径。例如：
+
+7.            SERVER:  SEARCH ADD SYS:MYSQL\BIN
+8.    初始化数据目录和授权表，如果需要，应在服务器控制台执行mysql_install_db。
+
+9.    在服务器控制台使用mysqld_safe启动MySQL服务器。
+
+10.要完成安装，还应当在autoexec.ncf中加入以下命令。例如，如果MySQL安装在SYS：MYSQL中，你想让MySQL自动启动，可以加入以下行：
+
+11.         #Starts the MySQL 5.1.x database server
+12.        SEARCH ADD SYS:MYSQL\BIN
+13.        MYSQLD_SAFE
+如果MySQL运行在NetWare 6.0上,我们强烈建议你在命令行中使用--skip-external-locking选项：
+
+#Starts the MySQL 5.1.x database server
+SEARCH ADD SYS:MYSQL\BIN
+MYSQLD_SAFE --skip-external-locking
+还需要使用CHECK TABLE和REPAIR TABLE来替代myisamchk，因为myisamchk使用外部锁。已经知道外部锁在NetWare 6.0中有问题；在NetWare 6.5中已经解决了该问题。
+
+NetWare中的mysqld_safe提供了窗口保留功能。当卸载(关闭)mysqld_safe NLM时，默认情况窗口不会消失。相反，会提示用户输入：
+
+*<NLM has terminated; Press any key to close the screen>*
+如果你想让NetWare自动关闭窗口，在mysqld_safe中使用--autoclose选项。例如：
+
+#Starts the MySQL 5.1.x database server
+SEARCH ADD SYS:MYSQL\BIN
+MYSQLD_SAFE --autoclose
+14.当首次安装或从前面的版本升级MySQL 5.1版时，应下载并安装最新的相应Perl模块和PHP扩展名：
+
+·         Perl for NetWare: http://forge.novell.com/modules/xfcontent/downloads.php/perl/Modules/
+
+·         PHP for NetWare: http://forge.novell.com/modules/xfcontent/downloads.php/php/Modules/
+
+ (MySQL 4.1的PHP 5扩展名适用于MySQL 5.1)。
+
+在5.1.3节，“mysqld_safe：MySQL服务器启动脚本”中详细描述了NetWare中的mysqld_safe的行为。
+
+如果服务器上已经安装了MySQL，一定要检查autoexec.ncf中已有的MySQL启动命令，如果需要则编辑或删除这些命令。
+
+注释：MySQL授权表中的初始账户没有密码。启动服务器后，你应当使用2.9节，“安装后的设置和测试”中的说明来设置密码。
+
+2.7. 在其它类Unix系统中安装MySQL
+本节介绍在各种平台上安装tar压缩文件格式的MySQL二进制分发版(文件有.tar.gz 扩展名)。详细目录参见2.1.2.5节，“MySQL AB编译的MySQL二进制版本”。
+
+要想获得MySQL，参见2.1.3节，“怎样获得MySQL”。
+
+MySQLtar文件二进制分发版的文件名格式为mysql-VERSION-OS.tar.gz，其中VERSION是版本号(例如，5.1.2-alpha)，OS表示分发版安装的操作系统类型(例如，pc-linux-i686)。
+
+除了这些通用软件包，我们还为各平台提供了具体的二进制安装软件包。关于如何安装的详细信息参见2.2节，“使用二进制分发版的标准MySQL安装”。
+
+你需要下面的工具来安装MySQL tar文件二进制分发版：
+
+·         GNU gunzip解压缩分发版。
+
+·         一个适当的tar解包分发版。 GNU tar已知可以。一些操作系统中含有预安装的tar，已知有问题。例如，已知Mac OS X tar和Sun tar对于长文件名有问题。在Mac OS X中，你可以使用预安装的gnutar程序。在其它系统中若tar不完善，你应当首先安装GNU tar。
+
+如果你遇到问题，在把问题寄到MySQL邮件目录时，请一定使用mysqlbug，就算问题不是一个缺陷，mysqlbug也会收集系统信息，将有助于其它人解决你的问题。不使用mysqlbug，你将减少得到你问题的一个解决方案的可能性！在你解包分发版后，你会在“bin”目录下找到mysqlbug。请参见1.7.1.3节，“如何通报缺陷和问题”。
+
+必须执行以便安装并使用MySQL二进制分发版的基本命令是：
+
+shell> groupadd mysql
+
+shell> useradd -g mysql mysql
+
+shell> cd /usr/local
+
+shell> gunzip < /path/to/mysql-VERSION-OS.tar.gz | tar xvf -
+
+shell> ln -s full-path-to-mysql-VERSION-OS mysql
+
+shell> cd mysql
+
+shell> scripts/mysql_install_db --user=mysql
+
+shell> chown -R root  .
+
+shell> chown -R mysql data
+
+shell> chgrp -R mysql .
+
+shell> bin/mysqld_safe --user=mysql &
+
+注释：该过程未设置MySQL账户的密码。完成下面的过程后，继续执行想2.9节，“安装后的设置和测试”。
+
+下面为安装二进制分发版的更详细的描述：
+
+1.    为mysqld增加一个登录用户和组：
+
+2.            shell> groupadd mysql
+
+3.            shell> useradd -g mysql mysql
+
+这些命令将增加MySQL组和MySQL用户。不同版本的Unix中，useradd和groupadd的语法可能会稍有不同。还可以称为adduser和addgroup。
+
+你可能会将这些用户和组命名为mysql之外的名称。如果是这样，在下面的步骤中替换为相应的名称。
+
+4.    挑选一个你想解开分发包的目录，进入该目录。在下面的例子中，我们将分发解包在“/usr/local”下（因此，下列说明假设你有权限在“/usr/local”中创建文件和目录，如果该目录被保护，你需要以root实施安装）。
+
+5.            shell> cd /usr/local
+6.    从2.1.3节，“怎样获得MySQL”中列出的站点之一获得一个分发文件。对于一个给定的版本，所有平台的二进制分发版均从相同的MySQL源码分发版构建。
+
+7.    解包分发版，将创建安装目录。然后生成到该目录的一个符号链接：
+
+8.            shell> gunzip < /path/to/mysql-VERSION-OS.tar.gz | tar xvf -
+
+9.            shell> ln -s full-path-to-mysql-VERSION-OS mysql
+
+tar命令创建mysql-VERSION-OS目录。ln命令生成到该目录的一个符号链接。这让你更容易地把安装目录指定为/usr/local/mysql。
+
+使用GNU tar，则不再需要gunzip。可以用下面的命令替换第一行来解包和提取分发版：
+
+shell> tar zxvf /path/to/mysql-VERSION-OS.tar.gz
+10.进入安装目录：
+
+11.       shell> cd mysql
+你会在mysql目录下发现几个文件和子目录，对安装目的最重要的是“bin”和“scripts”子目录。
+
+·         bin
+
+这个目录包含客户端程序和服务器，你应该把这个目录的完整路径加到PATH环境变量，以便shell能正确的找到MySQL程序。请参见附录F：环境变量。
+
+·         scripts
+
+这个目录包含mysql_install_db脚本，用来初始化mysql数据库的 授权表，其中贮存了服务器访问允许。
+
+12.如果还没有安装MySQL，必须创建MySQL授权表：
+
+13.        shell> scripts/mysql_install_db --user=mysql
+如果你用root运行命令，应当使用--user选项。选项的值应与你在第一步为运行服务器所创建的登录账户相同。如果你用该用户登录来运行命令，可以省略--user选项。
+
+创建或升级授权表后，需要手动重新启动服务器。
+
+14.将程序二进制的所有权改为root，数据目录的所有权改为运行mysqld 的用户。如果位于安装目录(/usr/local/mysql)下，命令应为：
+
+15.        shell> chown -R root  .
+
+16.        shell> chown -R mysql data
+
+17.        shell> chgrp -R mysql .
+
+第一个命令将文件的所有属性改为root用户。第二个命令将数据目录的所有属性改为mysql用户。第三个命令将组属性改为mysql组。
+
+18.如果你喜欢在引导机器时自动启动MySQL，可以拷贝support-files/mysql.server文件到系统有启动文件的地方。更多的信息可以在support-files/mysql.server脚本中和2.9.2.2节，“自动启动和停止MySQL”中找到。
+
+19.如果安装了DBI和DBD::mysql Perl模块，可以使用bin/mysql_setpermission脚本增加新账户。关于说明，参见 2.13节，“Perl安装注意事项”。
+
+20.如果你想使用mysqlaccess而在某个非标准的地点有MySQL分发版，你必须改变地点，在那儿mysqlaccess期望找到mysql客户端。编辑“bin/mysqlaccess”脚本，大约在第18行，寻找类似下面的行：
+
+21.          $MYSQL     = '/usr/local/bin/mysql';    # path to mysql executable
+改变路径以反映出mysql实际存储在你系统上的地点。如果不这样做，当运行mysqlaccess时，你将遇到一个broken pipe的错误。
+
+在所有东西被解包并且安装以后，你应该初始化并且测试你的分发版。
+
+可以用下列命令启动MySQL服务器：
+
+shell> bin/mysqld_safe --user=mysql &
+关于mysqld_safe的详细信息参见5.1.3节，“mysqld_safe：MySQL服务器启动脚本”。
+
+注释：MySQL授权表中的账户开始没有密码。启动服务器后，应当使用2.9节，“安装后的设置和测试”中的说明来设置密码。
+
+2.8. 使用源码分发版安装MySQL
+2.8.1. 源码安装概述
+2.8.2. 典型配置选项
+2.8.3. 从开发源码树安装
+2.8.4. 处理MySQL编译问题
+2.8.5. MIT-pthreads注意事项
+2.8.6. 在Windows下从源码安装MySQL
+2.8.7. 在Windows下编译MySQL客户端
+安装源码之前，首先检查我们的二进制是否适合你的平台，是否可以工作。我们做了大量的工作确保我们的二进制用最合适的选项来构建。
+
+要获得MySQLa 源码分发版，参见2.1.3节，“怎样获得MySQL”。
+
+MySQL源码分发版为tar压缩文件，文件名格式为mysql-VERSION.tar.gz，其中 VERSION是版本号，例如5.1.2-alpha。
+
+你需要下列工具构造并安装MySQL源码：
+
+·         GNU gunzip解压缩该分发版。
+
+·         一个适当的tar解包分发版。GNU tar已知可以。一些操作系统中含有预安装的tar，已知有问题。例如，已知Mac OS X tar和Sun tar对于长文件名有问题。在Mac OS X中，你可以使用预安装的gnutar程序。在其它系统中若tar不完善，你应当首先安装GNU tar。
+
+·         一个能工作的ANSI C++编译器。gcc> = 2.95.2、egcs> = 1.0.2或egcs 2.91.66、SGI C++和SunPro C++是一些已知能工作的编译器。当使用gcc时，不需要libg++。gcc2.7.x有一个缺陷，使得它可能不能编译一些完全合法的C++文件，例如“sql/sql_base.cc”。如果你仅有gcc2.7.x，你必须升级gcc才能编译MySQL。已知gcc 2.8.1在某些平台上有一些问题，因此如果平台上有新的编译器，则不要使用gcc 2.8.1。
+
+编译MySQL 3.23.x时，建议使用gcc 2.95.2或更新版。
+
+·         一个优秀的make程序。总是推荐GNU make且有时必须使用。如果你有问题，我们推荐试一试GNU make3.75或更新版。
+
+如果你使用的gcc版本足够新，可以识别-fno-exceptions选项，则使用该选项非常重要。否则，你编译二进制时出现问题。我们建议你同时使用-felide-constructors和-fno-rtti选项。当有疑问时，执行下面操作：
+
+CFLAGS="-O3" CXX=gcc CXXFLAGS="-O3 -felide-constructors \
+       -fno-exceptions -fno-rtti" ./configure \
+       --prefix=/usr/local/mysql --enable-assembler \
+       --with-mysqld-ldflags=-all-static
+在大多数系统中，可以得到快速、稳定的二进制。
+
+如果你遇到问题，在把问题邮寄到MySQL邮件目录时，请总是使用mysqlbug，就算问题不是一个缺陷，mysqlbug收集系统信息，将有助于其它人解决你的问题。不使用mysqlbug，你将减少得到问题的解决方案的可能性！在解包分发版后，你会在“bin”目录下找到mysqlbug。请参见1.7.1.3节，“如何通报缺陷和问题”。
+
+2.8.1. 源码安装概述
+你必须执行的安装MySQL源码分发版的基本命令是：
+
+shell> groupadd mysql
+shell> useradd -g mysql mysql
+shell> gunzip < mysql-VERSION.tar.gz | tar -xvf -
+shell> cd mysql-VERSION
+shell> ./configure --prefix=/usr/local/mysql
+shell> make
+shell> make install
+shell> cp support-files/my-medium.cnf /etc/my.cnf
+shell> cd /usr/local/mysql
+shell> bin/mysql_install_db --user=mysql
+shell> chown -R root  .
+shell> chown -R mysql var
+shell> chgrp -R mysql .
+shell> bin/mysqld_safe --user=mysql &
+如果从一个源码RPM开始，那么执行如下命令：
+
+shell> rpmbuild --rebuild --clean MySQL-VERSION.src.rpm
+这样你制作一个可以安装的二进制RPM。对于旧版本的RPM，你可能需要替换用rpm替换命令rpmbuild。
+
+注释：该过程不为任何MySQL账户设置密码。完成下面的过程后，根据2.9节，“安装后的设置和测试”进行安装后的设置和测试。
+
+以下是安装MySQL源码分发版的更详细的描述：
+
+1.    为mysqld增加一个登录用户和组： 
+
+2.            shell> groupadd mysql
+3.            shell> useradd -g mysql mysql
+这些命令将增加MySQL组和 MySQL用户。不同版本的Unix中，useradd 和groupadd的语法可能会稍有不同。还可以称为adduser和addgroup。
+
+你可能会将这些用户和组命名为mysql之外的名称。如果是这样，在下面的步骤中替换为相应的名称。
+
+4.    挑选一个你想解开分发包的目录，进入该目录。
+
+5.    从2.1.3节，“怎样获得MySQL”中列出的站点之一获得一个分发文件。
+
+6.    在当前目录下解包分发版：
+
+7.            shell> gunzip < /path/to/mysql-VERSION.tar.gz | tar xvf -
+该命令创建mysql-VERSION 目录。
+
+使用GNU tar，则不再需要gunzip。你可以用下面的命令来解包和提取分发：
+
+shell> tar zxvf /path/to/mysql-VERSION-OS.tar.gz
+8.    进入解包分发版的顶级目录：
+
+9.            shell> cd  mysql-VERSION
+请注意目前必须从顶级目录配置和构建MySQL。你不能在其它目录中构建。
+
+10.配置发布版并且编译：
+
+11.        shell> ./configure --prefix=/usr/local/mysql
+12.        shell> make
+当你运行configure时，你可能想要指定一些选项，运行./configure --help得到一个选项列表。2.8.2节，“典型配置选项”讨论一些很有用的选项。
+
+如果configure失败，你将向MySQL邮件目录发送包含你认为能帮你解决该问题的包含“config.log”中所有行的邮件，也要包括configure的最后几行输出。用mysqlbug脚本邮寄错误报告。请参见1.7.1.3节，“如何通报缺陷和问题”。
+
+如果编译失败，参见2.8.4节，“处理MySQL编译问题”寻求帮助。
+
+13.安装分发版：
+
+14.        shell> make install
+如果你想要设置一个选项文件，使用support-files目录中的一个作为模板。例如：
+
+shell> cp support-files/my-medium.cnf /etc/my.cnf
+可能你需要用root用户运行这些命令。
+
+如果想要配置为支持InnoDB表，应当编辑/etc/my.cnf文件，去掉innodb_...开始选项行前面的#符，并将选项值改为你想要的。请参见4.3.2节，“使用选项文件”和15.2.3节，“InnoDB配置”。
+
+15.进入安装目录：
+
+16.        shell> cd /usr/local/mysql
+17.如果还没有安装的MySQL，必须创建MySQL授权表：
+
+18.        shell> bin/mysql_install_db --user=mysql
+如果用root运行命令，应当使用--user选项。选项的值应与你在第一步为运行服务器所创建的登录账户相同。如果用该用户登录来运行命令，可以省略--user选项。
+
+用mysql_install_db创建MySQL授权表后，需要手动重新启动服务器
+
+19.将程序二进制的所有权改为root，数据目录的所有权改为你运行mysqld的用户。如果位于安装目录(/usr/local/mysql)下，命令应为：
+
+20.        shell> chown -R root  .
+21.        shell> chown -R mysql var
+22.        shell> chgrp -R mysql .
+第一个命令将文件的所有属性改为root用户。第二个命令将数据目录的所有属性改为mysql用户。第三个命令将组属性改为mysql组。
+
+23.如果你喜欢在引导机器时自动启动MySQL，你可以拷贝support-files/mysql.server文件到你系统有启动文件的地方。更多的信息可以在support-files/mysql.server脚本中和2.9.2.2节，“自动启动和停止MySQL”中找到。
+
+24.如果安装了DBI和DBD::mysql Perl模块，可以使用bin/mysql_setpermission脚本增加新账户。关于说明，参见2.13节，“Perl安装注意事项”。
+
+在所有东西被安装以后，你应当使用该命令初始化并且测试你的分发版：
+
+shell> /usr/local/mysql/bin/mysqld_safe --user=mysql &
+如果这个命令提示mysqld daemon ended并马上失败，那么你能在数据目录中的文件“hostname'.err”找到一些信息。
+
+关于mysqld_safe的详细信息参见5.1.3节，“mysqld_safe：MySQL服务器启动脚本”。
+
+注释：MySQL授权表中的账户开始没有密码。启动服务器后，你应当使用2.9节，“安装后的设置和测试”中的说明来设置密码。
+
+2.8.2. 典型配置选项
+configure脚本给你一个很大的控制权来控制如何配置MySQL源码分发版。一般使用configure命令行的选项来进行。你也可以用某些环境变量作用于configure。请参见附录F：环境变量。要查看configure支持的选择列表，可以运行命令：
+
+shell> ./configure --help
+如果只编译MySQL客户端库和客户端程序而不是服务器，使用--without-server选项： 
+shell> ./configure --without-server 
+如果你没有C++编译器，则不能编译mysql(有一个客户端程序需要C++)。在这种情况下，你可以去掉configure里面测试C++编译器的代码，然后运行带有 --without-server选项的./configure。编译步骤步将仍然尝试构造mysql，但是你可以忽略任何关于“mysql.cc”的警告。（如果make停止，试试make -k告诉它即使出错继续剩下的构造步骤）。
+
+·         如果你想要构建嵌入式MySQL库 (libmysqld.a),你应当使用--with-embedded-server选项。
+
+如果你不想要位于“/usr/local/var”目录下面的日志(log)文件和数据库，使用类似于下列configure命令的一个： 
+shell>./configure--prefix=/usr/local/mysql 
+shell>./configure--prefix=/usr/local – 
+       localstatedir=/usr/local/mysql/data 
+第一个命令改变安装前缀以便将所有内容安装到“/usr/local/mysql”下面而非 默认的“/usr/local”。第二个命令保留默认安装前缀，但是覆盖了数据库目录默认目录(通常是“/usr/local/var”)并且把它改为/usr/local/mysql/data。编译完MySQL后，可以通过选项文件更改这些选项。请参见4.3.2节，“使用选项文件”。
+
+如果你正在使用Unix并且你想要MySQL的套接字位于 默认位置以外的某个地方(通常在目录“/tmp”或“/var/run”，使用象这样的configure的命令： 
+shell> ./configure\-- with-unix-socket- 
+path=/usr/local/mysql/tmp/mysql.sock 
+注意给出的文件名必须是一个绝对路径。你还可以在以后使用MySQL选项文件更改mysql.sock的位置。请参见A.4.5节，“如何保护或更改MySQL套接字文件/tmp/mysql.sock”。
+
+如果你想编译静态链接程序(例如，制作二进制分发版、获得更快的速度或与解决与RedHat分发版的一些问题)，像这样运行configure： 
+·                shell>./configure --with-client-ldflags=-all-static\
+
+·                        --with-mysqld-ldflags=-all-static
+
+如果你正在使用gcc并且没有安装libg++或libstdc++，你可以告诉configure使用gcc作为C++编译器： 
+shell> CC=gcc  CXX=gcc  ./configure 
+当你使用gcc作为C++编译器用时，它将不试图链接libg++或libstdc++。即使你安装了这些库，这样也很好，因为过去使用MySQL时，它们的部分版本会出现一些奇怪的问题。
+
+下面列出了一些经常使用的编译器和环境变量设定值。
+
+o        gcc 2.7.2： 
+
+o                     CC=gcc CXX=gcc CXXFLAGS="-O3 -felide-constructors"
+o        egcs 1.0.3a： 
+
+o                     CC=gcc CXX=gcc CXXFLAGS="-O3 -felide-constructors \
+o                     -fno-exceptions -fno-rtti"
+o        gcc 2.95.2： 
+
+o                     CFLAGS="-O3 -mpentiumpro" CXX=gcc CXXFLAGS="-O3 -mpentiumpro \
+o                     -felide-constructors -fno-exceptions -fno-rtti"
+o        pgcc 2.90.29 或更新版：
+
+o                     CFLAGS="-O3 -mpentiumpro -mstack-align-double" CXX=gcc \
+o                     CXXFLAGS="-O3 -mpentiumpro -mstack-align-double \
+o                     -felide-constructors -fno- exceptions -fno-rtti"
+在大多数情况，在configure行使用前面列出的选项并加入下面的选项，可以得到合理的优化的MySQL二进制：
+
+--prefix=/usr/local/mysql --enable-assembler \
+--with-mysqld-ldflags=-all-static
+换句话说，对于所有最近的gcc版，整个configure行应为：
+
+CFLAGS="-O3 -mpentiumpro" CXX=gcc CXXFLAGS="-O3 -mpentiumpro \
+-felide-constructors -fno- exceptions -fno-rtti" ./ configure \
+--prefix=/usr/local/mysql --enable-assembler \
+--with-mysqld-ldflags=-all-static
+我们在MySQL网址http://www.mysql.com/提供的二进制均已经编译过并进行了优化，对于大多数用户应当比较完善。请参见2.1.2.5节，“MySQL AB编译的MySQL二进制版本”。其中有一些配置设定值，可以选用来构建更快的二进制，但是只适用高级用户。请参见7.5.4节，“编译和链接怎样影响MySQL的速度”。
+
+如果构造失败并且产生有关编译器或链接器的错误，不能创建共享库“libmysqlclient.so.#”(“#”是一个版本号), 你可以通过为configure指定--disable-shared选项来解决此问题。在这种情况下，configure将不构造一个共享libmysqlclient.so.#库。
+
+默认地，MySQL使用latin1(cp1252)字符集。为了改变 默认设置，使用--with-charset选项： 
+shell> ./configure -- with-charset=CHARSET 
+CHARSET可以是big5、cp1251、cp1257、czech、danish、dec8、dos、euc_kr、gb2312、gbk、german1、hebrew、hp8、hungarian、koi8_ru、koi8_ukr、latin1、latin2、sjis、swe7、tis620、ujis、usa7或win1251ukr。请参见5.10.1节，“数据和排序用字符集”。
+
+可以指定默认校对规则。MySQL默认使用latin1_swedish_ci校对规则。要想更改，使用--with-collation选项：
+
+shell> ./configure --with-collation=COLLATION
+要想更改字符集和校对规则，要同时使用--with-charset和--with-collation选项。 校对规则必须是字符集的合法校对规则。(使用SHOW COLLATION语句来确定每个字符集使用哪个校对规则)。
+
+如果想在服务器和客户端之间变换字符，你应该看一下SET OPTION CHARACTER SET命令。请参见13.5.3节，“SET语法”。
+
+警告：如果你在创建了任何数据库表之后改变字符集，你将必须对每个表运行myisamchk -r -q --set-character-set=charset，否则索引可能不正确地排序。（如果安装了MySQL，创建一些表，然后重新配置MySQL使用一个不同的字符集并且重新安装它，这时就可能发生这种情况。）
+
+通过configure选项--with-extra-charsets=LIST，你可以定义在服务器中再定义哪些字符集。LIST 指下面任何一项：
+
+o        空格间隔的一系列字符集名
+
+o        complex -，以包括不能动态装载的所有字符集
+
+o        all –，以将所有字符集包括进二进制
+
+为了配置MySQL带有调试代码，使用--with-debug选项： 
+shell> ./configure --with-debug 
+这导致包含一个安全的内存分配器，能发现一些错误和并提供关于正在发生的事情的输出。请参见E.1节，“调试MySQL服务器”。
+
+·         如果客户端程序使用线程，还必须使用--enable-thread-safe-client配置选项来编译线程安全版的MySQL客户端库。将创建一个libmysqlclient_r库，可以用来连接应用程序线程。请参见25.2.15节，“如何生成线程式客户端”。
+
+·         可以使用--with-big-tables选项构建支持大数据库表的MySQL。
+
+该选项使变量用来将表行数保存到unsigned long long中而不是unsigned long。结果是允许表有大约1.844E+19 ((232)2)行而不是232 (~4.295E+09) 行。在以前，要完成该功能必须手动将-DBIG_TABLES传递给编译器。
+
+属于特定系统的选项可在本章特定系统的小节里找到。请参见2.12节，“具体操作系统相关的注意事项”
+2.8.3. 从开发源码树安装
+注意：如果你想帮助我们测试新代码，应当阅读本节。如果你只想在系统上安装并运行MySQL，应当使用标准发布分发版(二进制或源码分发版)。
+
+要想获得我们的最新开发源码树，应使用说明：
+
+1.    从http://www.bitmover.com/bk-client.shar下载BitKeeper免费客户端。
+
+2.    在Unix上安装免费客户端：
+
+3.            shell> sh bk-client.shar
+4.            shell> cd bk_client-1.1
+5.            shell> make all
+6.            shell> PATH=$PWD:$PATH
+在Windows上的安装方法：
+
+·         从http://cygwin.com下载并安装Cygwin。
+
+·         确保gcc和make已经安装到Cygwin。可以用which gcc和 which make命令进行测试。如果任何一个没有安装，运行 Cygwin安装包管理器，选择gcc、make并安装。
+
+·         在Cygwin中，运行：
+
+·                      shell> sh bk-client.shar
+·                      shell> cd bk_client-1.1
+然后编辑Makefile并将行s $(CC) $(CFLAGS) -o sfio -lz sfio.c更改为：
+
+$(CC) $(CFLAGS) -o sfio sfio.c -lz
+现在运行make命令并设置路径：
+
+shell> make all
+shell> PATH=$PWD:$PATH
+7.    安装BitKeeper免费客户端后，首先进入工作目录，然后使用以下命令在本地复制MySQL 5.1：
+
+8.            shell> sfioball -r+ bk://mysql.bkbits.net/mysql-5.1 mysql-5.1
+一般情况，你不需要自己构建文档，因为我们已经在http://dev.mysql.com/doc/提供了许多格式。我们每天更新你可以下载的格式(HTML、PDF等)，因此你没有必要从MySQLdoc树中的DocBook XML基本格式来创建。如果你想要复制文档库，使用下面的命令：
+
+shell> sfioball -r+ bk://mysql.bkbits.net/mysqldoc mysqldoc
+在前面的例子中，在当前目录的MySQL-5.1/子目录中设置源码树。
+
+如果你位于防火墙后面，只能初始化HTTP连接，还可以通过HTTP使用BitKeeper。
+
+如果需要使用代理服务器，设置环境变量http_proxy指向代理：
+
+shell> export http_proxy="http://your.proxy.server:8080/"
+当复制库时用http://替换bk：//。例如：
+
+shell> sfioball -r+ http://mysql.bkbits.net/mysql-5.1 mysql-5.1
+下载源码树可能需要一段时间，取决于连接速度。请耐心等待。
+
+9.    要想更新本地MySQL 5.1库复制，使用命令：
+
+10.        shell> update bk://mysql.bkbits.net/mysql-5.1
+11.你需要GNU make、autoconf 2.58 (或更新版)、automake 1.8、libtool 1.5和m4来运行后面的命令。尽管许多操作系统安装了make，很可能编译失败，出现许多奇怪的缺陷消息。因此，强烈建议你使用GNU make(有时名为gmake)。
+
+幸运的是，大量的操作系统预装了GNU工具链或提供了可安装软件包。你可以随时从下面的地址下载：
+
+·         http://www.gnu.org/software/autoconf/ 
+
+·         http://www.gnu.org/software/automake/ 
+
+·         http://www.gnu.org/software/libtool/ 
+
+·         http://www.gnu.org/software/m4/ 
+
+·         http://www.gnu.org/software/make/ 
+
+要想配置MySQL 5.1,你还需要GNU bison 1.75或更新版。旧版本的bison会报告错误：
+
+sql_yacc.yy:#####: fatal error: maximum table size (32767) exceeded
+注释：实际上并没有超出最大表空间；这是由旧版本的bison的缺陷造成的该问题。
+
+下面的例子显示了配置源码树需要的典型命令。第一个cd命令将位置改为树的顶级目录；用相应目录名替换MySQL-5.1。
+
+shell> cd mysql-5.1
+shell> bk -r edit
+shell> aclocal; autoheader
+shell> libtoolize --automake --force
+shell> automake --force --add-missing; autoconf
+shell> (cd innobase; aclocal; autoheader; autoconf; automake)
+shell> (cd bdb/dist; sh s_all)
+shell> ./configure  # Add your favorite options here
+shell> make
+对于下面的命令，可以使用BUILD/autorun.sh作为快捷方式：
+
+shell> aclocal; autoheader
+shell> libtoolize --automake --force
+shell> automake --force --add-missing; autoconf
+shell> (cd innobase; aclocal; autoheader; autoconf; automake)
+shell> (cd bdb/dist; sh s_all)
+使用将目录改为innobase和bdb/dist目录的命令行来配置InnoDB和 Berkeley DB (BDB)储存引擎。如果你不需要InnoDB或BDB支持，你可以省略这些命令行。
+
+如果在该阶段你遇到一些奇怪的错误，请确认你是否已经安装了 libtool。
+
+标准配置脚本位于BUILD/子目录。你会发现使用BUILD/compile-pentium-debug脚本比使用前面的外壳命令要方便得多。要想在不同的架构上编译，可以修改脚本，即去掉Pentium相关标志。
+
+12.构建完成后，运行make install。在产品机器上运行时应注意；该命令会覆盖你正使用的版本。如果你安装了另一个MySQL，我们建议你使用 与你的产品服务器上不同的--prefix、--with-tcp-port和--unix-socket-path选项值来运行./configure。
+
+13.强制运行新安装和尝试会破坏新功能。应先运行make test。请参见27.1.2节，“MySQL测试套件”。
+
+14.如果你已经进入make阶段而分发版不编译，请报告给我们的http://bugs.mysql.com/中的缺陷数据库。如果你已经安装了GNU工具的最新版本，如果视图处理配置文件时出错，请报告给我们。但是，如果你执行aclocal并且遇到command not found error或类似问题，不要报告给我们。而是应确保安装了所有必要的工具，并且PATH变量设置正确，保证外壳命令可以找到它们。
+
+15.复制完库(sfioball)获得源码树后，你应当定期更新库(update)。
+
+16.你可以检查树的更改史，浏览源码树中的BK/ ChangeLog文件并查看ChangeSet描述找到所有不同点。要想检查特殊的更改集，必须使用sfioball命令提取源码树的两次不同的修订，然后使用外部diff命令来比较。如果你看到有疑问的奇怪的不同之处或代码，一定要向MySQL internals邮件列表发送邮件。请参见1.7.1.1节，“The MySQL邮件列表”。并且，如果你有更好的思想，请向上述地址发送邮件。
+
+17.BitKeeper免费客户端预装了源码。免费客户端可用的唯一文档是源码本身。
+
+你还可以在线浏览更改集、注释和源码。要想浏览MySQL 5.1的相关信息，请到http://mysql.bkbits.net:8080/mysql-5.1。
+
+2.8.4. 处理MySQL编译问题
+所有MySQL程序在Solaris或Linux上使用gcc编译并且没有任何警告。在其它系统上，由于系统包含文件的差别可能会发生警告。对于使用MIT-pthreads时发生的警告。请参见2.8.5节，“MIT-pthreads注意事项”。其它问题，检查下面的表。
+
+许多问题的解决方案涉及重新配置。如果你确实需要重新配置，注意下列事项：
+
+如果configure在它已经被运行了以后运行，它可以使用先前收集的信息。这个信息存储在“config.cache”里面。当configure启动时，它寻找该文件而且如果它存在，假定信息仍然是正确的，读入它的内容。当你重新配置时，该假设无效。 
+每次运行configure的时候，必须运行make再重新编译。然而, 你可能想要把先前构造的老的目标文件删除，因为它们使用不同的配置选项编译而成。 
+为了防止使用旧的配置信息或目标文件，重新运行configure前运行这些命令：
+
+shell> rm  config.cache
+
+shell> make clean
+
+另外，你可以运行make distclean。
+
+下表描述了一些最常发生的编译MySQL的问题：
+
+如果在编译“sql_yacc.cc”时，遇到如下错误，可能是存储器或交换空间溢出： 
+·                Internal compiler error: program cc1plus got fatal signal 11
+·                Out of virtual memory
+·                Virtual memory exhausted
+该问题是gcc要求大量的内存编译带有嵌入函数(inline function)的“sql_yacc.cc”。试试以--with-low-memory选项运行configure：
+
+shell> ./configure -- with-low-memory
+
+如果你正在使用gcc，该选项使得将-fno-inline加到编译行，如果你正使用其它的编译器，则加入-O0。你应该试一试--with-low-memory选项，即使你有特别多的存储器和交换空间，而你认为不可能运行得溢出。这个问题甚至会在很慷慨的硬件配置的系统上出现，通常用--with-low-memory选项修正它。
+
+默认情况，configure选则c++作为编译器并用-lg++选项的GNU c++链接。如果你正在使用gcc，这个特性在配置期间导致如下问题： 
+·                configure: error: installation or configuration problem:
+
+·                C++ compiler cannot create executables.
+
+也可能在编译期间看到g++、libg++或libstdc++相关的问题。
+
+这些问题的一个原因是你可能没有g++，或可能有g++但无libg++或libstdc++。看一下“config.log”文件。它应该包含c++编译器不能工作的准确原因！为了解决这些问题，可以使用gcc作为C++编译器。试试设置环境变量CXX为"gcc -O3"。例如：
+
+shell> CXX="gcc -O3" ./configure
+
+可以工作，因为gcc象g++一样编译C++源码，但 默认地它不链接libg++或libstdc++。
+
+解决这些问题的其它方法当然是安装g++、libg++和libstdc++。然而，我们建议不要在MySQL中使用libg++或libstdc++，因为只会增加mysqld二进制空间而不会带来任何好处。部分版本的库在过去曾经给用户带来一些奇怪的问题。
+
+·         如果你的编译以下面任何错误而失败，必须升级make版本到GNUmake：
+
+·                making all in mit-pthreads
+·                make: Fatal error in reader: Makefile, line 18:
+·                Badly formed macro assignment
+或：
+
+make: file `Makefile' line 18: Must be a separator (:
+或：
+
+pthread.h: No such file or directory
+已知Solaris和FreeBSD的make程序有问题。
+
+已知GNU make 3.75能工作。
+
+·         如果你想要定义C或C++编译器所使用的标志，把标志加到CFLAGS和CXXFLAGS环境变量中即可。也可以使用CC和CXX来指定编译器名字。例如：
+
+·                shell> CC=gcc
+·                shell> CFLAGS=-O3
+·                shell> CXX=gcc
+·                shell> CXXFLAGS=-O3
+·                shell> export CC CFLAGS CXX CXXFLAGS
+对于已经知道在不同系统上有用的标志定义列表，参见2.1.2.5节，“MySQL AB编译的MySQL二进制版本”。
+
+·         如果你遇到象如下的一条错误消息，则需要升级gcc编译器：
+
+·                client/libmysql.c:273: parse error before `__attribute__'
+gcc2.8.1已知可以工作，但是我们推荐使用gcc 2.95.2或egcs 1.0.3a。
+
+·         如果编译mysqld时显示例如下面的那些错误, configure没有正确地检测传到accept()、getsockname()或getpeername()最后参数的类型：
+
+·                cxx: Error: mysqld.cc, line 645: In this statement, the referenced
+·                     type of the pointer value ''length'' is ''unsigned long'',
+·                     which is not compatible with ''int''.
+·                new_sock = accept(sock, (struct sockaddr *)&cAddr, &length);
+为了修正它，编辑“config.h”文件(它由configure生成)。寻找这些行：
+
+/* Define as the base type of the last arg to accept */
+#define SOCKET_SIZE_TYPE XXX
+更改XXX为size_t或int，取决于你的操作系统。（注意：每次运行configure都必须这样做，因为configure重新生成“config.h”）。 
+“sql_yacc.cc”文件由“sql_yacc.yy”生成。通常构造过程不需要创造“sql_yacc.cc”，因为MySQL有一个已经生成的拷贝，然而，如果你确实需要再创建它，可能会碰到这个错误： 
+·                "sql_yacc.yy", line xxx fatal: default action causes potential...
+
+这是一个yacc版本不完善的迹象。你可能需要安装bison（GNU的yacc)并使用它。 
+
+·         在Debian Linux 3.0上, 如果你编译的MySQL 5.1要支持Berkeley DB，需要安装gawk代替默认的mawk。
+
+·         如果你需要调试mysqld或MySQL客户端，运行configure，使用--with-debug选项，然后重新编译并且将客户端程序链接到新的客户端库。请参见E.2节，“调试MySQL客户端”。
+
+·         如果你在Linux(例如，SuSE Linux 8.1或Red Hat Linux 7.3)下遇到类似下面的编译错误：
+
+·                libmysql.c:1329: warning: passing arg 5 of `gethostbyname_r' from
+·                incompatible pointer type
+·                libmysql.c:1329: too few arguments to function `gethostbyname_r'
+·                libmysql.c:1329: warning: assignment makes pointer from integer
+·                without a cast
+·                make[2]: *** [libmysql.lo] Error 1
+默认情况，configure脚本试图使用g++ GNU C++编译器来确定正确的参数。如果未安装g++，将会产生错误的结果。有两种方法可以解决该问题：
+
+o        确保安装了GNU C++ g++。在某些Linux分发版上，需要安装的软件包叫做gpp；在其它分发版上名为gcc-c++。
+
+o        使用gcc作为C++ 编译器，将CXX环境变量设置为gcc：
+
+o                     export CXX="gcc"
+请注意之后需要再次运行configure。
+
+2.8.5. MIT-pthreads注意事项
+这节描述使用MIT-pthreads时所涉及的一些问题。
+
+在Linux上，应该不使用MIT-pthreads而是安装LinuxThreads！参见2.12.1节，“Linux注意事项”。
+
+如果你的系统不提供原生的线程支持，将需要使用MIT-pthreads包构造MySQL。这包括大多数FreeBSD系统、SunOS 4.x、Solaris 2.4和更早版本及其它，参见2.1.1节，“MySQL支持的操作系统”。
+
+MIT-pthreads不是MySQL 5.1源码分发版的一部分。如果你需要该安装包，需要单独从http://www.mysql.com/Downloads/Contrib/pthreads-1_60_beta6-mysql.tar.gz下载。
+
+下载后，将源文件提取到MySQL源码目录的顶级目录。将创建新的mit-pthreads子目录。
+
+在大多数系统上，你能通过使用configure并用--with-mit-threads选项来强迫运行MIT-pthreads： 
+shell> ./configure -- with-mit-threads 
+当使用MIT-pthreads时，不支持在一个非源码目录构造，因为我们想要使我们对代码的改变减到最小。
+
+·         决定是否使用MIT-pthreads的检查仅在处理服务器代码的配置过程期间发生。如果已经用--without-server配置了分发版并只构造客户端代码，客户端将不知道MIT-pthreads是否正在被使用并且是否使用 默认的Unix套接字连接。因为在某些平台上Unix套接字文件不能在MIT-pthreads下面工作，这意味着当你运行客户端程序时，你需要使用-h或--host。
+
+·         当使用MIT-pthreads编译MySQL时，因为性能原因，系统锁定 默认为禁止使用。你可以用--external-locking选项告诉服务器使用系统锁定。只是在相同数据文件上运行两个MySQL服务器时采需要，因此不推荐。
+
+有时pthreadbind()命令不能绑定一个套接字但没有任何错误消息(至少在Solaris上)，结果是所有到服务器的连接均失败。例如： 
+shell> mysqladmin version 
+mysqladmin: connect to server at '' failed; 
+error: 'Can't connect to mysql server on localhost (146)' 
+解决它的方法是杀死mysqld服务器并且重启它。这只有当我们强迫服务器停止并马上进行重启时在发生。
+
+使用MIT-pthreads，不能用SIGINT（break)中断sleep()系统调用。这只有在运行mysqladmin --sleep时才能注意到。在中断起作用并且进程停止之前必须等待sleep()终止。 
+当链接时，你可能会收到这样的警告消息(至少在Solaris上)；它们可以被忽视： 
+ld: warning: symbol `_iob' has differing sizes: 
+    (file /my/local/pthreads/lib/libpthread.a(findfp.o) value=0x4; 
+file /usr/lib/libc.so value=0x140); 
+    /my/local/pthreads/lib/libpthread.a(findfp.o) definition taken 
+ld: warning: symbol `__iob' has differing sizes: 
+    (file /my/local/pthreads/lib/libpthread.a(findfp.o) value=0x4; 
+file /usr/lib/libc.so value=0x140); 
+    /my/local/pthreads/lib/libpthread.a(findfp.o) definition taken 
+ 
+
+一些其它的警告也可被忽略： 
+implicit declaration of function `int strtoll(...)' 
+implicit declaration of function `int strtoul(...)' 
+我们还没有让readline在MIT-pthreads上工作。（这不需要，但是可能某些人会感兴趣。） 
+2.8.6. 在Windows下从源码安装MySQL
+2.8.6.1. 使用VC++构建MySQL
+2.8.6.2. 从最新的开发源码创建Windows源码安装包
+下面的说明描述了如何在Windows下从5.1版源码构建MySQL二进制。说明用于从包含最新开发源码的标准源码分发版或从BitKeeper树来构建二进制。
+
+注释：本文档中的说明严格限于在Windows下从最新源码分发版或从BitKeeper树来测试MySQL的用户。作为产品使用时，MySQL AB不建议使用你自己从源码构建的MySQL服务器。一般情况，最好使用MySQL AB预编译的对性能进行优化的适用Windows的MySQL二进制分发版。安装二进制分发版的说明参见2.3节，“在Windows上安装MySQL”。
+
+要想在Windows中从源码构建MySQL，Windows系统中应有下面的编译器和资源：
+
+·         Visual Studio 2003编译器系统(VC++ 7.0)。
+
+·         3到5GB的硬盘空间。
+
+·         Windows 2000或更高版本。
+
+确切的系统需求见：http://msdn.microsoft.com/vstudio/productinfo/sysreqs/default.aspx
+
+还需要适用Windows的MySQL源码分发版。有两种方法可以获得MySQL 5.1 源码分发版：
+
+1.    获得MySQL AB打包的源码分发版软件包。预打包的源码分发版可从 http://dev.mysql.com/downloads/获得。
+
+2.    你可以用最新BitKeeper开发源码树构建源码分发版。如果你计划构建，必须在Unix系统中创建安装软件包，并将它转移到Windows系统。(这样操作的理由是部分配置和构建步骤需要只能在Unix中工作的工具）。BitKeeper方法需要：
+
+·         运行Unix或类似Unix的系统，例如Linux。
+
+·         该系统上安装的BitKeeper 3.0。关于如何下载和安装BitKeeper的说明参见2.8.3节，“从开发源码树安装”。
+
+如果你使用Windows源码分发版，你可以直接跳到2.8.6.1节，“使用VC++构建MySQL”。要想从BitKeeper树构建，继续2.8.6.2节，“从最新的开发源码创建Windows源码安装包”。
+
+如果你发现某些组件不能按预料的工作，或者你有好的建议可以改进目前的在Windows中的构建过程，请向win32邮件列表发送消息。请参见1.7.1.1节，“The MySQL邮件列表”。
+
+2.8.6.1. 使用VC++构建MySQL
+注释：MySQL 4.1和以上版本的VC++工作区文件与Microsoft Visual Studio 2003版本兼容，MySQL AB人员已经在每个版本之前进行了测试。
+
+按照以下步骤构建MySQL：
+
+1.    创建工作目录(例如，C：\ workdir)。
+
+2.    使用WinZip或其它可以读取.zip文件的Windows工具将源码分发版解压缩到上述目录。
+
+3.    启动Visual Studio。
+
+4.    从File菜单，选择Open Workspace。
+
+5.    打开工作目录中的MySQL.dsw工作区。
+
+6.    从Build 菜单，选择Set Active Configuration菜单。
+
+7.    点击窗口选择mysqld - Win32 Debug并点击OK。
+
+8.    按F7开始构建调试服务器、库和客户端应用程序。
+
+9.    按同样方法编译发布版本。
+
+10.程序和库的调试版本位于client_debug和lib_debug目录。程序和库的发布版本位于client_release和lib_release目录。请注意如果你想要构建调试版本和发布版本，可以从Build菜单选择Build All选项。
+
+11.测试服务器。使用前面的说明构建服务器时，默认MySQL基本目录和数据目录位于C:\mysql和C:\mysql\data。如果你想要使用源码树根目录和数据目录作为基本目录和数据目录来测试服务器，需要告诉服务器其路径名。可以在命令行用--basedir和--datadir选项来完成，或将相应选项放入选项文件(在Windows目录或C：\my.cnf中的my.ini文件)。如果想要使用的数据目录在其它地方，可以指定其路径名。
+
+12.根据你想要使用的服务器，从client_release或client_debug目录启动服务器。常用服务器启动说明见2.3节，“在Windows上安装MySQL”。如果想要使用其它基本目录或数据目录，需要相应地更改指令。
+
+13.当服务器根据你的配置独立运行或作为服务时，尝试从client_release或client_debug目录中的MySQL交互式命令行实用工具连接它。
+
+如果构建的程序工作正常，停止服务器。按照以下步骤安装MySQL：
+
+1.    创建安装MySQL的目录。例如，要安装到C：\mysql，使用命令：
+
+2.            C:\> mkdir C:\mysql
+3.            C:\> mkdir C:\mysql\bin
+4.            C:\> mkdir C:\mysql\data
+5.            C:\> mkdir C:\mysql\share
+6.            C:\> mkdir C:\mysql\scripts
+如果想要编译其它客户端程序并连接到MySQL，你还需要创建几个目录：
+
+C：\> mkdir C：\mysql\include
+C：\> mkdir C：\mysql\lib
+C：\> mkdir C：\mysql\lib\debug
+C：\> mkdir C：\mysql\lib\opt
+如果想要对MySQL进行基准检查，创建目录：
+
+C：\> mkdir C：\mysql\sql-bench
+基准检查需要Perl支持。请参见2.13节，“Perl安装注意事项”。
+
+7.    将下面的目录从workdir目录复制到C：\mysql目录：
+
+8.            C:\> cd \workdir
+9.            C:\workdir> copy client_release\*.exe C:\mysql\bin
+10.        C:\workdir> copy client_debug\mysqld.exe C:\mysql\bin\mysqld-debug.exe
+11.        C:\workdir> xcopy scripts\*.* C:\mysql\scripts /E
+12.        C:\workdir> xcopy share\*.* C:\mysql\share /E
+如果想要编译其它客户端程序并连接到MySQL，还应当复制几个库和头文件：
+
+C:\workdir> copy lib_debug\mysqlclient.lib C:\mysql\lib\debug
+C:\workdir> copy lib_debug\libmysql.* C:\mysql\lib\debug
+C:\workdir> copy lib_debug\zlib.* C:\mysql\lib\debug
+C:\workdir> copy lib_release\mysqlclient.lib C:\mysql\lib\opt
+C:\workdir> copy lib_release\libmysql.* C:\mysql\lib\opt
+C:\workdir> copy lib_release\zlib.* C:\mysql\lib\opt
+C:\workdir> copy include\*.h C:\mysql\include
+C:\workdir> copy libmysql\libmysql.def C:\mysql\include
+如果你想要对MySQL进行基准测试，你还应当：
+
+C:\workdir> xcopy sql-bench\*.* C:\mysql\bench /E
+按照二进制Windows分发版相同的方法设置并启动服务器。请参见2.3节，“在Windows上安装MySQL”。
+
+2.8.6.2. 从最新的开发源码创建Windows源码安装包
+要想从当前的BitKeeper源码树创建Windows源码安装包，使用下面的说明。请注意必须在运行Unix或类Unix操作系统的系统上执行该过程。例如，已知该过程在Linux上工作得很好。
+
+1.    复制MySQL 5.1的BitKeeper源码树。关于如何复制源码树的详细信息，相关说明参见2.8.3节，“从开发源码树安装”。
+
+2.    配置和构建分发版，得到可工作的服务器二进制。实现的一个方法是在源码树顶级目录运行下面的命令：
+
+3.            shell> ./BUILD/compile-pentium-max
+4.    确保构建过程成功完成后，从源码树顶级目录运行下面的实用工具脚本：
+
+5.            shell> ./scripts/make_win_src_distribution
+该脚本创建在Windows 系统中使用的源码安装包。可以根据你的需求为脚本提供不同的选项。它接受下面的选项：
+
+·         --help
+
+显示帮助消息。
+
+·         --debug
+
+打印关于脚本操作的信息，不创建包。
+
+·         --tmp
+
+指定临时位置。
+
+·         --suffix
+
+安装软件包后缀名。
+
+·         --dirname
+
+复制文件的目录名(媒介之间)。
+
+·         --silent
+
+不打印正处理文件的详细列表。
+
+·         --tar
+
+创建tar.gz安装软件包而不是.zip安装软件包。
+
+默认情况，make_win_src_distribution创建Zip-格式的文件，文件名为mysql-VERSION-win-src.zip，其中VERSION代表MySQL源码树的版本。
+
+6.    将创建的Windows源码安装包复制或上载到Windows机器上。要想编译，使用2.8.6.1节，“使用VC++构建MySQL”中的说明。
+
+2.8.7. 在Windows下编译MySQL客户端
+在源码文件中，应当在MySQL.h之前包括my_global.h：
+
+#include <my_global.h>
+#include <mysql.h>
+my_global.h包括你在Windows中编译程序所需要的Windows兼容文件(例如 windows.h)。
+
+可以将代码连接到动态libmysql.lib库，它只是一个包装器以便根据需要装载libmysql.dll，或连接静态mysqlclient.lib库。
+
+MySQL客户端库编译为线程库，因此你应当将代码编译为多线程。
+
+2.9. 安装后的设置和测试
+2.9.1. Windows下安装后的过程
+2.9.2. Unix下安装后的过程
+2.9.3. 使初始MySQL账户安全
+安装完MySQL后，有一些问题你应当处理。例如，在Unix中，你应当初始化数据目录并创建MySQL授权表。对于所有平台，一个重要安全问题是 授权表中的初始账户没有密码。你应当指定密码以防止未授权访问MySQL服务器。你可以创建时区表以识别命名的时区。(目前，只在Unix上装了这些表。不久将在Windows中解决该问题）。
+
+下面章节包括适用Windows系统和Unix系统的安装后的过程。另一节，2.9.2.3节，“启动MySQL服务器以及其故障诊断和排除”，适用所有平台；它描述了启动服务器时遇到问题时如何解决。2.9.3节，“使初始MySQL账户安全”也适用所有平台。你应当按照说明确保你已经正确地为你的MySQL账户指定密码来保护其安全。
+
+如果你准备创建其它用户账户，你可以在5.7节，“MySQL访问权限系统”和5.8节，“MySQL用户账户管理”找到关于MySQL访问控制系统和账户管理的信息。
+
+2.9.1. Windows下安装后的过程
+在Windows中，不需要创建数据目录和授权表。MySQL Windows分发版包括在数据目录下的MySQL数据库中的一套预初始化的账户的 授权表。不要运行Unix中使用的mysql_install_db脚本。但是，如果你没有使用Windows Installation Wizard（安装帮助）来安装MySQL，应当为账户指定密码。请参见2.3.4.1节，“前言”。在2.9.3节，“使初始MySQL账户安全”。
+
+设置密码前，你可能想要运行一些客户端程序来确保你能够连接服务器，并且操作正确。确保服务器在运行(参见2.3.10节，“首次启动服务器”)，然后发出下面的命令来验证你可以从服务器获取信息。输出应当类似于：
+
+C:\> C:\mysql\bin\mysqlshow
++-----------+
+| Databases |
++-----------+
+| mysql     |
+| test      |
++-----------+
+ 
+C:\> C:\mysql\bin\mysqlshow mysql
+Database: mysql
++--------------+
+|    Tables    |
++--------------+
+| columns_priv |
+| db           |
+| func         |
+| host         |
+| tables_priv  |
+| user         |
++--------------+
+ 
+C:\> C:\mysql\bin\mysql -e "SELECT Host,Db,User FROM db" mysql
++------+-------+------+
+| host | db    | user |
++------+-------+------+
+| %    | test% |      |
++------+-------+------+
+如果你正运行支持服务的Windows版本，你想让MySQL服务器在Windows启动时自动运行，参见2.3.12节，“以Windows服务方式启动MySQL”。
+
+2.9.2. Unix下安装后的过程
+2.9.2.1. 与运行mysql_install_db有关的问题
+2.9.2.2. 自动启动和停止MySQL
+2.9.2.3. 启动MySQL服务器以及其故障诊断和排除
+在Unix上安装MySQL后，需要初始化 授权表、启动服务器，并确保服务器工作正常。你还要让服务器随系统的启动和停止自动启动和停止。应当为授权表中的账户指定密码。
+
+在Unix中，由mysql_install_db设置 授权表。在某些安装中，该程序自动运行：
+
+·         如果你使用RPM分发版在Linux上安装MySQL，服务器RPM运行mysql_install_db。
+
+·         如果你使用PKG分发版在Mac OS X上安装MySQL，安装器运行mysql_install_db。
+
+否则，你需要自己运行mysql_install_db。
+
+下面的过程描述了如何初始化授权表 (如果还没有初始化)并启动服务器。还推荐了一些你可以用来测试服务器是否可以访问以及是否工作正确的命令。关于自动启动和停止服务器的信息，参见2.9.2.2节，“自动启动和停止MySQL”。
+
+你完成过程并让服务器运行后，你应当为mysql_install_db创建的账户指定密码。2.9.3节，“使初始MySQL账户安全”中列出了相关说明。
+
+在本节的例子中，服务器用MySQL登录账户的用户ID运行。假定存在这样的账户。如果不存在，要么创建账户，或用其它已有的用来运行服务器的登录账户来替代。
+
+1.    进入MySQL的顶级安装目录，此处为BASEDIR：
+
+2.            shell> cd BASEDIR
+BASEDIR可能为/usr/local/mysql 或/usr/local。以下步骤假定你位于该目录。
+
+3.    根据需要，运行mysql_install_db 程序设置含有确定如何让用户连接服务器的权限的初始MySQL授权表。如果你使用的分发版类型不能运行程序，你需要执行该步骤。
+
+典型，只有首次安装MySQL时，才需要运行mysql_install_db，因此如果你升级已有的安装你可以跳过该步骤，但mysql_install_db不会覆盖已有的 授权表，因此可以在任何环境下安全运行。
+
+要想初始化授权表，根据mysql_install_db是位于bin还是scripts目录下，使用下面的一个命令：
+
+shell> bin/mysql_install_db --user=mysql
+shell> scripts/mysql_install_db --user=mysql
+mysql_install_db脚本创建数据目录、拥有所有数据库权限的mysql数据库和可以用来测试MySQL的test数据库。脚本为root账户和匿名用户账户创建 授权表条目。账户一开始没有密码。2.9.3节，“使初始MySQL账户安全”中描述了初始权限。简单说，这些权限允许MySQL root用户执行任何操作，允许任何人使用test名创建或使用数据库或用test_启动。
+
+一定要确保由mysql登录账户拥有数据库目录和文件，以便在以后运行时 服务器具有读、写访问权限。为此，如果你用root用户运行mysql_install_db，应当使用--user选项。否则，当以mysql登录时，应当执行脚本，你可以省略命令中的--user选项。
+
+mysql_install_db在mysql数据库中创建几个表，包括user、db、host、 tables_priv、columns_priv和func以及其它。5.7节，“MySQL访问权限系统”中有完整的列表和描述。
+
+如果你不想要test数据库，启动服务器后，可以用mysqladmin -u root drop test卸掉。
+
+如果有mysql_install_db相关问题，参见2.9.2.1节，“与运行mysql_install_db有关的问题”。
+
+有一些选择运行mysql_install_db脚本,正如MySQL分发版中所提供的：
+
+·         如果想让初始权限与标准默认值不同，你可以在运行前修改mysql_install_db。然而，最好是在设置 授权表后使用GRANT和REVOKE来更改权限。换句话说，你可以运行mysql_install_db，然后通过MySQL root用户使用mysql -u rootMySQL来连接服务器，以便发出GRANT和REVOKE命令。
+
+如果你想要在几个机器上用相同的权限安装MySQL，可以将GRANT和REVOKE语句放入一个文件中，以脚本方式执行文件，运行mysql_install_db之后使用mysql。例如：
+
+shell> bin/ mysql_install_db --user=mysql
+shell> bin/mysql -u root < your_script_file
+ 
+这样，你就可以避免在每台机器上手动发出命令。
+
+·         完全可以重新创建授权表。如果你刚刚知道如何使用GRANT和REVOKE，并且运行mysql_install_db 之后进行了许多修改，想要关闭表重新启动，你可能想要这样操作。
+
+要想重新创建授权表，从含有MySQL数据库的目录中移走所有 .frm、.MYI和 .MYD文件。(这是数据目录下面的mysql目录，当你运行mysqld --help 时，列为datadir值)。然后再次运行mysql_install_db 脚本。
+
+·         可以使用--skip-grant-tables选项手动启动mysqld，并使用mysql自己增加权限信息：
+
+·                      shell> bin/mysqld_safe --user=mysql --skip-grant-tables &
+·                      shell> bin/mysql mysql
+手动从mysql执行mysql_install_db中的SQL命令。确保后面钥运行mysqladmin flush-privileges或mysqladmin reload，让服务器重载授权表。
+
+请注意不使用mysql_install_db，不仅需要手动安装授权表，还需要先创建。
+
+4.    启动MySQL服务器：
+
+5.                     shell> bin/mysqld_safe --user=mysql &
+一定要让MySQL服务器使用非权限(non-root) 登录账户运行。为此，如果你以系统root运行mysql_safe，应当使用--user选项。否则，你应当用mysql登录到系统来执行脚本，这样可以省略命令中的--user选项。
+
+A.3.2节，“如何以普通用户身份运行MySQL”中给出了非特权用户运行MySQL的说明。
+
+如果在执行该步前你忘记了创建授权表，当你启动服务器时，在错误日志文件中将出现下面的消息：
+
+mysqld: Can't find file: 'host.frm'
+如果启动服务器时遇到其它问题，查阅2.9.2.3节，“启动MySQL服务器以及其故障诊断和排除”。
+
+6.    使用mysqladmin验证服务器在运行中。以下命令提供了简单的测试，可检查服务器是否已经启动并能响应连接：
+
+7.            shell> bin/mysqladmin version
+8.            shell> bin/mysqladmin variables
+ mysqladmin version的输出根据平台和MySQL版本的不同而稍有变化，但是应当类似于：
+
+shell> bin/mysqladmin version
+mysqladmin  Ver 8.41 Distrib 5.1.2-alpha, for pc-linux-gnu on i686
+Copyright (C) 2000 MySQL AB & MySQL Finland AB & TCX DataKonsult AB
+This software comes with ABSOLUTELY NO WARRANTY. This is free software,
+and you are welcome to modify and redistribute it under the GPL license
+ 
+Server version          5.1.2-alpha-Max
+Protocol version        10
+Connection              Localhost via UNIX socket
+UNIX socket             /var/lib/mysql/mysql.sock
+Uptime:                 14 days 5 hours 5 min 21 sec
+ 
+Threads: 1  Questions: 366  Slow queries: 0  
+Opens: 0  Flush tables: 1  Open tables: 19  
+Queries per second avg: 0.000
+ 
+要想看还可以怎样使用mysqladmin，用-- help选项调用它。
+
+9.    验证可以关闭服务器：
+
+10.        shell> bin/mysqladmin -u root shutdown
+11.验证是否可以重启服务器。可以直接使用mysqld_safe或调用mysqld。例如：
+
+12.        shell> bin/mysqld_safe --user=mysql --log &
+如果mysqld_safe失败，参见2.9.2.3节，“启动MySQL服务器以及其故障诊断和排除”。
+
+13.进行一些简单的测试，验证你可以从服务器查询信息。输出应当类似于：
+
+14.        shell> bin/mysqlshow
+15.        +-----------+
+16.        | Databases |
+17.        +-----------+
+18.        | mysql     |
+19.        | test      |
+20.        +-----------+
+21.         
+22.        shell> bin/mysqlshow mysql
+23.        Database: mysql
+24.        +---------------------------+
+25.        |          Tables           |
+26.        +---------------------------+
+27.        | columns_priv              |
+28.        | db                        |
+29.        | func                      |
+30.        | help_category             |
+31.        | help_keyword              |
+32.        | help_relation             |
+33.        | help_topic                |
+34.        | host                      |
+35.        | proc                      |
+36.        | procs_priv                |
+37.        | tables_priv               |
+38.        | time_zone                 |
+39.        | time_zone_leap_second     |
+40.        | time_zone_name            |
+41.        | time_zone_transition      |
+42.        | time_zone_transition_type |
+43.        | user                      |
+44.        +---------------------------+
+45.         
+46.        shell> bin/mysql -e "SELECT Host,Db,User FROM db" mysql
+47.        +------+--------+------+
+48.        | host | db     | user |
+49.        +------+--------+------+
+50.        | %    | test   |      |
+51.        | %    | test_% |      |
+52.        +------+--------+------+
+53.在sql-bench目录(在MySQL安装目录下)中有一个基准套件，可以用来比较MySQL在不同平台上的执行情况。基准套件在Perl中编写。它使用Perl DBI模块来为各种数据库提供一个与数据库无关的接口，并且还需要其它Perl模块来运行基准套件。必须安装以下模块：
+
+54.        DBI
+55.        DBD::mysql
+56.        Data::Dumper
+57.        Data::ShowTable
+可以从CPAN(http://www.cpan.org/)获得这些模块。请参见2.13.1节，“在Unix中安装Perl”。
+
+ sql-bench/Results目录包含了在不同数据库和平台上的各种运行结果。要想进行测试，执行命令：
+
+shell> cd sql-bench
+shell> perl run-all-tests
+如果没有sql-bench目录，你可能使用RPM文件安装了MySQL，没有使用源码RPM。(源码RPM包括sql-bench benchmark目录）。 此时，必须先安装基准套件后才能使用。有一个单独的mysql-bench-VERSION-i386.rpm基准RPM文件，其中包含了基准代码和数据。
+
+如果你有源码分发版，其tests子目录中也有一些测试可供运行。例如，要运行auto_increment.tst，从源码分发版的顶级目录执行该命令：
+
+shell> mysql -vvf test < ./tests/auto_increment.tst
+期望的结果被显示在“ ./tests/auto_increment.res”文件中。
+
+58.至此，你应当可以运行服务器了。然而，初始MySQL账户均没有密码，因此应当使用2.9.3节，“使初始MySQL账户安全”中的说明来指定密码。
+
+MySQL 5.1安装过程在MySQL数据库中创建时区表。但是，必须手动装载表。相关说明参见5.10.8节，“MySQL服务器时区支持”。
+
+2.9.2.1. 与运行mysql_install_db有关的问题
+mysql_install_db 脚本的目的是生成新的MySQL授权表。它不覆盖已有的MySQL授权表，并且它不影响任何其它数据。
+
+如果你想要重新创建授权表，首先停止mysqld服务器（如果它正运行）。然后重新命名数据目录下的MySQL目录并保存，然后运行mysql_install_db。例如：
+
+shell> mv mysql-data-directory/mysql mysql-data-directory/mysql-old
+shell> mysql_install_db --user=mysql
+本节列出了运行mysql_install_db时你可能遇到的问题：
+
+·         mysql_install_db fails to install the grant tables 
+
+你会发现mysql_install_db不能安装 授权表，显示下面的消息后终止：
+
+Starting mysqld daemon with databases from XXXXXX
+mysqld ended
+在这种情况下，你应该很小心地检验日志文件！日志文件应该位于目录“XXXXXX”，用错误消息命名，并且应该指出为什么mysqld没启动。如果你不理解发生的事情，邮寄一份错误报告，包含日志文件！参见1.7.1.3节，“如何通报缺陷和问题”。
+
+·         已经有一个amysqld进程在运行
+
+表示服务器在运行，这种情况下可能已经创建了授权表。如果如此，则不再需要运行mysql_install_db，因为只需要运行一次(当你首次安装MySQL时)。
+
+·         当一个服务器正运行时，安装第二个服务器不工作
+
+这只有在当你已经有已存在的MySQL安装但是想要把新安装放在一个不同的地方时才会发生。例如，你可能已经有了一个产品安装，但为了测试想要同时运行2个安装。通常当你试着运行第二个服务器时，发生的问题是它试图和第一个使用同样的套接字和端口。在这种情况下，你将遇到错误消息：
+
+Can't start server: Bind on TCP/IP port:
+Address already in use
+Can't start server: Bind on unix socket...
+关于设置多个服务器的说明，参见5.12节，“在同一台机器上运行多个MySQL服务器”。
+
+·         你没有“ /tmp ”的写权限
+
+如果你没有写权限在默认位置(在“/tmp”里)创建一个Unix套接字文件，或没有在“/tmp”创建临时文件的许可，在运行mysql_install_db或mysqld服务器时，你将遇到一个错误。
+
+你可以在开始mysql_install_db或mysqld之前执行以下命令指定一个不同的Unix套接字文件位置和临时目录：
+
+shell> TMPDIR=/some_tmp_dir/
+shell> MYSQL_UNIX_PORT=/some_tmp_dir/mysql.sock
+shell> export TMPDIR MYSQL_UNIX_PORT
+some_tmp_dir应该是你有写许可的某个目录的全路径。
+
+然后，你应当能够用这些命令运行mysql_install_db并启动服务器：
+
+shell> bin/mysql_install_db --user=mysql
+shell> bin/mysqld_safe --user=mysql &
+如果mysql_install_db位于scripts目录下，首先修改命令scripts/mysql_install_db。
+
+参见A.4.5节，“如何保护或更改MySQL套接字文件/tmp/mysql.sock”。请参见附录F：环境变量。
+
+2.9.2.2. 自动启动和停止MySQL
+通常你可以用以下方法启动mysqld服务器：
+
+·         直接调用mysqld。该方法适合任何平台。
+
+·         作为Windows服务运行MySQL服务器。可以在支持服务的Windows版本(例如 NT、2000、XP和2003)上实现。可以将服务设置为在Windows 启动时自动启动服务器，或根据需要启动的手动服务。相关说明参见2.3.12节，“以Windows服务方式启动MySQL”。
+
+·         调用mysqld_safe，可以为mysqld确定正确的选项然后使用这些选项来运行。该脚本适用于基于BSD Unix的系统。请参见5.1.3节，“mysqld_safe：MySQL服务器启动脚本”。
+
+·         调用mysql.server。该脚本主要用于使用系统V-style运行目录的系统的启动和关闭，它通常安装到mysql下。mysql.server脚本调用mysqld_safe来启动服务器。请参见5.1.4节，“mysql.server：MySQL服务器启动脚本”。
+
+·         你可以在Mac OS X上安装一个单独的MySQL Startup Item安装包来使系统启动时自动启动MySQL。Startup Item调用mysql.server来启动服务器。详细介绍参见 2.5节，“在Mac OS X上安装MySQL”。
+
+mysql.server和mysqld_safe脚本和Mac OS X Startup Item可以用来手动启动服务器，或自动启动系统。mysql.server和Startup Item还可以用来停止服务器。
+
+mysql.server脚本可以被用来启动或停止服务器，通过用start或stop参数调用它： 
+
+shell> mysql.server start
+shell> mysql.server stop
+在mysql.server启动服务器之前，它把目录改变到MySQL安装目录，然后调用safe_mysqld。如果你想要作为一些特定的用户运行服务器，在/etc/my.cnf选项文件的[mysqld]组增加相应user选项，如本节后面所示。(如果你有在一个非标准的地点安装的二进制分发版，你可能需要编辑mysql.server。修改它，运行safe_mysqld前，cd到正确的目录。注意如果你修改mysql.server，那么某个时候升级MySQL时，你的修改版本将被覆盖，因此你应该做一个你可重新安装的编辑过的版本的拷贝）。 
+
+mysql.server stop通过向服务器发出一个信号停止它。你可手动执行mysqladmin shutdown关闭服务器。
+
+要想在服务器上自动启动和停止MySQL，应在“/etc/rc * 文件中适当的地方增加启动、停止命令。
+
+如果你使用Linux服务器RPM安装软件包(MySQL-server-VERSION.rpm)，mysql.server脚本安装在/etc/init.d目录中，名为MySQL。你不需要手动安装它。关于Linux RPM软件包的详细信息参见2.4节，“在Linux下安装MySQL”。
+
+一些供应商提供的RPM软件包安装的启动脚本名字不同，例如mysqld。
+
+如果从不自动安装mysql.server的源码分发版或二进制分发版格式来安装MySQL，可以手动安装它。可以在MySQL安装目录下或MySQL 源码树的support-files目录中找到脚本。
+
+要想手动安装mysql.server，用名称mysql将它复制到/etc/init.d目录，然后将它变为可执行文件。只需要将位置更改为mysql.serveris所在并执行这些命令的相应目录：
+
+shell> cp mysql.server /etc/init.d/mysql
+shell> chmod +x /etc/init.d/mysql
+旧的Red Hat系统使用/etc/rc.d/init.d目录，不使用/etc/init.d。相应地调节前面的命令。也可以首先创建指向/etc/rc.d/init.d的符号连接/etc/init.d：
+
+shell> cd /etc
+shell> ln -s rc.d/init.d .
+安装脚本后，用来激活它以便在系统启动时运行所需要的命令取决于你的操作系统。在Linux中，你可以使用chkconfig：
+
+shell> chkconfig --addMySQL
+在一些Linux系统中，还需要下面的命令来完全激活MySQL脚本：
+
+shell> chkconfig --level 345MySQL on
+在FreeBSD中，启动脚本通常应当位于/usr/local/etc/rc.d/。手册的rc(8)页内说明只有该目录脚本的基本名匹配*.sh shell文件名模式，脚本才会执行。目录内的其它文件或目录将被忽略掉。换句话说，在FreeBSD中，应当将mysql.server脚本安装为 /usr/local/etc/rc.d/mysql.server.sh以便自动启动。
+
+前面设置的另一种情况是，一些操作系统启动时也使用/etc/rc.local或/etc/init.d/boot.local 来启动其它服务。要想使用该方法启动MySQL，你可以在相应启动文件后面追加一条命令：
+
+/bin/sh -c 'cd /usr/local/mysql; ./bin/mysqld_safe --user=mysql &'
+对于其它系统，查阅操作系统的文档来查看安装启动脚本的方法。
+
+你也可以在一个全局“/etc/my.cnf”文件中增加mysql.server的选项。一个典型的“/etc/my.cnf”文件可能看起来像这样：
+
+[mysqld]
+datadir=/usr/local/mysql/var
+socket=/var/tmp/mysql.sock
+port=3306
+user=mysql
+ 
+[mysql.server]
+basedir=/usr/local/mysql
+mysql.server脚本使用下列变量：basedir、datadir和pid-file。定义后，必须将它们放到选项文件中，不能放到命令行。mysql.server只识别start和stop命令行参数。
+
+下面的表显示了服务器和每个启动脚本从选项文件读取哪个选项组：
+
+脚本
+ 选项组
+ 
+mysqld
+ [mysqld], [server], [mysqld-major-version]
+ 
+mysql.server
+ [mysqld], [mysql.server], [server]
+ 
+mysqld_safe
+ [mysqld], [server], [mysqld_safe]
+ 
+
+[mysqld-major-version]意味着名为[mysqld-5.0]的组，[mysqld-5.1]用于版本为5.0.x、5.1.x等的服务器。该特性可以用来指定只被给定发布系列的服务器读取的选项。
+
+为了向后兼容，mysql.server还读取[mysql_server]组，mysqld_safe还读取[safe_mysqld]组。然而，当使用MySQL 5.1时，你应当更新选项文件，使用[mysql.server]和[mysqld_safe]组。
+
+参见4.3.2节，“使用选项文件”。
+
+2.9.2.3. 启动MySQL服务器以及其故障诊断和排除
+如果启动服务器时有问题，可以尝试：
+
+·         指定你使用的储存引擎需要的任何特殊选项。
+
+·         确保服务器知道从哪里找到数据目录。
+
+·         确保服务器可以使用数据目录。数据目录和内容的所有权和允许必须设置成服务器可以访问和修改它们。
+
+·         检查错误日志查看服务器为何不启动。
+
+·         验证服务器想要使用的网络接口可用。
+
+一些储存引擎有一些选项可以控制其行为。你可以创建一个my.cnf文件并为计划使用的引擎设置启动选项。如果你将要使用支持事务处理表 (InnoDB，BDB)的储存引擎，应确保启动服务器之前按照你的期望对它们进行了配置：
+
+·         如果你正使用InnoDB表，参阅InnoDB-specific启动选项。如果你未指定选项，InnoDB使用默认值作为配置选项。请参见15.2.3节，“InnoDB配置”。
+
+·         如果你正使用BDB (Berkeley DB)表，你应当熟悉不同的BDB-specific启动选项。请参见15.5.3节，“BDB启动选项”。
+
+当mysqld服务器启动时，它进入数据目录。在这里它可以找到数据库并写入日志文件。在Unix中，服务器还在数据目录中写pid(过程 ID)文件。
+
+当编译服务器时确定数据目录。这是服务器默认寻找数据目录的位置。如果数据目录位于系统中的其它位置，服务器不能正确工作。用--verbose和--help选项调用mysqld你可以找出默认路径设定值。
+
+如果默认值与你的系统中的MySQL安装布局不匹配，你可以在命令行中为mysqld 或mysqld_safe指定选项来覆盖它们。你还可以在选项文件中列出选项。
+
+要想明显指定数据目录的位置，使用--datadir选项。一般情况下，你可以告诉mysqld基本目录的位置，MySQL安装在该目录下，并且它在该目录中寻找数据目录。你可以使用--basedir选项来实现。
+
+要想检查指定路径选项的结果，用--verbose和--help选项调用mysqld。例如，如果你进入mysqld的安装目录，然后运行下面的命令，它显示启动服务器的结果，基本目录为/usr/local：
+
+shell> ./mysqld --basedir=/usr/local --verbose --help
+你可以指定其它选项，例如--datadir，但是请注意--verbose和--help必须为最后的选项。
+
+一旦你确定了你想要的路径设定值，用--verbose和-- help启动服务器。
+
+如果mysqld正在运行，执行下列命令你可以找出它所使用的路径设定值：
+
+shell> mysqladmin variables
+或：
+
+shell> mysqladmin -h host_name variables
+host_name是MySQL服务器主机的名称。
+
+如果启动mysqld时遇到Errcode 13(意味着Permission denied)，这意味着数据目录或其内容的访问权限不允许服务器访问。此时，你需要更改所调用文件和目录的权限，使服务器有权使用它们。你还可以用root启动服务器，但是这样会造成安全问题，应当避免。
+
+在Unix中，进入数据目录，检查数据目录和其内容的所有权，确保服务器可以访问。例如，如果数据目录是/usr/local/mysql/var，使用命令：
+
+shell> ls -la /usr/local/mysql/var
+如果数据目录或其文件或子目录不属于你运行服务器使用的账户，将所有权改为该账户：
+
+shell> chown –R mySQL /usr/local/mysql/var
+shell> chgrp –R mySQL /usr/local/mysql/var
+如果服务器不能正确启动，检查错误日志文件，看看是否可以找到原因。日志文件位于数据目录(在Windows中一般为C:\Program Files\MySQL\MySQL Server 5.1\data，Unix二进制分发版为/usr/local/mysql/data，Unix源码分发版为/usr/local/var)。查找数据目录中的host_name.err和host_name.log文件，其中host_name是你的服务器主机名。然后检查文件的最后几行。在Unix中，可以使用tail来显示：
+
+shell> tail host_name.err
+shell> tail host_name.log
+错误日志包含指示服务器不能启动的信息。例如，你可以看见日志中：
+
+000729 14:50:10  bdb:  Recovery function for LSN 1 27595 failed
+000729 14:50:10  bdb:  warning: ./test/t1.db: No such file or directory
+000729 14:50:10  Can't init databases
+这意味着你没有用--bdb-no-recover选项启动mysqld，Berkeley DB恢复数据库时发现其日志文件有一些问题。要想继续，你应当将旧的Berkeley DB 日志文件从数据库目录移到其它地方，以后你可以在那儿检查它们。BDB日志文件以log.0000000001开头，按顺序命名。
+
+如果你运行支持BDB 表的mysqld,mysqld启动时内核崩溃，该可能是由于BDB 恢复日志的问题。此时，你可以尝试用--bdb-no-recover启动mysqld。如果有帮助，你应当从数据目录移走所有BDB日志文件并尝试不用--bdb-no-recover选项重新启动mysqld。
+
+如果出现下面的错误，说明其它程序(也许是另一个mysqld服务器)正使用mysqld正试图使用的TCP/IP端口或Unix 套接字文件：
+
+Can't start server: Bind on TCP/IP port: Address already in use
+Can't start server: Bind 在Unix中 socket...
+使用ps来确定是否另有一个mysqld服务器正在运行。如果如此，关闭服务器重新启动mysqld。(如果另一个服务器正运行，你的确想要运行多个服务器，你可以在5.12节，“在同一台机器上运行多个MySQL服务器”中发现相关信息)。
+
+如果没有其它服务器在运行，尝试执行命令 telnet your-host-name tcp-ip-port-number。(默认MySQL端口号是3306）。然后按两次Enter（回车）键。如果出现telnet: Unable to connect to remote host: Connection refused错误消息，其它程序正使用mysqld试图使用的 TCP/IP端口。你需要跟踪这是哪个程序并禁用它，或让mysqld用--port选项帧听其它端口。此时，当通过TCP/IP协议连接服务器时，你还需要为客户端程序指定端口号。
+
+端口不能访问的另一个原因可能是防火墙正运行，阻挡了与它的连接。如果如此，修改防火墙设置允许对该端口的访问。
+
+如果服务器已经启动但是你不能与它连接，你应当确保在/etc/hosts中有下面所示条目：
+
+127.0.0.1       localhost
+该问题只发生在没有工作线程库，并且MySQL必须配置为使用MIT-pthreads的系统。
+
+如果你不能启动mysqld，你可以使用--debug选项尝试编写一个跟踪文件来找到问题。请参见E.1.2节，“创建跟踪文件”。
+
+关于在Windows安装中排错的详细信息，参见2.3.14节，“在Windows环境下对MySQL安装的故障诊断与排除”。
+
+2.9.3. 使初始MySQL账户安全
+MySQL安装过程包括设置含有授权表的MySQL数据库：
+
+·         Windows分发版包含预初始化的授权表，可以自动安装。
+
+·         在Unix中，用mysql_install_db程序来安装 授权表。可以通过一些安装方法来运行该程序。否则你需要手动执行。详细信息参见2.9.2节，“Unix下安装后的过程”。
+
+授权表定义了初始MySQL用户账户和访问权限。按照以下步骤对这些账户进行设置：
+
+·         用用户root 创建两个账户。这些账户为超用户账户，可以执行任何操作。初始root账户的密码为空，因此任何人可以用root账户不用任何密码来连接MySQL服务器，并具有所有权限。
+
+o        在Windows中，一个root账户用来从本机连接MySQL服务器，另一个允许从任何主机连接。
+
+o        在Unix中，两个root账户均用于从本机连接。必须从本机进行连接，一个账户主机名应指定为localhost，另一个账户为实际的主机名或IP号。
+
+·         创建了两个匿名用户账户，每个账户的用户名均为空。匿名账户没有密码，因此任何人可以使用匿名账户来连接MySQL服务器。
+
+o        在Windows中，一个匿名账户用来从本机进行连接。它具有所有权限，同root 账户一样。另一个可以从任何主机上连接，具有test数据库或其它以test开始的数据库的所有权限。
+
+o        在Unix中，两个匿名账户均用于从本机连接。必须从本机进行连接，一个账户主机名应指定为localhost，另一个账户为实际的主机名或IP号。两个账户具有test数据库或其它以test开始的数据库的所有权限。
+
+如前面所述，所有初始账户均没有密码。这意味着在你执行下述操作前，MySQL安装未受保护：
+
+·         如果你想要防止客户端不使用密码用匿名用户来连接，你应当为匿名账户指定密码或删掉匿名账户。
+
+·         你应当为MySQL root账户指定密码。
+
+下面的说明描述了如何为初始MySQL账户设置密码，先为匿名账户设置然后为root账户设置。在例子中用实际密码替换“newpwd”。说明还包括如果你不想用匿名账户访问，如何删掉匿名账户。
+
+你可能想要在以后设置密码，因此不需要在进一步的设置或测试中指定密码。但是，一定要在实际生产作业、使用安装前设置好密码。
+
+要想为匿名账户指定密码，可以使用SET PASSWORD或UPDATE。在两种情况中，一定要使用PASSWORD()函数为密码加密。
+
+在Windows中使用PASSWORD的方法：
+
+shell> mysql -u root
+mysql> SET PASSWORD FOR ''@'localhost' = PASSWORD('newpwd');
+mysql> SET PASSWORD FOR ''@'%' = PASSWORD('newpwd');
+在Unix中使用PASSWORD的方法：
+
+shell> mysql -u root
+mysql> SET PASSWORD FOR ''@'localhost' = PASSWORD('newpwd');
+mysql> SET PASSWORD FOR ''@'host_name' = PASSWORD('newpwd');
+用服务器主机名替换第二个SET PASSWORD语句中的host_name。这是指定的user表中的root non-localhost记录的Host列名。如果你不知道是哪个主机名，在SET PASSWORD之前执行下面的语句：
+
+mysql> SELECT Host, User FROM mysql.user;
+查找在User列有root和在Host列没有localhost的记录。然后在第二个SET PASSWORD语句中使用该Host值。
+
+为匿名账户指定密码的另一种方法是使用UPDATE直接修改用户表。用root连接服务器，运行UPDATE语句为相应user表记录的Password列指定一个值。在Windows和Unix中的过程是相同的。下面的UPDATE语句同时为两个匿名账户指定密码：
+
+shell> mysql -u root
+mysql> UPDATE mysql.user SET Password = PASSWORD('newpwd')
+    ->     WHERE User = '';
+mysql> FLUSH PRIVILEGES;
+在user表中直接使用UPDATE更新密码后，必须让服务器用FLUSH PRIVILEGES重新读授权表。否则，重新启动服务器前，不会使用更改。
+
+如果你宁愿删除匿名账户，操作方法是：
+
+shell> mysql -u root
+mysql> DELETE FROM mysql.user WHERE User = '';
+mysql> FLUSH PRIVILEGES;
+可以在Windows和Unix中使用DELETE语句。在Windows中，如果你只想删掉具有与root相同权限的匿名账户，方法为：
+
+shell> mysql -u root
+mysql> DELETE FROM mysql.user WHERE Host='localhost' AND User='';
+mysql> FLUSH PRIVILEGES;
+该账户允许匿名访问，但是拥有全部的权限，因此删掉它可以提高安全。
+
+你可以用几种方法为root账户指定密码。以下介绍了三种方法：
+
+·         使用SET PASSWORD语句
+
+·         使用mysqladmin命令行客户端程序
+
+·         使用UPDATE语句
+
+要想使用SET PASSWORD指定密码，用root连接服务器并执行两个SET PASSWORD语句。一定要使用PASSWORD()函数来加密密码。
+
+在Windows中的语句：
+
+shell> mysql -u root
+mysql> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('newpwd');
+mysql> SET PASSWORD FOR 'root'@'%' = PASSWORD('newpwd');
+在Unix中的语句：
+
+shell> mysql -u root
+mysql> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('newpwd');
+mysql> SET PASSWORD FOR 'root'@'host_name' = PASSWORD('newpwd');
+用服务器主机名替换第二个SET PASSWORD语句中的host_name。这是你指定匿名账户密码的主机名。
+
+要想使用mysqladmin为root账户指定密码，执行下面的命令：
+
+  shell> mysqladmin -u root password "newpwd"
+  shell> mysqladmin -u root -h host_name password "newpwd"
+上述命令适用于Windows和Unix。用服务器主机名替换第二个命令中的host_name。不一定需要将密码用双引号引起来，但是你如果密码中包含空格或专用于命令解释的其它字符，则需要用双引号引起来。
+
+你还可以使用UPDATE直接修改user表。下面的UPDATE语句可以同时为两个root账户指定密码：
+
+shell> mysql -u root
+mysql> UPDATE mysql.user SET Password = PASSWORD('newpwd')
+    ->     WHERE User = 'root';
+mysql> FLUSH PRIVILEGES;
+UPDATE语句适用于Windows和Unix。
+
+设置完密码后，当你连接服务器时你必须提供相应密码。例如，如果你想要用mysqladmin 关闭服务器，可以使用下面的命令：
+
+shell> mysqladmin -u root -p shutdown
+Enter password: (enter root password here)
+注释：如果你设置了root密码后忘记了密码，从A.4.1节，“如何复位根用户密码”中查阅重设密码的方法。
+
+你可以使用GRANT语句设置新账户。相关说明参见5.8.2节，“向MySQL增加新用户账户”。
+
+2.10. 升级MySQL
+2.10.1. 从5.0版升级
+2.10.2. 升级授权表
+2.10.3. 将MySQL数据库拷贝到另一台机器
+做为一般原则，我们建议从一个发布系列升级到另一个发布系列时，你应当先升级到它的下一个系列而不要跳过。例如，如果你目前正运行MySQL 3.23，想要升级到较新的系列，要升级到MySQL 4.0而不要升级到5.0或5.1。
+
+下面的项列出了升级时的相关信息：
+
+·         从MySQL 5.0升级到5.1前,请阅读2.10.1节，“从5.0版升级”和附录D：MySQL变更史。其中提供了MySQL 5.1相对于MySQL 5.0的新特性或不同特性。如果你想要从MySQL 5.0以前的发布系列升级,应当依次升级到下一个发布系列，直到达到MySQL 5.0，然后再升级到MySQL 5.1。关于从MySQL 5.0升级的信息,参见MySQL 5.0 参考手册；对于更早的发布，参见MySQL 4.1参考手册。
+
+·         在升级前应先备份数据库。
+
+·         如果在Windows中运行MySQL服务器，参见2.3.15节，“在Windows下升级MySQL”。
+
+·         从MySQL 5.0升级到5.1更改MySQL数据库中的 授权表；增加了列和表以支持新功能。为了充分利用这些特性，应确保授权表是最新的。升级授权表的过程参见2.10.2节，“升级授权表”。在升级前，你可能想要使用mysqldump来转储表；升级后，可以使用mysql或mysqlimport重建、重装 授权表来重载dump(备份)文件。
+
+·         如果你正复制，关于升级复制设置的信息参见6.6节，“升级复制设置”。
+
+·         如果安装包括mysqld-max服务器的MySQL-Max分发版，则后面要升级到非Max版的MySQL，mysqld_safe仍然试图运行旧的mysqld-max服务器。如果升级，应当手动删掉旧的mysqld-max服务器以确保mysqld_safe运行新的mysqld服务器。
+
+只要你的MySQL版本属于相同的发布系列，总是可以在不同的版本之间的相同架构上移动MySQL格式文件和数据文件。目前的产品发布系列是5.1。如果运行MySQL时更改字符集，必须对所有MyISAM表运行myisamchk -r -q --set-character-set=charset。否则，索引顺序将会出错，因为更改字符集也会更改排序。
+
+如果你使用新版本时比较小心，在安装新的MySQL前可以重新命名旧的mysqld。例如，如果你想要从MySQL 5.0.13升级到5.1.10, 将当前的服务器从mysqld重新命名为mysqld-5.0.13。如果新的mysqld出现问题，只需要关闭并用旧的mysqld重新启动。
+
+升级后，如果你遇到重新编译的客户端程序问题，例如Commands out of sync或不期望的内核转储，可能是编译程序时使用了旧的头文件或库文件。出现这种情况，应当检查mysql.h文件和libmysqlclient.a库的日期，以验证它们是否来自新的MySQL分发版。如果不是，用新的头文件和库重新编译程序。
+
+如果出现问题，例如新mysqld服务器不启动或没有密码不能连接，验证是否使用了以前安装的旧my.cnf文件。可以用--print-defaults选项检查(例如，mysqld --print-defaults)。如果显示程序名之外的其它内容，说明有一个活动my.cnf文件影响了服务器或客户端操作。
+
+当安装新的MySQL发布时，最好重建并重装Perl DBD：：mysql 模块。同样适用于其它MySQL接口，例如PHP mysql扩展名和Python MySQLdb模块。
+
+2.10.1. 从5.0版升级
+当从5.0升级到5.0.10或更高版本时请注意必须运行mysql_fix_privilege_tables(或在Windows中运行mysql_fix_privilege_tables.sql)。否则，不能创建保存的过程。相关过程参见2.10.2节，“升级授权表”。
+
+2.10.2. 升级授权表
+一些发布对授权表(MySQL数据库中的表)的结构进行了更改以增加新的权限或特性。当你更新到新版本 MySQL时，要想确保授权表最新，应当运行mysql_fix_privilege_tables脚本来更新 授权表。相关过程参见5.4节，“mysql_fix_privilege_tables：升级MySQL系统表”。
+
+如果你从MySQL 4.1或更早版本升级，授权表升级过程为CREATE VIEW和SHOW VIEW权限增加了视图相关的列。这些权限位于全局和数据库 级。在这种情况下，MySQL 5.1版MySQL_fix_privilege_ tables将user表中的Create_priv值复制到Create_view_priv和 Show_view_priv列。
+
+2.10.3. 将MySQL数据库拷贝到另一台机器
+你可以在支持相同浮点格式的不同架构之间为MyISAM表复制.frm、.MYI和.MYD文件。(MySQL关注所有字节交换问题）。请参见15.1节，“MyISAM存储引擎”。
+
+如果你需要在不同的架构之间转移数据库，可以使用mysqldump创建含有SQL语句的文件。然后你可以将文件转移到其它机器上，并将它输入到MySQL客户端。
+
+使用mysqldump --help来看有哪些选项可用。如果你正将数据移动到更新版本的MySQL，你应当使用mysqldump –opt来利用各种优化性能来产生更小、可以更快处理的转储文件。
+
+在两台机器之间移动数据库的最简单(尽管不是最快)的方法是在数据库所在的机器上运行下面的命令：
+
+shell> mysqladmin -h 'other_hostname' create db_name
+shell> mysqldump --opt db_name | mysql -h 'other_hostname' db_name
+如果你想要从远程机器通过慢速网络复制数据库，可以使用：
+
+shell> mysqladmin create db_name
+shell> mysqldump -h 'other_hostname' --opt --compress db_name | mysql db_name
+还可以将结果保存到文件中，然后将文件转移到目标机器上并将文件装载到数据库中。例如，可以在源机器上使用下面的命令将数据库备份到文件中：
+
+shell> mysqldump --quick db_name | gzip > db_name.contents.gz
+(该例子中创建的文件是压缩格式）。将含有数据库内容的文件到目标机上并运行命令：
+
+shell> mysqladmin create db_name
+shell> gunzip < db_name.contents.gz | mysql db_name
+还可以使用mysqldump和mysqlimport来转移数据库。对于大的表，比只是使用mysqldump要快得多。在下面的命令中，DUMPDIR代表用来保存mysqldump输出的目录全路径名。
+
+首先，创建保存输出文件的目录并备份数据库：
+
+shell> mkdir DUMPDIR
+shell>mysqldump --tab=DUMPDIR db_name
+然后将DUMPDIR目录中的文件转移到目标机上相应的目录中并将文件装载到MySQL：
+
+shell> mysqladmin create db_name           # create database
+shell> cat DUMPDIR/*.sql | mysql db_name   # create tables in database
+shell> mysqlimport db_name DUMPDIR/*.txt   # load data into tables
+不要忘记复制MySQL数据库，因为授权表保存在该数据库中。你可能需要在新机器上用MySQL root用户运行命令，直到产生MySQL数据库。
+
+将mysql数据库导入目标机器后，执行mysqladmin flush-privileges，以便服务器重载授权表信息。
+
+2.11. 降级MySQL
+本节描述了旧版本MySQL比新版本工作得好的情况下，如何降级到旧的MySQL版本。
+
+如果你在同一发布系列(例如，从 5.0.13 到5.0.12)内降级，一般规则是只需要在旧版本的顶部安装新的二进制。不需要对数据库进行任何操作。但是，最好是先进行备份。
+
+下面的项列出了进行降级时应执行的操作：
+
+·         阅读你将要降级的发布系列的升级部分，确定它没有你需要的功能。2.10节，“升级MySQL”。
+
+·         如果该版本有降级部分，你也应当阅读。
+
+只要MySQL版本属于相同的发布系列，你总是可以在不同的版本之间的相同架构上移动MySQL格式文件和数据文件。目前的产品发布系列是5.1。
+
+如果你从一个发布系列降级到另一个发布系列，表储存格式可能不兼容。在这种情况下，你可以在降级嵌使用mysqldump来转储表。降级后，使用mysql或mysqlimport重载转储文件来重新创建表。请参见2.10.3节，“将MySQL数据库拷贝到另一台机器”。
+
+表格式不向下兼容的一般迹象是降级时不能打开表。在这种情况下，使用下面的过程：
+
+1.    停止你想要降级到的旧的MySQL服务器。
+
+2.    重新启动将被降级的新的MySQL服务器。
+
+3.    使用mysqldump创建一个dump（转储）文件来转储不能被旧服务器访问的所有表。
+
+4.    停止新MySQL服务器，重新启动旧MySQL服务器。
+
+将dump（转储）文件重载入旧服务器。表应当可访问。
+
+2.12. 具体操作系统相关的注意事项
+2.12.1. Linux注意事项
+2.12.2. Mac OS X注意事项
+2.12.3. Solaris注意事项
+2.12.4. BSD注意事项
+2.12.5. 其它Unix注意事项
+2.12.6. OS/2注意事项
+2.12.1. Linux注意事项
+2.12.1.1. Linux操作系统注意事项
+2.12.1.2. Linux二进制分发版说明
+2.12.1.3. Linux源码分发版说明
+2.12.1.4. Linux后期安装注意事项
+2.12.1.5. Linux x86注意事项
+2.12.1.6. Linux SPARC注意事项
+2.12.1.7. Linux Alpha注意事项
+2.12.1.8. Linux PowerPC注意事项
+2.12.1.9. Linux MIPS注意事项
+2.12.1.10. Linux IA-64注意事项
+本节讨论发现的在Linux中出现的问题。前面几节描述了一般操作系统相关的问题，使用二进制或源码分发版时可能出现的问题和安装后的问题。后面几节讨论在具体Linux平台上出现的问题。
+请注意这些问题的大多数出现在旧的Linux 版本中。如果你运行最新的版本，可能不会发现这些问题。
+
+2.12.1.1. Linux操作系统注意事项
+MySQL至少需要Linux 2.0版本。
+警告：我们已经发现在SMP系统中Linux 2.2.14 和MySQL会出现一些奇怪的问题。我们还收到来自一些MySQL用户的报告说他们用内核2.2.14使用MySQL时遇到了严重的稳定性问题。如果你正使用该内核，应当升级到2.2.19 (或更新版)或到2.4内核。如果你有一个多CPU盒，应当考虑使用2.4，因为它能大大加速。你的系统将会更稳定。
+
+当使用LinuxThreads时，你应当至少可以看见有三个mysqld 进程在运行。这些实际上是线程。有一个线程是LinuxThreads管理器，一个线程处理连接，另一个线程处理告警和信号。
+
+2.12.1.2. Linux二进制分发版说明
+MySQL的Linux-Intel二进制和RPM发布配置为最高的可能速度。我们一直在尝试使用可用的最快的稳定的编译器。
+二进制发布用-staticis连接，说明一般情况你不需要关心系统库的版本。你也不需要安装LinuxThreads。用-staticis连接的程序稍微大于动态连接程序，但也稍微快一些(3-5%)。但是，静态连接程序的一个问题是你不能使用用户定义函数(UDF)。如果你将要写或使用UDF(只适用于C或C++ 编程人员)，你必须使用动态链接自己编译MySQL。
+
+二进制分发版的一个已知问题是在使用libc的旧的Linux系统(例如Red Hat 4.x或Slackware)上，你会遇到一些(非致命)主机名解析问题。如果系统使用libc没有使用glibc2,你可能会遇到一些主机名解析和getpwnam()问题。这是因为glibc依靠一些外部库来执行主机名解析和getpwent(), 即使用-staticis编译也如此。这些问题出现在两个方面：
+
+·         当运行mysql_install_db时，你会看见下面的错误消息：
+
+·                Sorry, the host 'xxxx' could not be looked up
+你可以通过执行mysql_install_db --force来解决该问题，并不在mysql_install_db中执行resolveip测试。不利方面是 你不能在授权表中使用主机名：除了localhost，必须使用IP号。如果你正使用不支持—force的旧版本MySQL，必须使用文本编辑器手动卸载mysql_install中的resolveip测试。
+
+·         当你尝试用--user选项运行mysqld时你还会看见下面的错误：
+
+·                getpwnam: No such file or directory
+要解决该问题，使用su命令启动mysqld，不要指定--user选项。这样使系统自己更改mysqld进程的用户ID，mysqld不再需要这样做。
+
+另一个解决办法可以解决两个问题，即不使用二进制分发版。获得MySQL源码分发版(RPM或tar.gz格式)并安装。
+
+在一些Linux 2.2版本中，当客户端通过TCP/IP建立大量与mysqld服务器的新连接时，你可能会遇到错误Resource temporarily unavailable。该问题是Linux在你关闭TCP/IP套接字的时间和系统实际释放该套接字的时间之间有一个延迟。只有有限数目的TCP/IP时段有空间，因此如果客户端试图在短时间内建立许多新TCP/IP连接时，你会遇到源不可用错误。例如，当你通过TCP/IP运行MySQL test-connect基准测试时你会看见该错误。
+
+我们已经多次向不同的 Linux 邮件列表询问该问题，但是一直没有找到合适的解决办法。唯一知道的“解决办法”是客户端使用永久连接，或，如果你在同一机器上运行数据库服务器和客户端，使用Unix套接字文件来连接，不要使用TCP/IP连接。
+
+2.12.1.3. Linux源码分发版说明
+下面关于glibc的注意事项只适用你自己构建MySQL时。如果在x86机器上运行Linux，在大多数情况下最好使用我们的二进制。我们将二进制连接到了我们能找到的打了最好补丁的glibc版本，并使用了最优的编译器选项，尽力使它适合高负荷服务器。对于典型用户，即使对于超过2GB限制的大量并行连接或表设置，在大多数情况下，我们的二进制仍然是最佳选择。阅读下面的内容后，如果你不清楚怎样做，先试用我们的二进制看它是否满足你的需求。如果你发现它不够完善，那么你可以尝试你自己的构建。在这种情况下，我们很希望能看到相关注释，以便我们下次可以构建更好的二进制。
+MySQL在Linux上使用 LinuxThreads 。如果你正在使用一个没有glibc2的老的Linux版本，你必须在尝试编译MySQL前安装LinuxThreads。你可以从 http://dev.mysql.com/downloads/os-linux.html获得LinuxThreads。
+
+注意：当你执行INSERT DELAYED时，所用的包括2.1.1及以前的glibc版本在pthread_互斥_timedwait()处理上有一个致命错误，如果你正在使用INSERT DELAYED，我们建议先升级glibc。
+
+请注意Linux 内核和LinuxThreads库默认情况下最多可以处理1,024个线程。如果你计划使用超过1,000个并行连接，需要对LinuxThreads进行一些更改，如下所示：
+
+·         将sysdeps/unix/sysv/linux/bits/local_lim.h中的PTHREAD_THREADS_MAX 增加到4096，将LinuxThreads/internals.h 中的STACK_SIZE减少到256KB。路径相对于glibc的根目录。(请注意如果STACK_SIZE为默认值2MB，MySQL有600-1000个连接时不稳定）。
+
+·         重新编译LinuxThreads，生成新的libpthreads.a库，并重新连接MySQL。
+
+可以从http://www.volano.com/linuxnotes.html 查阅关于LinuxThreads线程限制的详细信息。
+
+还有一个问题会严重影响MySQL的性能，特别是在SMP系统中。在glibc 2.1的LinuxThreads中，对于拥有很多只是短时间内占有互斥体的线程的程序，不能很好地执行互斥。结果出现荒谬的现象：在许多情况下，如果你使用未修改的LinuxThreads连接MySQL，从SMP中去掉卸载处理器实际上会提高MySQL的性能。我们提供了一个glibc 2.1.3的补丁来纠正该行为(http://www.mysql.com/Downloads/Linux/linuxthreads-2.1-patch )。
+
+在glibc 2.2.2中,MySQL使用修改后的互斥，这样甚至比打了补丁的glibc 2.1.3还要好得多。但是，需要注意的是在某些条件下，当前glibc 2.2.2中的互斥代码会高旋，影响了MySQL的性能。通过优化mysqld进程到最高优先级，可以降低在这种情况下出现这种问题的可能性。我们还可以通过补丁来纠正高旋问题，可以从http://www.mysql.com/Downloads/Linux/linuxthreads-2.2.2.patch下载。它集成高旋的纠正、线程最大数目和堆栈空间于一体。你需要用补丁patch -p0 </tmp/linuxthreads-2.2.2.patch在LinuxThreads目录下使用。我们 希望在将来的glibc 2.2发布中能以某种形式将它包括进来。在任何情况下，如果你连接glibc 2.2.2,仍然需要纠正STACK_SIZE和 PTHREAD_THREADS_MAX。我们希望在将来能将默认值纠正到某种程度上可以接受的值，适合高负荷MySQL设置，因此用来产生你自己的构建的  命令可以简化到到./configure; make; make install。
+
+我们建议你使用这些补丁来构建专用的libpthreads.a静态版本，并只使用它同MySQL实现静态链接。我们知道这些补丁对于MySQL很安全 并大大改善了它的性能，但是我们还不能断言它在其它应用程序上的效果如何。如果你需要将其它使用LinuxThreads的应用程序同打了补丁的静态版本的库连接，或构建一个打了补丁的共享版本，并将它安装到系统中，你将自己承担风险。
+
+如果你在安装MySQL的过程中遇到任何奇怪的问题，或一些常用实用工具被悬挂起来，很可能是库或编译器相关问题。在这种情况下，使用我们的二进制来解决。
+
+如果你连接你自己的MySQL客户端程序，运行时你会看见下面的错误：
+
+ld.so.1: fatal: libmysqlclient.so.#:
+open failed: No such file or directory
+使用下面的方法可以避免该问题：
+
+·         用-Wl,r/full/path/to/libmysqlclient.so标记连接客户端，不要使用-Lpath)。
+
+·         将libmysqclient.so复制到/usr/lib。
+
+·         运行客户端程序前，将libmysqlclient.so所在目录的路径名增加到LD_RUN_PATH环境变量。
+
+如果使用Fujitsu编译器 (fcc/FCC)，编译MySQ时可能会出现一些问题，因为Linux头文件主要面向gcc。以下的configure行应当结合fcc/FCC使用：
+
+CC=fcc CFLAGS="-O -K fast -K lib -K omitfp -Kpreex -D_GNU_SOURCE \
+    -DCONST=const -DNO_STRTOLL_PROTO" \
+CXX=FCC CXXFLAGS="-O -K fast -K lib \
+    -K omitfp -K preex --no_exceptions --no_rtti -D_GNU_SOURCE \
+    -DCONST=const -Dalloca=__builtin_alloca -DNO_STRTOLL_PROTO \
+    '-D_EXTERN_INLINE=static __inline'" \
+./configure \
+    --prefix=/usr/local/mysql --enable-assembler \
+    --with-mysqld-ldflags=-all-static --disable-shared \
+    --with-low-memory
+2.12.1.4. Linux后期安装注意事项
+在MySQL安装目录或MySQL源码树下的support-files目录下可以找到mysql.server。你可以将它安装为/etc/init.d/mysql，以便自动启动和关闭MySQL。请参见2.9.2.2节，“自动启动和停止MySQL”。
+
+如果MySQL不能打开足够的文件或连接，可能是你没有将Linux配置为处理足够的文件。
+
+在Linux 2.2及以上版本中，你可以检查分配的文件的数目：
+
+shell> cat /proc/sys/fs/file -max
+shell> cat /proc/sys/fs/dquot-max
+shell> cat /proc/sys/fs/super-max
+如果有超过16MB的内存，应当在启动脚本中增加如下内容(例如，在SuSE Linux中：/etc/init.d/boot.local)：
+
+echo 65536 > /proc/sys/fs/file-max
+echo 8192 > /proc/sys/fs/dquot-max
+echo 1024 > /proc/sys/fs/super-max
+还可以用root从命令行运行echo命令，但是下一次重新启动计算机时这些设定值会丢掉。
+
+另外，可以使用许多Linux分发版使用的sysctl工具设置启动参数(包括SuSE Linux 8.0和以后版本)。将下面的值放到文件 /etc/sysctl.conf中：
+
+# Increase some values for MySQL
+fs.file-max = 65536
+fs.dquot-max = 8192
+fs.super-max = 1024
+你还应将以下内容加入/etc/my.cnf：
+
+[mysqld_safe]
+open-files-limit=8192
+这样服务器连接和打开文件的总数目可以达到8,192。
+
+LinuxThreads的STACK_SIZE常数控制在寻址空间中线程堆栈的占用空间。它需要足够大，以保证每个线程堆栈有足够的空间，但是应足够小，防止某些线程的堆栈运行全局mysqld数据。遗憾的是，根据我们的发现，如果你用mmap()映射目前正使用的寻址，Linux成功运行  后不会映射映射区，将会清空整个地址页上的数据而不会返回错误信息。因此，mysqld或其它线程应用程序的安全依靠创建线程的代码的“绅士”行为。用户必须采取措施以确保在任何时间运行线程的数目相对线程堆栈应足够低，以防止全局堆内存。使用mysqld时，你应当为max_connections变量设置合理的值强制该行为。
+
+如果你自己构建MySQL，你可以为LinuxThreads打补丁以便更好地使用堆栈。请参见2.12.1.3节，“Linux源码分发版说明”。如果你不想为LinuxThreads打补丁，你应当将max_connections的值设置为不超过500。如果你有大的关键字缓冲区、大的堆内存表，或其它使mysqld分配大量内存的东西，或如果你用2GB的补丁运行2.2内核，max_connections的值应当更低。如果你正使用我们的二进制或RPM版本，可以安全地将max_connections设置为1500（假定没有大的关键字缓冲区或有大量数据的堆内存表。将LinuxThreads中的STACK_SIZE降低得越低，可以安全地创建越多的线程。我们推荐的值的范围为128KB到256KB。
+
+如果你正使用大量的并行连接，在2.2内核中你可能会遇到一个“特性”，即通过对进程的分支或克隆子进程的行为进行罚分，来试图防止轰炸攻击。这样你增加并行客户端的数量时，MySQL不能正确响应。在单CPU系统中，我们已经发现该现象，即线程创建地很慢；连接MySQL的时间很长(长达1分钟)，并且关闭的时间也很长。在多CPU系统中，我们已经观察到随着客户端数目的增加，查询速度逐渐下降。在寻求解决办法的过程中，我们收到了一个用户的内核补丁，他声称该补丁可以解决他的问题。从http://www.mysql.com/Downloads/Patches/linux-fork.patch可以下载该补丁。我们已经在开发和生产系统上对该补丁进行了广泛的测试。它可以大大改善MySQL的性能，而不会造成任何问题，我们向仍然在2.2内核运行高负荷服务器的用户推荐它。
+
+在2.4内核中已经对该问题进行了修复，因此如果你不满意当前系统的性能，不要为2.2 内核打补丁，在SMP系统中升级到2.4版要容易地多，升级不仅可以修复错误，还可以使SMP更好地加速。
+
+我们已经在双CPU机器上在2.4内核中对MySQL进行了测试，发现MySQL的比例要好得多。1,000名客户查询时，还看不到速度有实质上的下降，MySQL的比例因子(最大吞吐量与一个客户端的吞吐量的比例)为180%。我们在四-CPU系统中也观察到了类似的结果：当客户数目上升到1,000名时还没有实质上的减慢, 比例因子为300%。根据这些结果，对于使用2.2内核的高负荷SMP服务器，我们绝对建议升级到 2.4内核。
+
+我们已经发现，在2.4内核中应使用可能的最高优先级来运行mysqld进程，以获得最佳性能。可以通过为mysqld_safe加renice -20 $$命令来实现。在四-CPU系统中的测试中，提高优先级在400个客户时会使吞吐量增加60%。
+
+我们目前还想搜集关于MySQL在four-way和eight-way系统上用2.4内核执行的性能的更详细信息。如果你访问了这些系统并进行了一些基准测试，请将结果用email发送到<benchmarks@mysql.com>。我们将对它们进行审查以包括进手册中。
+
+如果用ps运行mysqld服务器进程时发现进程死掉了，一半是MySQL中有缺陷或数据库表崩溃了。请参见A.4.2节，“如果MySQL依然崩溃，应作些什么”。
+
+如果mysqld死掉并给出SIGSEGV信号，要想在Linux中对内核进行调试，你可以用--core-file选项启动mysqld。注意你还可能需要通过向mysqld_safe添加ulimit -c 1000000或用--core-file-size=1000000启动mysqld_safe来加大内核文件的大小。请参见5.1.3节，“mysqld_safe：MySQL服务器启动脚本”。
+
+2.12.1.5. Linux x86注意事项
+MySQL需要5.4.12或更新版本的libc。已知它可以在libc 5.4.46中工作。glibc 2.0.6和更新版本应当也可以工作。Red Hat的glibc RPM有一些问题，因此如果你遇到问题，应看看是否有更新版。已知glibc 2.0.7-19和2.0.7-29 RPM可以工作。
+
+如果你正使用Red Hat 8.0或更新的glibc 2.2.x库，你会看见mysqld执行gethostbyaddr()时会死掉。这是因为新的glibc库在执行该调用时需要大于128KB的堆栈空间。要想修复该问题，用--thread-stack=192K选项启动mysqld。(在MySQL 4以前的版本中应使用-O thread_stack=192K）。 在MySQL 4.0.10和以上版本中，该堆栈空间值即为默认值，因此你不会看见该问题。
+
+如果你正使用gcc 3.0和以上版本编译MySQL，在编译MySQL前你必须先安装libstdc++v3库；如果不这样做，在联接过程中会遇到关于丢失__cxa_pure_virtual符号的错误。
+
+在一些旧的Linux分发版中，configure会生成如下错误：
+
+Syntax error in sched.h. Change _P to __P in the
+/usr/include/sched.h file.
+See the Installation chapter in the Reference Manual.
+只需要按照错误消息的提示操作。对只有一条下划线的_P名再增加一条下划线，然后重新尝试。
+
+编译时可能会出现警告。下面的警告可以忽略：
+
+mysqld.cc -o objs-thread/mysqld.o
+mysqld.cc: In function `void init_signals()':
+mysqld.cc:315: warning: assignment of negative value `-1' to
+`long unsigned int'
+mysqld.cc: In function `void * signal_hand(void *)':
+mysqld.cc:346: warning: assignment of negative value `-1' to
+`long unsigned int'
+如果mysqld启动时总是出现转储内核， 问题可能是你使用了旧的/lib/libc.a。尝试重新对其命名，然后删掉sql/mysqld并重新执行make install然后再次尝试。已经报导在部分Slackware安装中出现了该问题。
+
+当链接mysqld时如果出现下面的错误，说明libg++.a安装不正确：
+
+/usr/lib/libc.a(putc.o): In function `_IO_putc':
+putc.o(.text+0x0): multiple definiti在of `_IO_putc'
+你可以使用libg++.a运行configure来避免该问题：
+
+shell> CXX=gcc ./configure
+2.12.1.6. Linux SPARC注意事项
+在部分执行过程中，readdir_r()会中断。现象是SHOW DATABASES语句总是返回空子集。可以在完成配置、进行编译前从config.h中删掉HAVE_READDIR_R来修复。
+2.12.1.7. Linux Alpha注意事项
+我们已经用我们的基准和测试套件在Alpha中测试了MySQL 5.1，看起来工作得不错。
+
+我们目前在配置Alpha EV6处理器的Compaq DS20机器上，在SuSE Linux 7.0中对AXP、内核2.4.4-SMP、Compaq C编译器(V6.2-505)和Compaq C++编译器(V6.3-006)构建MySQL二进制软件包。
+
+你可以从 http://www.support.compaq.com/alpha-tools/ 找到上述编译器。使用这些编译器，得到的MySQL性能比gcc要好9-14%。
+
+在Alpha版MySQL中，我们在编译选项中使用-arch generic标记，可以确保二进制在所有Alpha处理器中运行。我们还采用静态编译以避免库问题。configure命令应为：
+
+CC=ccc CFLAGS="-fast -arch generic" CXX=cxx \
+CXXFLAGS="-fast -arch generic -noexceptions -nortti" \
+./configure --prefix=/usr/local/mysql --disable-shared \
+    --with-extra-charsets=complex --enable-thread-safe-client \
+    --with-mysqld-ldflags=-non_shared --with-client-ldflags=-non_shared
+ 
+如果想要使用egcs，可以使用下面的configure行：
+
+CFLAGS="-O3 -fomit-frame-pointer" CXX=gcc \
+CXXFLAGS="-O3 -fomit-frame-pointer -felide-constructors \
+    -fno-exceptions -fno-rtti" \
+./configure --prefix=/usr/local/mysql --disable-shared
+已知的在Linux-Alpha中运行MySQL的问题：
+
+·         在gdb 4.18 中不能调试线程应用程序。你应当使用gdb 5.1。
+
+·         使用gcc时如果你尝试静态链接mysqld，启动时映像会导致转储内核。换句话说，使用gcc时不要使用--with-mysqld-ldflags=-all-static。
+
+2.12.1.8. Linux PowerPC注意事项
+MySQL应当可以在使用最新glibc安装软件包(用glibc 2.0.7测试)的MkLinux上工作。
+2.12.1.9. Linux MIPS注意事项
+为了使MySQL在Qube2(Linux Mips)上工作，需要最新的glibc库。已知glibc-2.0.7-29C2可以工作。还必须使用egcs C++编译器(egcs 1.0.2-9、gcc 2.95.2或更新版)。
+2.12.1.10. Linux IA-64注意事项
+要想让MySQL在Linux IA-64中编译,我们用 gcc 2.96构建时使用下面的configure命令：
+
+CC=gcc \
+CFLAGS="-O3 -fno-omit-frame-pointer" \
+CXX=gcc \
+CXXFLAGS="-O3 -fno-omit-frame-pointer -felide-constructors \
+    -fno-exceptions -fno-rtti" \
+    ./configure --prefix=/usr/local/mysql \
+    "--with-comment=Official MySQL binary" \
+    --with-extra-charsets=complex
+在IA-64中,MySQL客户端二进制使用共享库。这意味着如果你将我们的二进制分发版安装到/usr/local/mysql之外的其它位置，需要将libmysqlclient.so安装目录路径加到/etc/ld.so.conf文件或LD_LIBRARY_PATH环境变量中。
+
+参见A.3.1节，“与MySQL客户端库的链接问题”。
+
+2.12.2. Mac OS X注意事项
+2.12.2.1. Mac OS X 10.x (Darwin)
+2.12.2.2. Mac OS X Server 1.2 (Rhapsody)
+在Mac OS X中，tar不能处理长文件名。如果你需要解包.tar.gz分发版，应使用gnutar。
+2.12.2.1. Mac OS X 10.x (Darwin)
+MySQL应当可以在Mac OS X 10.x(Darwin)中工作，不会有重大问题。
+
+已知的问题有：
+
+·         连接时间(wait_timeout、interactive_timeout和net_read_timeout)值不理想。
+
+这可能是线程库中的信号处理问题，信号不能中断挂起的读命令，我们希望将来能对线程库进行更新以修复该问题。
+
+在Darwin 6.3中用下面的configure行对Mac OS X二进制进行了编译：
+
+CC=gcc CFLAGS="-O3 -fno-omit-frame-pointer" CXX=gcc \
+CXXFLAGS="-O3 -fno-omit-frame-pointer -felide-constructors \
+    -fno-exceptions -fno-rtti" \
+    ./configure --prefix=/usr/local/mysql \
+    --with-extra-charsets=complex --enable-thread-safe-client \
+    --enable-local-infile --disable-shared
+参见2.5节，“在Mac OS X上安装MySQL”。
+
+2.12.2.2. Mac OS X Server 1.2 (Rhapsody)
+对于当前版本的Mac OS X服务器，编译MySQL之前不需要对操作系统进行更改。在服务器平台上的编译与客户端版本Mac OS X相同。
+
+对于旧的版本(Mac OS X Server 1.2, a.k.a. Rhapsody)，在配置MySQL之前必须先安装pthread软件包。
+
+参见2.5节，“在Mac OS X上安装MySQL”。
+
+2.12.3. Solaris注意事项
+2.12.3.1. Solaris 2.7/2.8注意事项
+2.12.3.2. Solaris x86注意事项
+在Solaris中，甚至在解压缩MySQL分发版时，你也会遇到问题，因为Solaris tar不能处理长文件名。这说明解压缩MySQL分发版时会遇见错误。
+
+如果出现这种问题，必须使用GNU tar(gtar)来解压缩分发版。可以从http://dev.mysql.com/downloads/os-solaris.html找到预编译的Solaris版本。
+
+Sun原生线程只在Solaris 2.5和更高版本中工作。对于版本2.4和更早版本，MySQL自动使用MIT-pthreads。请参见2.8.5节，“MIT-pthreads注意事项”。
+
+如果你运行configure时遇到下面的错误，说明编译器安装得有问题：
+
+checking for restartable system calls... configure: error can not
+run test programs while cross compiling
+在这种情况下，应当将编译器升级到较新的版本。还可以在config.cache文件中插入下面的行来解决该问题：
+
+ac_cv_sys_restartable_syscalls=${ac_cv_sys_restartable_syscalls='no'}
+如果在SPARC上使用Solaris，建议使用编译器gcc 2.95.2或3.2。可以从http://gcc.gnu.org/下载。请注意egcs 1.1.1和gcc 2.8.1不能在SPARC上可靠地工作。
+
+当使用gcc 2.95.2时建议的configure行：
+
+CC=gcc CFLAGS="-O3" \
+CXX=gcc CXXFLAGS="-O3 -felide-constructors -fno-exceptions -fno-rtti" \
+./configure --prefix=/usr/local/mysql --with-low-memory \
+    --enable-assembler
+如果你使用UltraSPARC系统，在CFLAGS和CXXFLAGS环境变量中加上-mcpu=v8 -Wa,-xarch=v8plusa，性能可以提高4%。
+
+如果你有Sun Forte 5.0(或更新版)编译器，可以运行：
+
+CC=cc CFLAGS="-Xa -fast -native -xstrconst -mt" \
+CXX=CC CXXFLAGS="-noex -mt" \
+./configure --prefix=/usr/local/mysql --enable-assembler
+要想用Sun Forte 编译器创建64-位二进制，使用下面的配置选项：
+
+CC=cc CFLAGS="-Xa -fast -native -xstrconst -mt -xarch=v9" \
+CXX=CC CXXFLAGS="-noex -mt -xarch=v9" ASFLAGS="-xarch=v9" \
+./configure --prefix=/usr/local/mysql --enable-assembler
+要想使用gcc创建64-位Solaris二进制，在CFLAGS和CXXFLAGS中增加-m64，并从configure行删掉--enable-assembler。
+
+在MySQL基准测试中，在UltraSPARC上使用32位模式的Forte 5.0，同使用带-mcpu标记的gcc 3.2比较，速度提高了4%。
+
+如果创建了64位的mysqld二进制，速度要比32-位二进制慢4%，但是可以处理更多的线程和内存。
+
+当为x86_64使用Solaris 10时,你应当安装用forcedirectio选项保存InnoDB文件的文件系统。(默认情况不用该选项来安装)。如果不这样做，当在该平台上使用InnoDB 储存引擎时将会造成严重的性能下降。
+
+如果fdatasync或sched_yield出现问题，你可以在configure行加LIBS=-lrt修复该问题。
+
+对于早于WorkShop 5.3的编译器,你可能需要编辑configure脚本。应将该行：
+
+#if !defined(__STDC__) || __STDC__ != 1
+更该为：
+
+#if !defined(__STDC__)
+如果你用-Xc 选项打开__STDC__，Sun 编译器不能用Solaris pthreads.h 头文件编译。这是一个Sun 缺陷(中断的编译器或include文件)。
+
+如果运行mysqld时出现下面的错误消息，原因是你企图不启用-mt multi-thread选项而用Sun编译器编译MySQL：
+
+libc internal error: _rmutex_unlock: rmutex not held
+
+将-mt加到CFLAGS和CXXFLAGS上并重新编译。
+
+如果你正使用gcc的SFW版本(在Solaris 8安装包内)，运行configure之前你必须将/opt/sfw/lib加到环境变量LD_LIBRARY_PATH上。
+
+如果你正使用从sunfreeware.com下载的gcc，会遇到许多问题。要想避免，应当在运行机器上重新编译gcc和GNU binutils。
+
+如果你用gcc编译MySQL时遇到下面的错误，说明gcc配置不适合Solaris的版本：
+
+shell> gcc -O3 -g -O2 -DDBUG_OFF  -o thr_alarm ...
+./thr_alarm.c: In function `signal_hand':
+./thr_alarm.c:556: too many arguments to function `sigwait'
+在这种情况下正确的做法是得到最新版本的gcc，并用你当前的gcc编译器编译。至少对于Solaris 2.5,几乎所有二进制版本的gcc有旧的不再使用的include文件,中断了所有使用线程的程序，也可能会中断其它程序。
+
+Solaris不提供静态版本的系统库(libpthreads和libdl)，因此你不能用--static编译MySQL。如果你试图这样做，会遇到下面的错误：
+
+ld: fatal: library -ldl: not found
+undefined reference to `dlopen'
+cannot find -lrt
+如果你连接你自己的MySQL客户端程序，运行时会出现下面的错误：
+
+ld.so.1: fatal: libmysqlclient.so.#:
+open failed: No such file or directory
+可以通过下面的方法避免该问题：
+
+·         用-Wl,r/full/path/to/libmysqlclient.so标记而不要用-Lpath)连接客户端。
+
+·         将libmysqclient.so复制到/usr/lib。
+
+·         运行客户端程序前，将libmysqlclient.so目录的路径名加到LD_RUN_PATH环境变量上。
+
+如果你未安装zlib用 -lz连接时configure出现问题，你有两个选则：
+
+·         如果你想要使用压缩通信协议，你需要从ftp.gnu.org获得并安装zlib。
+
+·         构建MySQL时用--with-named-z-libs=no选项运行configure。
+
+如果你正使用gcc，向MySQL调用用户定义函数(UDF)时出现问题，尝试向UDF连接行添加-lgcc到。
+
+如果想让MySQL自动启动，可以将support-files/mysql.server复制到/etc/init.d，并创建/etc/rc3.d/S99mysql.server符号连接。
+
+如果有太多进程试图快速连接mysqld，你应当能再MySQL日志只看见错误：
+
+Error in accept: Protocol error
+可以尝试用--back_log=50选项启动服务器来解决该问题。(在MySQL 4以前的版本中使用-O back_log=50）。 
+
+Solaris不支持setuid() 应用程序所需的内核文件，因此如果你使用--user选项你不能从mysqld遇到内核文件。
+
+2.12.3.1. Solaris 2.7/2.8注意事项
+一般情况，可以在Solaris 2.7和2.8中使用Solaris 2.6二进制。大多数Solaris 2.6发布也适用Solaris 2.7和2.8。
+
+MySQL应当能够自动检测到新的Solaris版本并解决下面的问题。
+
+Solaris 2.7/2.8的include文件中有一些缺陷。当使用gcc时你会看见下面的错误：
+
+/usr/include/widec.h:42: warning: `getwc' redefined
+/usr/include/wchar.h:326: warning: this is the location of the previous
+definition
+如果出现该问题，修复的办法是将/usr/include/widec.h复制到.../lib/gcc-lib/os/gcc-version/include，并将41行从：
+
+#if     !defined(lint) && !defined(__lint)
+更改为：
+
+#if     !defined(lint) && !defined(__lint) && !defined(getwc)
+另外，可以直接编辑/usr/include/widec.h。用任何一种方法修复后，应当删掉config.cache并再次运行configure。
+
+如果运行make时遇到下面的错误，这是因为configure不能检测到curses.h文件(可能是因为/usr/include/widec.h中的错误)：
+
+In file included from mysql.cc:50:
+/usr/include/term.h:1060: syntax error before `,'
+/usr/include/term.h:1081: syntax error before `;'
+可以用下面任何一种方法解决该问题：
+
+·         用CFLAGS=-DHAVE_CURSES_H CXXFLAGS=-DHAVE_CURSES_H ./configure配置。
+
+·         根据前面的讨论编辑/usr/include/widec.h并重新configure。
+
+·         删掉config.h文件中的#define HAVE_TERM行并重新运行make。
+
+如果链接客户端程序时连接器找不到-lz，问题可能是libz.so文件安装到了/usr/local/lib。可以用下面任何一种方法解决该问题：
+
+·         向LD_LIBRARY_PATH增加/usr/local/lib。
+
+·         增加到libz.so from /lib的连接。
+
+·         如果使用Solaris 8,可以安装Solaris 8 CD分发版中的可选项zlib。
+
+·         构建MySQL时用--with-named-z-libs=no选项运行configure。
+
+2.12.3.2. Solaris x86注意事项
+在x86 Solaris 8上, 如果使用strip删除调试符号，mysqld转储内核。
+
+如果正在 Solaris x86上使用gcc或egcs，并且你碰到了在装载时的内核转储问题，应该使用下列configure命令：
+
+CC=gcc CFLAGS="-O3 -fomit-frame-pointer -DHAVE_CURSES_H" \
+CXX=gcc \
+CXXFLAGS="-O3 -fomit-frame-pointer -felide-constructors \
+    -fno-exceptions -fno-rtti -DHAVE_CURSES_H" \
+./configure --prefix=/usr/local/mysql
+用libstdc++库和与C++异常处理来避免这个问题。 
+
+如果这没有帮助，你应该编译一个调试版本并且用一个踪迹文件运行它或在gdb下运行它。请参见E.1.3节，“在gdb环境下调试mysqld”。
+
+2.12.4. BSD注意事项
+2.12.4.1. FreeBSD注意事项
+2.12.4.2. NetBSD注意事项
+2.12.4.3. OpenBSD 2.5版注意事项
+2.12.4.4. BSD/OS 2.x版注意事项
+2.12.4.5. BSD/OS 3.x版注意事项
+2.12.4.6. BSD/OS 4.x版注意事项
+本节提供在各种BSD Unix中使用MySQL的相关信息。
+2.12.4.1. FreeBSD注意事项
+对于运行MySQL，推荐使用FreeBSD 4.x或更新版本，因为其线程包更加完整。要想遇到一个安全、稳定的系统，你应当只使用标记-RELEASE的FreeBSD内核。
+
+最容易因此是比较受喜欢的安装方法是使用mysql-server和mysql-client移植，可从http://www.freebsd.org得到。
+
+使用这些移植的益处包括：
+
+一个全优化的工作在FreeBSD版本上的MySQL。 
+自动配置和构建。 
+启动脚本安装在/usr/local/etc/rc.d。 
+·         用pkg_info -L察看哪个文件被安装的能力
+
+·         如果你在那台机器上不再想要MySQL，用pkg_delete完全删除它们。
+
+建议在FreeBSD 2.x版上使用 MIT-pthreads，在版本3和以上版本用原生线程。在一些2.2.x的以后版本使用原生线程运行是可能的，但是你可能碰到mysqld关掉的问题。
+
+遗憾的是，FreeBSD调用的某些函数还不能完全保证线程安全。特别令人注意的是，包括gethostbyname()函数， MySQL使用该函数将主机名转换为IP地址。在某些环境中，mysqld进程会突然造成100%的CPU负荷，不再响应。如果你遇到该问题，尝试使用--skip-name-resolve选项启动MySQL。
+
+另外，还可以将FreeBSD 4.x中的MySQL同LinuxThreads库连接，这样可以避免一些原生FreeBSD线程执行时的问题。为了更好地将LinuxThreads同原生线程进行对比，参见Jeremy Zawodny的文章FreeBSD or Linux for your MySQL Server? 地址：http://jeremy.zawodny.com/blog/archives/000697.html 。
+
+在FreeBSD使用LinuxThreads的已知问题有：
+
+·         连接时间(wait_timeout、interactive_timeout和net_read_timeout)值不理想。现象是永久连接挂起较长时间，不能关闭，只有线程执行新命令时 'kill'线程方有效。
+
+这可能是线程库中的信号处理问题，信号不能中断挂起的读命令。期望在FreeBSD 5.0中修复。
+
+MySQL构建进程需要GNU make(gmake)工作。如果没有GNU make，必须在编译MySQL前先安装它。
+
+建议的在FreeBSD中用gcc(2.95.2和以上版本)编译和安装MySQL的方法是：
+
+CC=gcc CFLAGS="-O2 -fno-strength-reduce" \
+    CXX=gcc CXXFLAGS="-O2 -fno-rtti -fno-exceptions \
+    -felide-constructors -fno-strength-reduce" \
+    ./configure --prefix=/usr/local/mysql --enable-assembler
+gmake
+gmake install
+cd /usr/local/mysql
+bin/mysql_install_db --user=mysql
+bin/mysqld_safe &
+ 
+如果configure使用MIT-pthreads，应当阅读MIT-pthreads注意事项。请参见2.8.5节，“MIT-pthreads注意事项”。
+
+如果你从make install遇到一个它不能找到“/usr/include/pthreads”的错误，configure没有检测出你需要MIT-pthreads。要修复该问题，移走config.cache，然后用--with-mit-threads选项重新运行configure。
+
+确定让你的名字解析程序安装正确，否则当连接mysqld时，你可能会遇到解析延时或失败。保证在“/etc/hosts”文件中的localhost入口是正确的。“/etc/hosts”文件应该以下面一行开始：
+
+127.0.0.1       localhost localhost.your.domain
+已知FreeBSD的文件句柄限制默认值很低。请参见A.2.17节，“文件未找到”。使用--open-files-limit选项执行mysqld_safe启动服务器，或在/etc/login.conf为mysqld用户提高限制并用cap_mkdb /etc/login.conf重建它。如果你不使用默认名(即使用chpass mysqld-user-name)，还要保证为该用户设置在密码文件中的相应级别。请参见5.1.3节，“mysqld_safe：MySQL服务器启动脚本”。
+
+FreeBSD将进程空间限制到512MB，即使系统有很多的可用RAM也如此。因此你可能会遇到如下所示错误：
+
+Out of memory (Needed 16391 bytes)
+在当前版本的FreeBSD(至少4.x和更高版本)中，你可以在/boot/loader.conf文件中增加下面的条目并重启机器增加该限制(不能在运行时间用sysctl命令更改这些设定值)：
+
+kern.maxdsiz="1073741824" # 1GB
+kern.dfldsiz="1073741824" # 1GB
+kern.maxssiz="134217728" # 128MB
+在旧版本的FreeBSD中，必须重新编译内核，以便更改进程的最大数据段空间。在这种情况下，应当查看LINT配置文件中的MAXDSIZ选项查看更详细的信息。
+
+如果MySQL的当前日期有问题，设置TZ变量将会有帮助。请参见附录F：环境变量。
+
+2.12.4.2. NetBSD注意事项
+为了在NetBSD上编译，你需要GNU make，否则当make试图在C++文件上运行lint时，编译将失败。
+
+2.12.4.3. OpenBSD 2.5版注意事项
+在OpenBSD 2.5上，可以用下列选项编译带原生线程的MySQL：
+CFLAGS=-pthread CXXFLAGS=-pthread ./configure --with-mit-threads=no
+2.12.4.4. BSD/OS 2.x版注意事项
+如果在编译MySQL时，遇到下列错误, 说明虚拟内存的ulimit值太低了：
+
+item_func.h: In method
+`Item_func_ge::Item_func_ge(const Item_func_ge &)':
+item_func.h:28: virtual memory exhausted
+make[2]: *** [item_func.o] Error 1
+试试使用ulimit -v 80000并再次运行make。如果这还不行并且你正在使用bash，试试换到csh或sh；一些BSDI用户报告了使用bash和ulimit有问题。
+
+如果你正在使用gcc，可能必须为configure使用--with-low-memory标志才能编译“sql_yacc.cc”。
+
+如果MySQL的当前日期有问题，设置TZ变量将会有帮助。请参见附录F：环境变量。
+
+2.12.4.5. BSD/OS 3.x版注意事项
+升级到BSD/OS 3.1。如果不能升级，则安装BSDI patch M300-038。
+
+在配置MySQL时，使用下列命令:
+
+env CXX=shlicc++ CC=shlicc2 \
+./configure \
+    --prefix=/usr/local/mysql \
+    --localstatedir=/var/mysql \
+    --without-perl \
+    --with-unix-socket-path=/var/mysql/mysql.sock
+已知下面的项可以工作：
+
+env CC=gcc CXX=gcc CXXFLAGS=-O3 \
+./configure \
+    --prefix=/usr/local/mysql \
+    --with-unix-socket-path=/var/mysql/mysql.sock
+如果你愿意，可以改变目录位置，或不指定任何位置而使用默认目录。
+
+如果在重负载下的性能有问题，试试使用--skip-thread-priority选项执行mysqld！这将以相同优先级运行所有线程；在BSDI 3.1上，可以得到较好的性能(至少直到BSDI可以修正其线程调度程序)。 
+
+如果在编译时遇到virtual memory exhausted错误，试试使用ulimit -v 80000并再次运行make。如果这还不行并且你正在使用bash，试试换到csh或sh；一些BSDI用户报告了使用bash和ulimit会有问题。
+
+2.12.4.6. BSD/OS 4.x版注意事项
+BSDI 4.x有一些线程有关的缺陷。如果你想要在这上面使用MySQL，应该安装所有与线程相关的补丁，至少应该安装M400-023。
+在一些 BSDI 4.x系统中，你可能会遇到共享库问题。现象是不能执行任何客户端程序，例如，mysqladmin。在这种情况下，需要重新配置，用disable-shared选项禁用库的共享以便进行配置。
+
+一些客户在BSDI 4.0.1中遇到了严重问题，即mysqld二进制过一会儿不能打开表。这是因为一些库/系统相关错误使mysqld未得到指令便更改了当前目录。
+
+修复方法是升级MySQL到最低3.23.34版或更高版，运行configure后，运行make前删掉config.h中的行#define HAVE_REALPATH。
+
+请注意这说明你不能通过符号连接将数据库目录连接到另一个数据库目录，或通过符号连接将表连接到BSDI上的另一个数据库。(可以通过符号连接连接到另一个硬盘)。
+
+2.12.5. 其它Unix注意事项
+2.12.5.1. HP-UX 10.20版注意事项
+2.12.5.2. HP-UX 11.x版注意事项
+2.12.5.3. IBM-AIX注意事项
+2.12.5.4. SunOS 4注意事项
+2.12.5.5. Alpha-DEC-UNIX(Tru64)版注意事项
+2.12.5.6. Alpha-DEC-OSF/1注意事项
+2.12.5.7. SGI Irix注意事项
+2.12.5.8. SCO UNIX和OpenServer 5.0.x版注意事项
+2.12.5.9. SCO UnixWare 7.1.x和OpenUNIX 8.0.0版注意事项
+2.12.5.10. SCO OpenServer 6.0.x版注意事项
+2.12.5.1. HP-UX 10.20版注意事项
+在HP-UX上编译MySQL时，有一些“小”问题。我们推荐您使用gcc而不是HP-UX自己的编译器，因为gcc可以生成更好的代码！
+
+我们推荐在HP-UX上使用gcc 2.95，不使用高度优化标志(类似-O6)，因为这在HP-UX 上可能不安全。
+
+下面的configure行在gcc 2.95中应当工作：
+
+CFLAGS="-I/opt/dce/include -fpic" \
+CXXFLAGS="-I/opt/dce/include -felide-constructors -fno-exceptions \
+-fno-rtti" \
+CXX=gcc \
+./configure --with-pthread \
+    --with-named-thread-libs='-ldce' \
+    --prefix=/usr/local/mysql --disable-shared
+下面的configure行在gcc 3.1中应当工作：
+
+CFLAGS="-DHPUX -I/opt/dce/include -O3 -fPIC" CXX=gcc \
+CXXFLAGS="-DHPUX -I/opt/dce/include -felide-constructors \
+    -fno-exceptions -fno-rtti -O3 -fPIC" \
+./configure --prefix=/usr/local/mysql \
+    --with-extra-charsets=complex --enable-thread-safe-client \
+    --enable-local-infile  --with-pthread \
+    --with-named-thread-libs=-ldce --with-lib-ccflags=-fPIC
+    --disable-shared
+2.12.5.2. HP-UX 11.x版注意事项
+由于在标准 HP-UX库中有一些严重错误，试图在HP-UX 11.0上运行MySQL前应当安装下面的补丁：
+PHKL_22840 Streams cumulative
+PHNE_22397 ARPA cumulative
+这样可以解决在线程应用程序中运行recv()时得到EWOULDBLOCK和执行accept()时得到EBADF的问题。
+
+如果你在未打补丁的HP-UX 11.x系统中使用gcc 2.95.1，可能会遇到下面的错误：
+
+In file included from /usr/include/unistd.h:11,
+                 from ../include/global.h:125,
+                 from mysql_priv.h:15,
+                 from item.cc:19:
+/usr/include/sys/unistd.h:184: declaration of C function ...
+/usr/include/sys/pthread.h:440: previous declaration ...
+In file included from item.h:306,
+                 from mysql_priv.h:158,
+                 from item.cc:19:
+问题是HP-UX没有一致地定义pthreads_atfork()。它同/usr/include/sys/unistd.h：184和/usr/include/sys/pthreads.h：440中的原型冲突。
+
+一个解决办法是将/usr/include/sys/unistd.h复制到MySQL/include并编辑unistd.h，对它进行更改以匹配pthreads.h中的定义。查找下列行：
+
+extern int pthreads_atfork(void (*prepare)()，void (*parent)(),
+                                          void (*child)())；
+将它更改为：
+
+extern int pthreads_atfork(void (*prepare)(void)，void (*parent)(void),
+                                          void (*child)(void))；
+更改完后，下面的configure行应当工作：
+
+CFLAGS="-fomit-frame-pointer -O3 -fpic" CXX=gcc \
+CXXFLAGS="-felide-constructors -fno-exceptions -fno-rtti -O3" \
+./configure --prefix=/usr/local/mysql --disable-shared
+如果你使用HP-UX 编译器，可以使用下面的命令(已经用cc B.11.11.04进行了测试)：
+
+CC=cc CXX=aCC CFLAGS=+DD64 CXXFLAGS=+DD64 ./configure \
+    --with-extra-character-set=complex
+你可以忽略下面类型的任何错误：
+
+aCC: warning 901: unknown option: `-3': use +help for online
+documentation
+如果运行configure时遇到下面的错误，请验证在到HP-UX C和C++编译器的路径前是否有到K&R编译器的路径：
+
+checking for cc option to accept ANSI C... no
+configure: error: MySQL requires an ANSI C compiler (and a C++ compiler).
+Try gcc. See the Installation chapter in the Reference Manual.
+不能编译的另一个原因可能是你没有按照前面所述定义+DD64标记。
+
+对于HP-UX 11，另一个办法是使用http://dev.mysql.com/downloads/提供的MySQL二进制，这是我们已经构建并测试过的。我们也收到了MySQL的HP-UX 10.20二进制可以在HP-UX 11上成功运行的报告。如果你遇到问题，一定要检查HP-UX补丁的版本。
+
+2.12.5.3. IBM-AIX注意事项
+Autoconf中没有了xlC自动检测，因此运行configure前，需要设置许多变量。以下例子使用IBM编译器：
+
+export CC="xlc_r -ma -O3 -qstrict -qoptimize=3 -qmaxmem=8192 "
+export CXX="xlC_r -ma -O3 -qstrict -qoptimize=3 -qmaxmem=8192"
+export CFLAGS="-I /usr/local/include"
+export LDFLAGS="-L /usr/local/lib"
+export CPPFLAGS=$CFLAGS
+export CXXFLAGS=$CFLAGS
+ 
+./configure --prefix=/usr/local \
+                --localstatedir=/var/mysql \
+                --sbindir='/usr/local/bin' \
+                --libexecdir='/usr/local/bin' \
+                --enable-thread-safe-client \
+                --enable-large-files
+ 
+可以从http://www-frec.bull.com/找到上述编译MySQL分发版的选项。
+
+如果你将前面的configure行中的-O3改为-O2，必须删掉-qstrict选项。这是对IBM C编译器的限制。
+
+如果你正在使用gcc或egcs编译MySQL，必须使用-fno-exceptions标志，因为gcc/egcs的异常处理不是对线程安全的！（已经用egcs1.1测试过）。IBM汇编程序也有一些已知问题，当使用gcc时可以生成坏的代码。
+
+在 AIX 上使用egcs和gcc 2.95，我们推荐下列configure行：
+
+CC="gcc -pipe -mcpu=power -Wa,-many" \
+CXX="gcc -pipe -mcpu=power -Wa,-many" \
+CXXFLAGS="-felide-constructors -fno-exceptions -fno-rtti" \
+./configure --prefix=/usr/local/mysql --with-low-memory
+为了成功编译，需要使用-Wa,-many选项。IBM知道该问题，但是由于工作区的原因，不急于修复它。我们不知道gcc 2.95是否需要-fno-exceptions选项,但是因为MySQL不使用例外，并且该选项可以产生快速的代码，我们建议使用egcs/gcc时使用该选项。
+
+如果汇编码有问题，试试更改-mcpu=xxx选项以匹配你的CPU。一般情况可能需要使用power2、power或powerpc。另外，你可能需要使用604或604e。我们不能绝对肯定但怀疑power一般应安全，即使在power2机器上也安全。
+
+如果你不知道你的CPU是什么样的，可以执行uname -m命令。可以产生类似000514676700的字符串，格式为xxyyyyyymmss，其中xx和ss总是00,yyyyyy是唯一的系统ID，mm是CPU Planar的ID。从http://www16.boulder.ibm.com/pseries/en_US/cmds/aixcmds5/uname.htm可以找到这些值的图表。
+
+该图表可以给出你可以使用的机器类型和机器型号，确定CPU的类型。
+
+如果遇到信号问题(MySQL在高负载下出人意料地死掉)，你可能已经发现了与线程和信号有关的一个OS 缺陷。在这种情况下，你可以用如下配置告诉MySQL不使用信号：
+
+CFLAGS=-DDONT_USE_THR_ALARM CXX=gcc \
+CXXFLAGS="-felide-constructors -fno-exceptions -fno-rtti \
+-DDONT_USE_THR_ALARM" \
+./configure --prefix=/usr/local/mysql --with-debug \
+    --with-low-memory
+这不影响MySQL的性能，但是有副作用，就是不能用mysqladmin kill或mysqladmin shutdown杀死在一个连接上“睡眠”的客户端。相反，当客户端发出下一个命令时，它将死掉。
+
+在AIX的一些版本上用libbind.a链接使得getservbyname（）内核转储，这是AIX的一个缺陷并且应该报告IBM。
+
+对于AIX 4.2.1和gcc，进行下面的更改。
+
+配置完后，编辑config.h和include/my_config.h，将下面的行：
+
+#define HAVE_SNPRINTF 1
+更改为：
+
+#undef HAVE_SNPRINTF
+最后需要在mysqld.cc中为initgroups ()添加：
+
+#ifdef _AIX41
+extern "C" int initgroups(const char *,int);
+#endif
+如果你需要为mysqld进程分配大量内存，只使用ulimit -d unlimited是不够的。还可以需要修改mysqld_safe，增加下面的行：
+
+export LDR_CNTRL='MAXDATA=0x80000000'
+关于使用大量内存的信息请查阅http://publib16.boulder.ibm.com/pseries/en_US/aixprggd/genprogc/lrg_prg_support.htm 。
+
+2.12.5.4. SunOS 4注意事项
+在SunOS 4上，需要用MIT-pthreads编译MySQL，反过来这意味着需要使用GNU make。
+
+一些SunOS 4系统的动态库和libtool有问题。可以使用下列configure行来避免这个问题：
+
+./configure --disable-shared --with-mysqld-ldflags=-all-static
+当编译readline时，可能会遇到关于重复定义的警告，可以忽略。 
+
+当编译mysqld的时候，将会遇到implicit declaration of function警告，可以忽略。
+
+2.12.5.5. Alpha-DEC-UNIX(Tru64)版注意事项
+如果你在Digital Unix上使用egcs 1.1.2，应当升级到gcc 2.95.2,因为egcs在DEC上有一些严重缺陷！
+
+当在Digital UNIX下编译线程程序时，文档推荐对于cc和cxx使用-pthread选项和-lmach -lexc库（除了-lpthread外)。你应该象下面这样运行configure：
+
+CC="cc -pthread" CXX="cxx -pthread -O" \
+./configure --with-named-thread-libs="-lpthread -lmach -lexc -lc"
+当编译mysqld时，会看见下面的警告：
+
+mysqld.cc: In function void handle_connections()':
+mysqld.cc:626: passing long unsigned int *' as argument 3 of
+accept(int,sockadddr *, int *)'
+你可以放心地忽略这些警告，它们的发生是因为configure只能检测出错误，而不是警告。
+
+如果直接从命令行启动服务器，当退出时，可能有死掉的问题。（当你退出时，重要进程收到一个SIGHUP信号)，如果如此，试着象这样启动服务器：
+
+nohup mysqld [options] &
+nohup使得后面的命令忽视从终端发来的任何SIGHUP信号了。另外，通过运行safe_mysqld启动服务器，可以让nohup调用mysqld。请参见5.1.3节，“mysqld_safe：MySQL服务器启动脚本”。
+
+如果编译mysys/get_opt.c时遇到问题，只需要从启动文件删掉#define _NO_PROTO行。
+
+如果使用Compaq的CC编译器，下面的configure行应当工作：
+
+CC="cc -pthread"
+CFLAGS="-O4 -ansi_alias -ansi_args -fast -inline speed all -arch host"
+CXX="cxx -pthread"
+CXXFLAGS="-O4 -ansi_alias -ansi_args -fast -inline speed all \
+    -arch host -noexceptions -nortti"
+export CC CFLAGS CXX CXXFLAGS
+./configure \
+    --prefix=/usr/local/mysql \
+    --with-low-memory \
+    --enable-large-files \
+    --enable-shared=yes \
+    --with-named-thread-libs="-lpthread -lmach -lexc -lc"
+gnumake
+如果用共享库编译时libtool出现问题，应当能够在链接mysql时通过下述命令解决该问题：
+
+cd mysql
+/bin/sh ../libtool --mode=link cxx -pthread  -O3 -DDBUG_OFF \
+    -O4 -ansi_alias -ansi_args -fast -inline speed \
+    -speculate all \ -arch host  -DUNDEF_HAVE_GETHOSTBYNAME_R \
+    -o mysql  mysql.o readline.o sql_string.o completion_hash.o \
+    ../readline/libreadline.a -lcurses \
+    ../libmysql/.libs/libmysqlclient.so  -lm
+cd ..
+gnumake
+gnumake install
+scripts/mysql_install_db
+2.12.5.6. Alpha-DEC-OSF/1注意事项
+如果遇到编译问题并安装了DEC CC和gcc，尝试这样运行configure：
+
+CC=cc CFLAGS=-O CXX=gcc CXXFLAGS=-O3 \
+./configure --prefix=/usr/local/mysql
+如果遇到“c_asm.h”文件的问题，可以创建并使用一个“哑(dummy)”“c_asm.h”文件：
+
+touch include/c_asm.h
+CC=gcc CFLAGS=-I./include \
+CXX=gcc CXXFLAGS=-O3 \
+./configure --prefix=/usr/local/mysql
+请注意从http://ftp.support.compaq.com/public/unix/下载最新的DEC(Compaq)补丁可以修复ld程序的下面问题。
+
+在OSF1 V4.0D和编译器"DEC C V5.6-071 on Digital UNIX V4.0 (Rev. 878)" 上，编译器有了一些奇怪的行为(未定义asm标志)。/bin/ld好象也被破坏(当链接mysqld时，发生_exit undefined问题)。在这个系统上，从OSF 4.0C的版本替换了/bin/ld后，我们设法用下列configure命令行编译MySQL：
+
+CC=gcc CXX=gcc CXXFLAGS=-O3 ./configure --prefix=/usr/local/mysql
+用Digital编译器“C++ V6.1-029”，下列命令应该工作：
+
+CC=cc -pthread
+CFLAGS=-O4 -ansi_alias -ansi_args -fast -inline speed \
+       -speculate all -arch host
+CXX=cxx -pthread
+CXXFLAGS=-O4 -ansi_alias -ansi_args -fast -inline speed \
+         -speculate all -arch host -noexceptions -nortti
+export CC CFLAGS CXX CXXFLAGS
+./configure --prefix=/usr/mysql/mysql \
+            --with-mysqld-ldflags=-all-static --disable-shared \
+            --with-named-thread-libs="-lmach -lexc -lc"
+在OSF1的某些版本中，alloca()函数被破坏，通过删除定义'HAVE_ALLOCA'的“config.h”的行更正它。 
+
+alloca()函数也可能在/usr/include/alloca.h里面有一个不正确的原型，源于此的警告可以忽略。 
+
+configure将自动地使用下列线程库： --with-named-thread-libs="-lpthread -lmach -lexc -lc"。
+
+当使用gcc时，也可以试试这样运行configure：
+
+CFLAGS=-D_PTHREAD_USE_D4 CXX=gcc CXXFLAGS=-O3 ./configure ....
+如果你的信号有问题(MySQL出人意料地在高负载下死掉)，可能遇到了一个线程和信号有关的OS 缺陷。在这种情况下，你可以告诉MySQL按如下配置不使用信号：
+
+CFLAGS=-DDONT_USE_THR_ALARM \
+CXXFLAGS=-DDONT_USE_THR_ALARM \
+./configure 
+这不影响MySQL性能，但是有副作用，就是不能用mysqladmin kill或mysqladmin shutdown杀死在一个连接上“睡眠”的客户端。相反，当客户端发出下一个命令时，它将死掉。
+
+使用gcc 2.95.2,会遇到下面的编译错误：
+
+sql_acl.cc:1456: Internal compiler error in `scan_region',
+at except.c:2566
+Please submit a full bug report.
+要修复该问题，应当进入sql目录并剪切、复制最后一行gcc，但应将-O3 改为-O0 (或如果编译行没有任何-O选项，应在gcc后面增加-O0)。之后，可以回到顶级目录并重新运行make。
+
+2.12.5.7. SGI Irix注意事项
+如果使用Irix 6.5.3或更新版，如果用拥有CAP_SCHED_MGT权限的用户(例如root)运行mysqld或用下面的shell命令给mysqld服务器该权限，mysqld能够创建线程：
+
+chcap "CAP_SCHED_MGT+epi" /opt/mysql/libexec/mysqld
+可能需要在运行configure后且在编译前定义“config.h”里面的一些符号。
+
+在一些Irix实现中，alloca()函数被破坏。如果mysqld服务器死于一些SELECT语句，把“config.h”定义HAVE_ALLOC和HAVE_ALLOCA_H的行删除即可。如果mysqladmin create不工作，把“config.h”定义HAVE_READDIR_R的行删除，你也可能必须删除HAVE_TERM_H行。 
+
+SGI推荐将本页上的所有补丁作为一个整体来安装：
+
+http://support.sgi.com/surfzone/patches/patchset/6.2_indigo.rps.html 
+
+至少，应该安装最新的核心卷(rollup)、最新的rld卷和最新的libc卷。 
+
+很明确，对于pthreads支持，需要本页上所有的POSIX补丁：
+
+http://support.sgi.com/surfzone/patches/patchset/6.2_posix.rps.html
+
+如果在编译“mysql.cc”时，遇到类似于下面的错误: 
+
+"/usr/include/curses.h", line 82: error(1084):
+invalid combinati在of type
+那么应在MySQL源码树的顶级目录输入下列命令：
+
+extra/replace bool curses_bool < /usr/include/curses.h > include/curses.h
+make
+应该也有安排上的问题报告。如果只有一个线程正在运行，事情会变慢的。通过启动另外一个客户端来避免它，这可以导致此后其它线程的执行速度增加2到10倍。这是Irix线程难以理解的问题；可能必须临时准备找出解决方案直到它能被修正。
+
+ 
+
+如果你正在用gcc编译，可以使用下列configure命令：
+
+ 
+
+CC=gcc CXX=gcc CXXFLAGS=-O3 \
+./configure --prefix=/usr/local/mysql --enable-thread-safe-client \
+    --with-named-thread-libs=-lpthread
+在用原生Irix C和C++编译器7.3.1.2的Irix 6.5.11上,下面的项工作：
+
+CC=cc CXX=CC CFLAGS='-O3 -n32 -TARG:platform=IP22 -I/usr/local/include \
+-L/usr/local/lib' CXXFLAGS='-O3 -n32 -TARG:platform=IP22 \
+-I/usr/local/include -L/usr/local/lib' \
+./configure --prefix=/usr/local/mysql --with-innodb --with-berkeley-db \
+    --with-libwrap=/usr/local \
+    --with-named-curses-libs=/usr/local/lib/libncurses.a
+2.12.5.8. SCO UNIX和OpenServer 5.0.x版注意事项
+当前的移植仅在“sco3.2v5.0.5”,“sco3.2v5.0.6”和“sco3.2v5.0.7”系统上进行了测试，在“sco 3.2v4.2”上的移植也有很大进展。OpenServer 5.0.8(Legend)具有原生线程，允许文件大于2GB。目前最大的文件可以达到2GB。
+
+我们可以在OpenServer上用gcc 2.95.3用下面的configure命令编译MySQL。
+
+CC=gcc CXX=gcc ./configure --prefix=/usr/local/mysql \
+    --enable-thread-safe-client --with-innodb \
+    --with-openssl --with-vio --with-extra-charsets=complex
+从ftp://ftp.sco.com/pub/openserver5/opensrc/gnutools-5.0.7Kj可以得到gcc。
+
+该开发系统需要在OpenServer 5.0.6O的penServer Execution Environment Supplement oss646B和oss656B，OpenSource库位于 gwxlibs。所有OpenSource工具位于opensrc目录。可以从ftp://ftp.sco.com/pub/openserver5/opensrc/获得。
+
+我们建议使用最新的MySQL产品发布。
+
+SCO提供的操作系统补丁：OpenServer 5.0.[0-6]：ftp://ftp.sco.com/pub/openserver5，OpenServer 5.0.7：ftp://ftp.sco.com/pub/openserverv5/507。
+
+SCO提供的关于安全修复的信息：Server 5.0.x：ftp://ftp.sco.com/pub/security/OpenServer。
+
+OpenSever 5.0.x系统上最大的文件的大小为2GB。
+
+在OpenServer 5.0.x上，可供串缓冲区、clist和锁定记录分配的总内存不能超出60MB。
+
+串缓冲区的分配单位为4096 字节的页，clists为70字节，锁定记录为64字节，因此为：
+
+(NSTRPAGES * 4096) + (NCLIST * 70) + (MAX_FLCKREC * 64) <= 62914560
+
+按照以下步骤来配置Database Services选项。如果你不确定应用程序是否需要，参见随应用程序提供的文档。
+
+1.    用root登录。
+
+2.    编辑/etc/conf/sdevice.d/suds文件启用SUDS驱动程序。将第2个域内的N更改为Y。
+
+3.    使用mkdev aio或Hardware/Kernel Manager来启用对asynchronous I/O的支持，并重新连接内核。要想让用户锁定内存用于该类I/O，更新aiomemlock(F)文件。应当对该文件进行更新，包括进可以使用AIO的用户和可以锁定的最大数量的内存。
+
+4.    许多应用程序使用setuid二进制，因此你只能指定单个用户 。请参见随应用程序提供的文档来看是否应用程序是这种情况。
+
+完成该进程后，重新启动系统，创建包括这些更改的新内核。
+
+默认情况，/etc/conf/cf.d/mtune中的条目设置为：
+
+Value           Default         Min             Max
+-----           -------         ---             ---
+NBUF            0               24              450000
+NHBUF           0               32              524288
+NMPBUF          0               12              512
+MAX_INODE       0               100             64000
+MAX_FILE        0               100             64000
+CTBUFSIZE       128             0               256
+MAX_PROC        0               50              16000
+MAX_REGION      0               500             160000
+NCLIST          170             120             16640
+MAXUP           100             15              16000
+NOFILES         110             60              11000
+NHINODE         128             64              8192
+NAUTOUP         10              0               60
+NGROUPS         8               0               128
+BDFLUSHR        30              1               300
+MAX_FLCKREC     0               50              16000
+PUTBUFSZ        8000            2000            20000
+MAXSLICE        100             25              100
+ULIMIT          4194303         2048            4194303
+* Streams Parameters
+NSTREAM         64              1               32768
+NSTRPUSH        9               9               9
+NMUXLINK        192             1               4096
+STRMSGSZ        16384           4096            524288
+STRCTLSZ        1024            1024            1024
+STRMAXBLK       524288          4096            524288
+NSTRPAGES       500             0               8000
+STRSPLITFRAC    80              50              100
+NLOG            3               3               3
+NUMSP           64              1               256
+NUMTIM          16              1               8192
+NUMTRW          16              1               8192
+* Semaphore Parameters
+SEMMAP          10              10              8192
+SEMMNI          10              10              8192
+SEMMNS          60              60              8192
+SEMMNU          30              10              8192
+SEMMSL          25              25              150
+SEMOPM          10              10              1024
+SEMUME          10              10              25
+SEMVMX          32767           32767           32767
+SEMAEM          16384           16384           16384
+* Shared Memory Parameters
+SHMMAX          524288          131072          2147483647
+SHMMIN          1               1               1
+SHMMNI          100             100             2000
+FILE            0               100             64000
+NMOUNT          0               4               256
+NPROC           0               50              16000
+NREGION         0               500             160000
+我们建议将这些值设置为：
+
+NOFILES应当为4096或2048。
+
+MAXUP应当为2048。
+
+要想更改内核，进入/etc/conf/bin并使用./idtune name parameter来更改。例如，要将SEMMS改为200，用root账户执行命令：
+
+# cd /etc/conf/bin
+# ./idtune SEMMNS 200
+我们建议对该系统进行调节，但是使用的正确参数值取决于访问应用程序或数据库的用户数目和数据库空间(也就是使用的缓冲池)。下面的项影响/etc/conf/cf.d/stune中定义的内核参数：
+
+SHMMAX(推荐设定值：128MB)和SHMSEG(推荐设定值：15)。这些参数影响创建用户缓冲池的MySQL数据库引擎。
+
+NOFILES和MAXUP至少应达到2048。
+
+MAXPROC至少应当设置到3000/4000(取决于用户数)或更大值。
+
+建议使用下面的公式来计算SEMMSL、SEMMNS和SEMMNU的值：
+
+SEMMSL = 13
+发现13最适合进程和MySQL。
+
+SEMMNS = SEMMSL * 系统上运行的db服务器数目。
+
+将SEMMNS设置为SEMMSL值乘以你在该系统上一次运行的db服务器的(最大)数目。
+
+SEMMNU = SEMMNS
+将SEMMNU值设置为等于SEMMNS值。可以将该值设置为75%的SEMMNS，但是这是一个保守的估计。
+
+至少需要安装"SCO OpenServer Linker and Application Development Libraries"或OpenServer开发系统来使用gcc。你不能只使用GCC Dev系统，而不安装它们。
+
+你应当获得FSU PTHREADS安装软件包并先安装它。可以从http://moss.csc.ncsu.edu/~mueller/ftp/pub/PART/pthreads.tar.gz获得。你还可以从 ftp://ftp.zenez.com/pub/zenez/prgms/FSU-threads-3.14.tar.gz获得预编译的安装软件包。
+
+FSU Pthreads能用带tcpip的SCO UNIX 4.2编译，或使用OpenServer 3.0或Open Desktop 3.0(OS 3.0 ODT 3.0)，安装带有使用一个GCC 2.5.X的SCO开发系统。对ODT或OS 3.0，将需要一个GCC 2.5.x的良好移植。没有一个良好的移植会有很多问题。对这个产品的移植需要SCO UNIX开发系统，没有它，缺少所需的库和链接器。还需要SCO-3.2v4.2-includes.tar.gz。该文件包含SCO 开发include 文件的更改这是构建MySQL所需要的。需要用这些修改的头文件替换已有系统的include文件。可以从 ftp://ftp.zenez.com/pub/zenez/prgms/SCO-3.2v4.2-includes.tar.gz获得。
+
+为了在系统上构造FSU Pthreads，需要做的工作是运行GNU make。启动FSU-threads-3.14.tar.gz中的Makefile生成FSU-线程。
+
+在“thread/src”目录下运行./configure并且选择SCO OpenServer选项。这个命令拷贝“Makefile.SCO5”到“Makefile”。然后运行make。
+
+为了在默认的“/usr/include”目录安装，作为root登录，然后cd 到“thread/src”目录，并运行make install。
+
+记得在制作MySQL时要使用GNU make。
+
+注释：如果你不是作为root启动safe_mysqld，将可能每进程只有 默认的110个打开的文件。mysqld将在日志文件写下关于此的注解。
+
+用SCO 3.2V4.2时,应当使用FSU PTHREADS 3.14或更新版。以下configure命令应当工作：
+
+CFLAGS="-D_XOPEN_XPG4" CXX=gcc CXXFLAGS="-D_XOPEN_XPG4" \
+./configure \
+    --prefix=/usr/local/mysql \
+    --with-named-thread-libs="-lgthreads -lsocket -lgen -lgthreads" \
+    --with-named-curses-libs="-lcurses"
+你可能遇到include文件的某些问题。在这种情况下，你能在ftp://www.mysql.com/pub/mysql/Downloads/SCO/SCO-3.2v4.2-includes.tar.gz找到新的SCO特定的include文件。你应该在MySQL源码树的“include”目录下打开这个文件。 
+
+SCO开发注意事项：
+
+MySQL应该自动地检测FSU Pthreads并且用-lgthreads -lsocket -lgthreads选项链接mysqld。 
+SCO开发库在FSU Pthreads是重入(reentrant)的。SCO宣称它的库函数是重入的，因此他们一定在FSU Pthreads中是重入的。在 OpenServer上的 FSU Pthreads 试图使用SCO方案制作重入的库。 
+FSU Pthreads(至少在ftp::/ftp.zenez.com的版本)链接了GNU malloc，如果你遇到内存使用的问题，确定“gmalloc.o”包含在“libgthreads.a”和“libgthreads.so”中。 
+·         在FSU Pthreads中，下列系统调用是pthreads感知的：read()、write()、getmsg()、connect()、accept()、select()和wait()。
+
+·         CSSA-2001-SCO.35.2(补丁列为定制erg711905-dscr_remap安全补丁(版本 2.0.0))中断FSU线程并使mysqld不稳定。如果你想在 OpenServer 5.0.6机器上运行mysqld必须删除它。
+
+·         如果你使用SCO OpenServer 5,可能需要用-DDRAFT7 in CFLAGS重新编译FSU pthreads。否则，mysqld启动时InnoDB会挂起。
+
+·         SCO在ftp://ftp.sco.com/pub/openserver5提供了OpenServer 5.0.x的操作系统补丁。
+
+·         SCO在ftp://ftp.sco.com/pub/security/sse和ftp://ftp.sco.com/pub/security/sse提供了OpenServer 5.0.x的安全修复和libsocket.so.2。
+
+·         Pre-OSR506安全修复。在ftp://stage.caldera.com/pub/security/openserver/或ftp://stage.caldera.com/pub/security/openserver/CSSA-2001-SCO.10/提供了libsocket.so.2和libresolv.so.1的telnetd修复，以及在pre-OSR506系统上的安装说明。
+
+最好在编译/使用MySQL之前安装这些补丁。
+
+Legend/ OpenServer 6.0.0有原生线程，没有2GB文件大小限制。
+
+2.12.5.9. SCO UnixWare 7.1.x和OpenUNIX 8.0.0版注意事项
+我们建议使用最新的MySQL产品发布。
+我们可以用下面的configure命令在UnixWare 7.1.x中编译MySQL：
+
+CC="cc" CFLAGS="-I/usr/local/include" \
+CXX="CC" CXXFLAGS="-I/usr/local/include" \
+./configure --prefix=/usr/local/mysql \
+    --enable-thread-safe-client --with-berkeley-db=./bdb \
+    --with-innodb --with-openssl --with-extra-charsets=complex
+如果你想要使用gcc，必须使用gcc 2.95.3或更新版。
+
+CC=gcc CXX=g++ ./configure --prefix=/usr/local/mysql
+当构建MySQL时不使用UnixWare 7.1.4或OpenServer 6.0.0中的Berkeley DB版本。MySQL使用自己的Berkeley DB。用来构建静态和动态库的configure命令在src_directory/bdb/build_unix/中，但是它不在MySQL自己的BDB版本中。工作区如下所示。
+
+1.    按常规配置MySQL。
+
+2.    进入（cd）bdb/build_unix/
+
+3.    将 -p Makefile复制(cp)到Makefile.sav
+
+4.    使用同样的选项并运行../dist/configure。
+
+5.    运行gmake。
+
+6.    cp -p Makefile.sav Makefile
+
+7.    进入顶级源目录并运行gmake。
+
+允许生成共享和动态库并工作。
+
+SCO在ftp://ftp.sco.com/pub/unixware7提供了UnixWare 7.1.1的操作系统补丁,在ftp://ftp.sco.com/pub/unixware7/713/ 提供了UnixWare 7.1.3的操作系统补丁, UnixWare 7.1.4的见ftp://ftp.sco.com/pub/unixware7/714/, OpenUNIX 8.0.0的见 ftp://ftp.sco.com/pub/openunix8 。
+
+SCO提供的安全修复相关信息：OpenUNIX见ftp://ftp.sco.com/pub/security/OpenUNIX，UnixWare见 ftp://ftp.sco.com/pub/security/UnixWare。
+
+默认情况，在UnixWare 7.1.1系统中最大文件的大小为1GB，但是UnixWare 7.1.4中文件大小限制是1 TB（用VXFS）。一些OS实用程序 的限制是2GB。在UnixWare 7中可能的最大文件大小是1TB（用VXFS）。
+
+在UnixWare 7.1.4中，你不需要采取措施来获得大文件支持，但在UnixWare 7.1.x的以前版本中需要启用大文件支持，可以运行fsadm。
+
+# fsadm -Fvxfs -o largefiles /
+# fsadm /         * Note
+# ulimit unlimited
+# cd /etc/conf/bin
+# ./idtune SFSZLIM 0x7FFFFFFF     ** Note
+# ./idtune HFSZLIM 0x7FFFFFFF     ** Note
+# ./idbuild -B
+ 
+* This should report "largefiles".
+** 0x7FFFFFFF represents infinity for these values.
+用shutdown重启系统。
+
+默认情况，/etc/conf/cf.d/mtune中的条目设置为：
+
+Value           Default         Min             Max
+-----           -------         ---             ---
+SVMMLIM         0x9000000       0x1000000       0x7FFFFFFF
+HVMMLIM         0x9000000       0x1000000       0x7FFFFFFF
+SSTKLIM         0x1000000       0x2000          0x7FFFFFFF
+HSTKLIM         0x1000000       0x2000          0x7FFFFFFF
+我们建议将这些值设置为：
+
+SDATLIM 0x7FFFFFFF
+HDATLIM 0x7FFFFFFF
+SSTKLIM 0x7FFFFFFF
+HSTKLIM 0x7FFFFFFF
+SVMMLIM 0x7FFFFFFF
+HVMMLIM 0x7FFFFFFF
+SFNOLIM 2048
+HFNOLIM 2048
+我们建议对该系统进行调节，但是使用的正确参数值取决于访问应用程序或数据库的用户数目和数据库空间(也就是使用的缓冲池)。下面的项影响/etc/conf/cf.d/stune中定义的内核参数：
+
+SHMMAX(推荐设定值：128MB)和SHMSEG(推荐设定值：15)。这些参数影响创建用户缓冲池的MySQL数据库引擎。
+
+SFNOLIM和HFNOLIM至少应达到2048。
+
+NPROC至少应当设置到3000/4000(取决于用户数)。
+
+建议使用下面的公式来计算SEMMSL、SEMMNS和SEMMNU的值：
+
+SEMMSL = 13
+据发现13最适合进程和MySQL。
+
+SEMMNS = SEMMSL * 系统上运行的db服务器数目。
+
+将SEMMNS设置为SEMMSL值乘以你在该系统上一次运行的db服务器的(最大)数目。
+
+SEMMNU = SEMMNS 
+
+将SEMMNU值设置为等于SEMMNS值。可以将该值设置为75%的SEMMNS，但是这是一个保守的估计。
+
+2.12.5.10. SCO OpenServer 6.0.x版注意事项
+OpenServer6的主要改进包括：
+
+·         大文件支持，可达到1 TB。
+
+·         多处理器支持，从4个处理器增加到32个处理器。
+
+·         增加的内存支持，可达到64GB。
+
+·         将UnixWare的功能扩展到OpenServer6。
+
+·         性能的改进
+
+OpenServer6.0.0具有：
+
+·         /bin，用于与OpenServer5.0.x相同行为的命令。
+
+·         /u95/bin用于标准的命令，例如大文件系统(LFS)支持。
+
+·         /udk/bin用于UnixWare 7.1.4中相同的命令，默认是LFS支持。
+
+下面是在OpenServer6上设置PATH的指导。如果用户想使用传统的OpenServer5.0.x，则路径应当首先为/bin。如果用户需要LFS支持，则 路径应当为/u95/bin：/bin。如果用户首选UnixWare 7支持，则路径应为/udk/bin：/u95/bin：/bin：。
+
+我们建议使用最新的MySQL产品发布。
+
+我们可以在OpenServer 6.0.x用下面的configure命令编译MySQL：
+
+CC="cc" CFLAGS="-I/usr/local/include" \
+CXX="CC" CXXFLAGS="-I/usr/local/include" \
+./configure --prefix=/usr/local/mysql \
+    --enable-thread-safe-client --with-berkeley-db=./bdb \
+    --with-innodb --with-openssl --with-extra-charsets=complex \
+    --enable-readline
+如果你想要使用gcc，必须使用gcc2.95.3或更新版。
+
+CC=gcc CXX=g++ ./configure --prefix=/usr/local/mysql
+当构建MySQL时不使用UnixWare 7.1.4或OpenServer 6.0.0中的Berkeley DB版本。MySQL使用自己的Berkeley DB。用来构建静态和动态库的configure命令在src_directory/bdb/build_unix/中，但是它不在MySQL自己的BDB版本中。工作区如下所示。
+
+1.    按常规配置MySQL。
+
+2.    进入（cd）bdb/build_unix/
+
+3.    将 -p Makefile复制(cp)到Makefile.sav
+
+4.    使用同样的选项并运行../dist/configure。
+
+5.    运行gmake。
+
+6.    cp -p Makefile.sav Makefile
+
+7.    进入顶级源目录并运行gmake。
+
+允许生成共享和动态库并工作。OpenServer6.0.0 还需要MySQL源码树的补丁和适用于bdb/dist/config.guess的config.guess的补丁。你可以从ftp://ftp.zenez.com/pub/zenez/prgms/mysql-4.1.12-osr6-patches.tar.gz和ftp://ftp.zenez.com/pub/zenez/prgms/mysql-4.x.x-osr6-patches下载补丁。有一个README文件可以提供帮助。
+
+SCO在ftp://ftp.sco.com/pub/openserver6提供了OpenServer6的操作系统补丁。
+
+SCO在ftp://ftp.sco.com/pub/security/OpenServer提供关于安全修复的信息。
+
+默认情况，在OpenServer6.0.0系统的最大文件大小为1TB。一些操作系统工具的限制是2GB。在UnixWare 7中最大文件大小可以是1TB（用 VXFS或HTFS）。
+
+默认情况，/etc/conf/cf.d/mtune中的条目设置为：
+
+Value           Default         Min             Max
+-----           -------         ---             ---
+SVMMLIM         0x9000000       0x1000000       0x7FFFFFFF
+HVMMLIM         0x9000000       0x1000000       0x7FFFFFFF
+SSTKLIM         0x1000000       0x2000          0x7FFFFFFF
+HSTKLIM         0x1000000       0x2000          0x7FFFFFFF
+我们建议将这些值设置为：
+
+SDATLIM 0x7FFFFFFF
+HDATLIM 0x7FFFFFFF
+SSTKLIM 0x7FFFFFFF
+HSTKLIM 0x7FFFFFFF
+SVMMLIM 0x7FFFFFFF
+HVMMLIM 0x7FFFFFFF
+SFNOLIM 2048
+HFNOLIM 2048
+我们建议对该系统进行调节，但是使用的正确参数值取决于访问应用程序或数据库的用户数目和数据库空间(也就是使用的缓冲池)。下面的项影响/etc/conf/cf.d/stune中定义的内核参数：
+
+SHMMAX(推荐设定值：128MB)和SHMSEG(推荐设定值：15)。这些参数影响创建用户缓冲池的MySQL数据库引擎。
+
+SFNOLIM和HFNOLIM至少应达到2048。
+
+NPROC至少应当设置到3000/4000(取决于用户数)。
+
+建议使用下面的公式来计算SEMMSL、SEMMNS和SEMMNU的值：
+
+SEMMSL = 13
+发现13最适合进程和MySQL。
+
+SEMMNS = SEMMSL * 系统上运行的db服务器数目。
+
+将SEMMNS设置为SEMMSL值乘以你在该系统上一次运行的db服务器的(最大)数目。
+
+SEMMNU = SEMMNS 
+
+将SEMMNU值设置为等于SEMMNS值。可以将该值设置为75%的SEMMNS，但是这是一个保守的估计。
+
+2.12.6. OS/2注意事项
+MySQL使用太多的打开文件。因此，应该增加类似下面的东西到“CONFIG.SYS”文件：
+SET EMXOPT=-c -n -h1024
+如果不这样做，将可能碰到下列错误：
+
+File 'xxxx' not found (Errcode: 24)｀
+当OS/2 Warp 3上使用MySQL时，要求FixPack 29或以上版本。用OS/2 Wrap 4，要求FixPack 4或以上版本。这是Pthreads库的一个要求。MySQL必须安装在支持长文件名的一个分区上，如HPFS、FAT32等等。
+
+“INSTALL.CMD”脚本必须从OS/2自己的“CMD.EXE”运行并且不能工作在替代外壳如“4OS2.EXE”。
+
+“scripts/mysql-install-db”脚本已经被重新命名了：它称为“install.cmd”并且是一个REXX脚本，将安装 默认的MySQL安全配置并为MySQL创建WorkPlace Shell图标。
+
+动态模块支持通过编译但没有充分测试，动态模块应该使用Pthreads运行时刻库编译。
+
+ 
+
+gcc -Zdll -Zmt -Zcrtdll=pthrdrtl -I../include -I../regex -I.. \
+    -o example udf_example.cc -L../lib -lmysqlclient udf_example.def
+mv example.dll example.udf
+注释：由于OS/2的限制，UDF模块名字的词干不能超过8个字符。模块存储在“/mysql2/udf”目录；safe-mysqld.cmd脚本将把这个目录放在BEGINLIBPATH环境变量中。当使用UDF模块时，指定的扩展名被忽略--它被假定为“.udf”。例如，在 Unix上，共享模块可能被命名为“example.so”并且可以象这样从它装载函数：
+
+mysql> CREATE FUNCTION metaphon RETURNS STRING SONAME 'example.so'；
+
+在OS/2中, 模块被命名为example.udf，但是不能指定模块扩展名：
+
+mysql> CREATE FUNCTION metaphon RETURNS STRING SONAME 'example'；
+2.13. Perl安装注意事项
+2.13.1. 在Unix中安装Perl
+2.13.2. 在Windows下安装ActiveState Perl
+2.13.3. 使用Perl DBI/DBD接口的问题
+Perl对MySQL的支持借助DBI/DBD客户端接口。接口要求Perl 5.6.0或以后版本。如果你的Perl版本更旧，接口将不能工作。
+
+如果想要在Perl DBI中使用事务，需要有1.2216版或更新版DBD：：mysql。建议使用2.9003版或更新版。
+
+如果你使用MySQL 4.1客户端库，必须使用DBD：：mysql 2.9003或更新版。
+
+MySQL分发版不包含Perl支持。可以从http://search.cpan.org获得Unix需要的模块，或在Windows中使用ActiveState ppm程序。以下章节描述了如何做。
+
+如果你想要运行MySQL基准脚本，必须安装Perl支持。请参见7.1.4节，“MySQL基准套件”。
+
+2.13.1. 在Unix中安装Perl
+MySQL Perl支持也要求你安装了MySQL客户端编程支持(库和头文件)。大多数安装中安装了必要的文件。但是，如果你在Linux中从RPM文件安装MySQL，确保安装了开发者RPM。客户端程序在客户端RPM中，但是客户端编程支持在开发者RPM。
+
+如果你想要安装Perl支持，需要的文件能从http://search.cpan.org的CPAN (Comprehensive Perl Archive Network)获得。
+
+在Unix中安装Perl模块最简单的方法是使用CPAN模块。例如：
+
+shell> perl -MCPAN -e shell
+cpan> install DBI
+cpan> install DBD::mysql
+DBD：：mysql安装运行许多测试。测试中使用默认用户名和密码尝试连接本地MySQL服务器。(默认用户名是Unix中的登录名和Windows中的ODBC。默认密码“没有密码。”) 如果你不能通过这些值连接服务器 (例如，如果你的账户有密码)，测试失败。可以使用force install DBD::mysql忽略失败的测试。
+
+DBI需要Data::Dumper模块。应该可以安装；如果不能，应当在安装DBI前安装Data::Dumper模块。
+
+还可以下载tar文件压缩格式的模块分发版，并手动构建模块。例如，解压缩和构建DBI分发版的过程为：
+
+1.     将分发版解压缩到当前目录：
+
+2.            shell> gunzip < DBI-VERSION.tar.gz | tar xvf -
+该命令创建目录 DBI-VERSION。
+
+3.    进入解压缩分发版的顶级目录：
+
+4.            shell> cd DBI-VERSION
+5.    构建分发版并编译：
+
+6.            shell> perl Makefile.PL
+7.            shell> make
+8.            shell> make test
+9.            shell> make install
+make test命令很重要，因为它验证模块正在工作。注意：在你DBD::mysql安装期间运行该命令试验接口代码时，MySQL服务器必须正在运行，否则测试将失败。 
+
+无论何时你安装一个新版本的MySQL，重建并且重新安装DBD::mysql分发版是一个好主意, 特别是在升级MySQL后，观察所有异常，如DBI脚本失败。 
+
+如果你没有权限在系统目录下安装Perl模块，或如果你安装本地Perl模块，下列参考书可以帮助你：http://servers.digitaldaze.com/extensions/perl/modules.html#modules
+
+在标题“Installing New Modules that Require Locally Installed Modules”下面查找。
+
+2.13.2. 在Windows下安装ActiveState Perl
+在Windows中，应当按照以下步骤安装带ActiveState Perl的MySQL DBD模块：
+
+·         从http://www.activestate.com/Products/ActivePerl/获得ActiveState Perl并安装。
+
+·         打开控制台窗口(“DOS窗口)。
+
+·         如果需要，设置HTTP_proxy变量。例如，你可以试试：
+
+·                set HTTP_proxy=my.proxy.com:3128
+·         启动PPM程序：
+
+·                C：\> C：\perl\bin\ppm.pl
+·         如果你还没有安装DBI，则安装：
+
+·                ppm> install DBI
+·         如果成功，运行下面的命令：
+
+·                install\
+·                ftp://ftp.de.uu.net/pub/CPAN/authors/id/JWIED/DBD-mysql-1.2212.x86.ppd
+该进程应当在ActiveState Perl 5.6或更新版本中工作。
+
+如果你不能使上述步骤工作，应该安装MyODBC驱动程序并且通过ODBC连接MySQL服务器：
+
+use DBI;
+$dbh= DBI->connect("DBI:ODBC:$dsn",$user,$password) ||
+die "Got error $DBI::errstr when connecting to $dsn\n";
+2.13.3. 使用Perl DBI/DBD接口的问题
+如果Perl报告它不能发现../mysql/mysql.so模块，可能试因为Perl不能定位共享库libmysqlclient.so。
+
+可以使用下面的方法修复该问题：
+
+·         用perl Makefile.PL -static -config而不要用perl Makefile.PL编译DBD：：mysql分发版。
+
+·         将libmysqlclient.so复制到其它共享库所在的目录 (可能为/usr/lib 或/lib)。
+
+·         修改用来编译DBD：：mysql的-L选项，反应libmysqlclient.so的实际位置。
+
+·         在Linux中，你可以将libmysqlclient.so的目录路径名增加到/etc/ld.so.conf文件。
+
+·         将libmysqlclient.so的目录路径名增加到LD_RUN_PATH环境变量。一些系统使用LD_LIBRARY_PATH。
+
+注意如果连接器没有找到另一个库，你还可能需要修改-L选项。例如，如果因为libc在/lib下并且连接命令指定了-L/usr/lib，连接器不能找到它，将-L选项更改为-L/lib或在连接命令中增加-L/lib。
+
+如果你遇到下面的DBD：：mysql错误，你可能使用了gcc(或使用了用gcc编译的旧的二进制)：
+
+/usr/bin/perl: can't resolve symbol '__moddi3'
+/usr/bin/perl: can't resolve symbol '__divdi3'
+当构建mysql.so库是在连接命令中增加-L/usr/lib/gcc-lib/... -lgcc(当编译Perl客户端时检查生成mysql.so的make的输出)。-L选项应指定libgcc.a在系统中的安装目录的路径名。
+
+该问题的另一个原因是Perl和MySQL没有用gcc编译。在这种情况下，你可以用gcc编译二者来解决。
+
+当你运行测试时你会从DBD：：mysql看见下面的错误：
+
+t/00base............install_driver(mysql) failed:
+Can't load '../blib/arch/auto/DBD/mysql/mysql.so' for module DBD::mysql:
+../blib/arch/auto/DBD/mysql/mysql.so: undefined symbol:
+uncompress at /usr/lib/perl5/5.00503/i586-linux/DynaLoader.pm line 169.
+这意味着你需要在连接行包括-lz 压缩库。可以通过更改文件lib/DBD/mysql/Install.pm的下列行来实现：
+
+$sysliblist .= " -lm";
+更改为：
+
+$sysliblist .= " -lm -lz";
+然后，你必须运行make realclean 然后重新安装。
+
+如果你想要在SCO上安装DBI，需要在DBI-xxx 和每个子目录中编辑Makefile。请注意下面的更新假定使用gcc 2.95.2或更新版：
+
+旧：                                 新：
+CC = cc                               CC = gcc
+CCCDLFLAGS = -KPIC -W1,-Bexport       CCCDLFLAGS = -fpic
+CCDLFLAGS = -wl,-Bexport              CCDLFLAGS =
+ 
+LD = ld                               LD = gcc -G -fpic
+LDDLFLAGS = -G -L/usr/local/lib       LDDLFLAGS = -L/usr/local/lib
+LDFLAGS = -belf -L/usr/local/lib      LDFLAGS = -L/usr/local/lib
+ 
+LD = ld                               LD = gcc -G -fpic
+OPTIMISE = -Od                        OPTIMISE = -O1
+ 
+旧：
+CCCFLAGS = -belf -dy -w0 -U M_XENIX -DPERL_SCO5 -I/usr/local/include
+ 
+新：
+CCFLAGS = -U M_XENIX -DPERL_SCO5 -I/usr/local/include
+这些更改是必需的，因为用icc或cc编译的Perl动态装载器不装载DBI模块。
+
+如果你想要在不支持动态链接(例如 SCO)的系统中使用Perl模块，可以生成一个包括DBI和DBD：：mysql的静态版本的Perl。方法是生成一个用DBI代码连接的Perl版本，并将它安装到当前Perl的顶级目录。然后构建一个含DBD代码连接的Perl版本并安装。
+
+在SCO中，必须将下面的环境变量设置为：
+
+LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:/usr/progressive/lib
+Or：
+
+LD_LIBRARY_PATH=/usr/lib:/lib:/usr/local/lib:/usr/ccs/lib:\
+    /usr/progressive/lib:/usr/skunk/lib
+LIBPATH=/usr/lib:/lib:/usr/local/lib:/usr/ccs/lib:\
+    /usr/progressive/lib:/usr/skunk/lib
+MANPATH=scohelp:/usr/man:/usr/local1/man:/usr/local/man:\
+    /usr/skunk/man:
+首先，在DBD分发版的安装目录运行下述命令来创建一个包括静态连接的DBD模块的Perl：
+
+shell> perl Makefile.PL -static -config
+shell> make
+shell> make install
+shell> make perl
+然后必须安装新的Perl。make perl的输出表示安装时需要执行的make命令。在SCO中，为make -f Makefile.aperl inst_perl MAP_TARGET=perl。
+
+然后，使用刚刚创建的Perl，在DBD：：mysql分发版的安装目录运行下述命令来创建另一个Perl，应包括静态连接的DBD：：mysql：
+
+shell> perl Makefile.PL -static -config
+shell> make
+shell> make install
+shell> make perl
+最后，应当安装新的Perl。make perl的输出指示了使用的命令。
+
+
+--------------------------------------------------------------------------------
+
+这是MySQL参考手册的翻译版本，关于MySQL参考手册，请访问dev.mysql.com.。原始参考手册为英文版，与英文版参考手册相比，本翻译版可能不是最新的。
